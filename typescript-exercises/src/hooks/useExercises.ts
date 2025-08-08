@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import type { Exercise, ExerciseCategory } from '@/types';
 import { discriminatedUnionsCategory } from '@exercises/discriminated-unions/config';
 import { reactHooksCategory } from '@exercises/react-hooks/config';
+import { eliteStateManagementCategory } from '@exercises/elite-state-management/config';
 
 // Import all exercise categories
 const EXERCISE_CATEGORIES: ExerciseCategory[] = [
   discriminatedUnionsCategory,
   reactHooksCategory,
+  eliteStateManagementCategory,
 ].sort((a, b) => a.order - b.order);
 
 export function useExercises() {
