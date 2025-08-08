@@ -11,7 +11,6 @@ import App from './App';
 import '@mantine/core/styles.css';
 import '@mantine/notifications/styles.css';
 import '@mantine/spotlight/styles.css';
-import '@mantine/modals/styles.css';
 import '@mantine/code-highlight/styles.css';
 
 // Import custom styles

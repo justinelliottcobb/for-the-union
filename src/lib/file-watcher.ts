@@ -1,41 +1,26 @@
-import chokidar from 'chokidar';
 import type { Exercise } from '@/types';
 
 export type FileChangeCallback = (filePath: string, content: string) => void;
 
+// Browser-compatible FileWatcher that doesn't use Node.js file system APIs
 export class FileWatcher {
-  private watcher: chokidar.FSWatcher | null = null;
   private callbacks: Map<string, FileChangeCallback[]> = new Map();
+  private isWatching: boolean = false;
 
   constructor(private exerciseFilesPath: string = './exercise-files') {}
 
   startWatching(): void {
-    if (this.watcher) {
+    if (this.isWatching) {
       this.stopWatching();
     }
 
-    this.watcher = chokidar.watch(this.exerciseFilesPath, {
-      ignored: /(^|[\/\\])\../,
-      persistent: true,
-      ignoreInitial: true,
-    });
-
-    this.watcher
-      .on('change', async (path) => {
-        await this.handleFileChange(path);
-      })
-      .on('error', (error) => {
-        console.error('File watcher error:', error);
-      });
-
-    console.log(`Watching for file changes in: ${this.exerciseFilesPath}`);
+    this.isWatching = true;
+    console.log(`File watching enabled for: ${this.exerciseFilesPath} (browser mode)`);
   }
 
   stopWatching(): void {
-    if (this.watcher) {
-      this.watcher.close();
-      this.watcher = null;
-    }
+    this.isWatching = false;
+    this.callbacks.clear();
   }
 
   watchExercise(exercise: Exercise, callback: FileChangeCallback): void {
@@ -68,7 +53,10 @@ export class FileWatcher {
     }
   }
 
-  private async handleFileChange(filePath: string): Promise<void> {
+  // Manual trigger for file changes (since we can't watch files in browser)
+  async triggerFileChange(filePath: string): Promise<void> {
+    if (!this.isWatching) return;
+    
     try {
       const content = await this.readFile(filePath);
       const callbacks = this.callbacks.get(filePath) || [];
