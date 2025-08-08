@@ -19,7 +19,7 @@ import {
   IconCheck,
   IconX,
   IconClock,
-  IconPlay,
+  IconPlayerPlay,
   IconRefresh,
   IconAlertTriangle,
 } from '@tabler/icons-react';
@@ -163,7 +163,7 @@ export function TestRunner({ exercise, onStatusChange }: TestRunnerProps) {
             
             <Button
               size="xs"
-              leftSection={<IconPlay size={14} />}
+              leftSection={<IconPlayerPlay size={14} />}
               onClick={handleManualRun}
               loading={isRunning}
               variant="light"
@@ -278,7 +278,7 @@ export function TestRunner({ exercise, onStatusChange }: TestRunnerProps) {
               <Stack align="center" justify="center" style={{ minHeight: 200 }}>
                 <Text c="dimmed">No test results yet</Text>
                 <Button
-                  leftSection={<IconPlay size={16} />}
+                  leftSection={<IconPlayerPlay size={16} />}
                   onClick={handleManualRun}
                   variant="light"
                 >

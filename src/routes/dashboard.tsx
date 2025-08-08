@@ -11,7 +11,7 @@ import {
   ActionIcon,
   Tooltip,
 } from '@mantine/core';
-import { IconPlay, IconCheck, IconClock } from '@tabler/icons-react';
+import { IconPlayerPlay, IconCheck, IconClock } from '@tabler/icons-react';
 import { useNavigate } from 'react-router-dom';
 import { useExercises } from '@/hooks/useExercises';
 import { useProgress } from '@/hooks/useProgress';
@@ -95,7 +95,7 @@ export function DashboardPage() {
                         color={isCompleted ? 'green' : 'blue'}
                         onClick={() => handleStartExercise(category.id)}
                       >
-                        {isCompleted ? <IconCheck size={20} /> : <IconPlay size={20} />}
+                        {isCompleted ? <IconCheck size={20} /> : <IconPlayerPlay size={20} />}
                       </ActionIcon>
                     </Tooltip>
                   </Group>
@@ -154,9 +154,4 @@ export function DashboardPage() {
       </Stack>
     </Container>
   );
-}
-
-// Temporary placeholder for useProgress hook
-function getProgress() {
-  return { exercises: [] };
 }

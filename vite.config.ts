@@ -23,7 +23,12 @@ export default defineConfig({
     outDir: 'dist',
     sourcemap: true,
   },
+  define: {
+    global: 'globalThis',
+    'process.env': {},
+  },
   optimizeDeps: {
-    include: ['typescript', 'chokidar'],
+    include: ['typescript'],
+    exclude: ['chokidar'],
   },
 })
