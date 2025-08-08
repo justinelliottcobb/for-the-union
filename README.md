@@ -1,105 +1,72 @@
-# For The Union - TypeScript Exercises
+# TypeScript Exercises
 
-A comprehensive TypeScript learning system similar to Rustlings that provides an interactive, auto-reloading exercise environment for mastering TypeScript through hands-on practice.
+A comprehensive TypeScript learning system similar to Rustlings that provides an interactive, auto-reloading exercise environment.
 
-## 🎯 Project Overview
-
-This repository contains a modern, interactive TypeScript learning platform designed to help developers master advanced TypeScript concepts through progressive exercises. Inspired by the excellent Rust learning tool [Rustlings](https://github.com/rust-lang/rustlings), this system provides real-time feedback and auto-reloading capabilities.
-
-## ✨ Features
+## Features
 
 - 🏃‍♂️ **Interactive Learning**: Real-time TypeScript compilation and test execution
 - 🔄 **Auto-Reload**: File watching with automatic re-compilation when you save changes
-- 🎯 **Progressive Difficulty**: Exercises designed to build upon each other systematically
-- 🧪 **Comprehensive Testing**: Built-in test runner with detailed feedback and error reporting
-- 📊 **Progress Tracking**: Track your learning journey with detailed statistics and achievements
-- 🌙 **Modern UI**: Beautiful, responsive interface built with Mantine UI and React 18
-- 🛠️ **Extensible Architecture**: Easy to add new exercise categories and content
-- 🔧 **CLI Tools**: Command-line utilities for creating new exercises
+- 🎯 **Progressive Difficulty**: Exercises designed to build upon each other
+- 🧪 **Comprehensive Testing**: Built-in test runner with detailed feedback
+- 📊 **Progress Tracking**: Track your learning journey with detailed statistics
+- 🌙 **Modern UI**: Beautiful interface built with Mantine UI and React
+- 🛠️ **Extensible**: Easy to add new exercise categories and content
 
-## 🚀 Quick Start
+## Getting Started
 
 ### Prerequisites
 
-- Node.js 18+
+- Node.js 18+ 
 - npm or yarn
-- Git
 
-### Installation & Setup
+### Installation
 
-1. **Clone the repository:**
-   ```bash
-   git clone git@github.com:justinelliottcobb/for-the-union.git
-   cd for-the-union
-   ```
-
-2. **Navigate to the TypeScript exercises:**
+1. **Clone and setup:**
    ```bash
    cd typescript-exercises
-   ```
-
-3. **Install dependencies:**
-   ```bash
    npm install
    ```
 
-4. **Start the development server:**
+2. **Start the development server:**
    ```bash
    npm run dev
    ```
 
-5. **Open your browser:**
-   Navigate to `http://localhost:3000` and start learning!
+3. **Open your browser:**
+   Navigate to `http://localhost:3000`
 
 ### Your First Exercise
 
-1. Click on **"Discriminated Unions"** in the sidebar
-2. Select **"Traffic Light States"** exercise
-3. Click **"Open in Editor"** to edit the exercise file in your preferred IDE
+1. Click on "Discriminated Unions" in the sidebar
+2. Select "Traffic Light States" exercise
+3. Click "Open in Editor" to edit the exercise file
 4. Follow the instructions and implement the solution
-5. Save the file and watch tests run automatically in real-time!
+5. Save the file and watch tests run automatically!
 
-## 📚 Exercise Categories
+## Exercise Categories
 
 ### 📊 Discriminated Unions
-Master type-safe data modeling with discriminated unions:
+Learn to model complex data with type-safe discriminated unions:
+- **Traffic Light States** - Basic discriminated union concepts
+- **Geometric Shapes** - Advanced union type manipulation
 
-- **Traffic Light States** (Difficulty: 2/5) - Learn discriminated union basics and type-safe state machines
-- **Geometric Shapes** (Difficulty: 3/5) - Advanced union type manipulation with area calculations
+*More categories coming soon!*
 
-*More categories coming soon including functional programming patterns, async/await mastery, and advanced type manipulations!*
-
-## 🏗️ Project Structure
+## File Structure
 
 ```
-for-the-union/
-├── typescript-exercises/           # Main TypeScript learning system
-│   ├── src/
-│   │   ├── components/            # React components (ExerciseViewer, TestRunner, etc.)
-│   │   ├── exercises/             # Exercise templates and solutions
-│   │   ├── hooks/                 # React hooks for state management
-│   │   ├── lib/                   # Core exercise runner and utilities
-│   │   └── routes/                # Page components
-│   ├── exercise-files/            # Working files for students to edit
-│   ├── scripts/                   # CLI tools for creating exercises
-│   └── README.md                  # Detailed system documentation
-├── src/                           # Original Vite + React template
-└── README.md                      # This file
+typescript-exercises/
+├── src/
+│   ├── components/          # React components
+│   ├── exercises/           # Exercise templates and solutions
+│   ├── hooks/              # React hooks for state management
+│   ├── lib/                # Core exercise runner and utilities
+│   └── routes/             # Page components
+├── exercise-files/         # Working files for students
+└── scripts/                # CLI tools for creating exercises
 ```
 
-## 🛠️ Development
-
-### Running the System
-
-```bash
-cd typescript-exercises
-npm run dev          # Start development server
-npm run build        # Build for production  
-npm run preview      # Preview production build
-npm run test         # Run test suite
-npm run test:ui      # Run tests with UI
-npm run lint         # Run ESLint
-```
+## CLI Tools
 
 ### Creating New Exercises
 
@@ -109,90 +76,138 @@ Use the built-in CLI tool to scaffold new exercises:
 npm run create-exercise -- \
   --category="advanced-types" \
   --name="conditional-types" \
-  --title="Conditional Types Mastery" \
-  --description="Learn to use TypeScript conditional types effectively" \
+  --title="Conditional Types" \
+  --description="Master TypeScript conditional types" \
   --difficulty=4 \
   --time=30 \
-  --objectives="Understand conditional type syntax" "Apply conditional types to real-world scenarios" \
-  --hints="Start with simple conditions using extends" "Remember that conditional types are lazy"
+  --objectives="Understand conditional type syntax" "Apply conditional types to real scenarios" \
+  --hints="Start with simple conditions" "Use the extends keyword"
 ```
 
-This automatically generates:
-- Exercise template file with TODO comments
-- Reference solution file
-- Comprehensive test suite
-- Detailed instruction markdown
+This creates:
+- Exercise template file
+- Solution file  
+- Test file
+- Instruction markdown
 
-## 🏛️ Architecture
+## Development
 
-### Core Technologies
+### Running Tests
 
-- **Frontend**: React 18 + TypeScript with strict mode
-- **UI Library**: Mantine UI v7 with dark/light theme support
-- **Routing**: React Router 7 with file-based routing patterns
-- **Build Tool**: Vite with Hot Module Replacement (HMR)
-- **Testing**: Vitest with browser-based TypeScript compilation
-- **File Watching**: Chokidar for real-time file change detection
+```bash
+# Run all tests
+npm run test
 
-### Key Components
+# Run tests in watch mode
+npm run test:ui
 
-- **ExerciseRunner**: Compiles and executes TypeScript in the browser using the TypeScript compiler API
-- **FileWatcher**: Monitors exercise files for changes and triggers automatic recompilation
-- **TestRunner**: Executes tests and displays results with real-time feedback and animations
-- **ProgressTracker**: Persists completion status and learning statistics in localStorage
+# Run specific test file
+npm run test exercises/discriminated-unions
+```
 
-## 🎯 Learning Approach
+### Building for Production
 
-### Exercise Philosophy
+```bash
+npm run build
+npm run preview
+```
 
-Each exercise is designed with:
+### Code Style
 
-1. **Clear Learning Objectives**: 2-4 specific, measurable learning goals
-2. **Progressive Difficulty**: Building complexity that reinforces previous concepts
-3. **Comprehensive Testing**: Coverage of happy path, edge cases, and TypeScript type safety
-4. **Guided Instructions**: Background context, examples, and step-by-step guidance
-5. **Strategic Hints**: Helpful nudges without giving away the complete solution
+```bash
+npm run lint
+```
 
-### Pedagogical Features
+## Exercise Development Guide
 
-- **Real-time Feedback**: Immediate compilation errors and test results
-- **Type Safety Focus**: Exercises emphasize TypeScript's type system benefits
-- **Practical Applications**: Real-world scenarios rather than abstract examples
-- **Incremental Learning**: Each exercise builds on previous knowledge
-- **Achievement Tracking**: Progress badges and completion statistics
+### Creating Quality Exercises
 
-## 🤝 Contributing
+1. **Clear Learning Objectives**: Each exercise should have 2-4 specific learning goals
+2. **Progressive Difficulty**: Build on previous concepts gradually
+3. **Comprehensive Tests**: Cover happy path, edge cases, and type safety
+4. **Helpful Instructions**: Include background, examples, and step-by-step guidance
+5. **Strategic Hints**: Provide hints that guide without giving away the solution
 
-We welcome contributions! Here's how to get involved:
+### Exercise Template Structure
 
-### Adding New Exercises
+```typescript
+// exercise.ts - Student working file
+export type YourType = never; // TODO: Implement
+
+// solution.ts - Reference implementation  
+export type YourType = string | number;
+
+// tests.ts - Comprehensive test suite
+import { describe, it, expect } from 'vitest';
+
+// instructions.md - Detailed guidance
+# Exercise Title
+Learning objectives, background, and step-by-step instructions
+```
+
+## Extending the System
+
+### Adding New Categories
+
+1. Create category directory in `src/exercises/`
+2. Add category configuration
+3. Update the exercise hooks
+4. Create exercise files using the CLI tool
+
+### Custom Exercise Types
+
+The system supports any TypeScript learning content:
+- Type manipulations
+- Functional programming patterns  
+- Async/await patterns
+- Design patterns
+- Framework-specific concepts
+
+## Architecture
+
+### Core Components
+
+- **ExerciseRunner**: Compiles and executes TypeScript in the browser
+- **FileWatcher**: Watches exercise files for changes using Chokidar
+- **TestRunner**: Runs tests and displays results with real-time feedback
+- **ProgressTracker**: Tracks completion and learning statistics
+
+### Technology Stack
+
+- **Frontend**: React 18 with TypeScript
+- **UI Library**: Mantine UI v7 with dark/light theme
+- **Routing**: React Router 7
+- **Build Tool**: Vite with HMR
+- **Testing**: Vitest with browser TypeScript compilation
+- **File Watching**: Chokidar
+
+## Contributing
 
 1. Fork the repository
-2. Use the CLI tool to create exercise scaffolding
-3. Implement comprehensive instructions, tests, and solutions
-4. Test thoroughly with multiple difficulty levels
-5. Submit a Pull Request
+2. Create your feature branch (`git checkout -b feature/amazing-exercise`)
+3. Add your exercises with tests and documentation
+4. Commit your changes (`git commit -m 'Add amazing exercise'`)
+5. Push to the branch (`git push origin feature/amazing-exercise`)
+6. Open a Pull Request
 
-### Contributing Guidelines
+### Contribution Guidelines
 
-- All exercises must include comprehensive test coverage
-- Follow established file structure and naming conventions
-- Include clear, beginner-friendly instructions with examples
-- Ensure compatibility with TypeScript strict mode
-- Test exercises across different skill levels
+- All exercises must include comprehensive tests
+- Follow the established file structure and naming conventions
+- Include clear instructions and helpful hints
+- Test exercises with multiple difficulty levels
+- Ensure TypeScript strict mode compatibility
 
-## 📄 License
+## License
 
-This project is licensed under the MIT License. See the LICENSE file for details.
+MIT License - see LICENSE file for details.
 
-## 🙏 Acknowledgments
+## Acknowledgments
 
-- Inspired by [Rustlings](https://github.com/rust-lang/rustlings) - the excellent Rust learning tool
-- Built with modern web technologies for optimal developer experience
-- Designed with accessibility and inclusive learning in mind
+Inspired by [Rustlings](https://github.com/rust-lang/rustlings) - the excellent Rust learning tool that makes learning through practice engaging and effective.
 
 ---
 
-**Start your TypeScript mastery journey today!** 🚀
+**Happy Learning! 🎉**
 
-Navigate to the `typescript-exercises` directory and begin learning advanced TypeScript concepts through hands-on, interactive practice.
+Start your TypeScript journey today and master advanced type system concepts through hands-on practice.

@@ -2,7 +2,7 @@
 
 ## Project Overview
 **Repository:** `git@github.com:justinelliottcobb/for-the-union.git`  
-**Working Directory:** `/home/sisawat/working/web/for-the-union/typescript-exercises`  
+**Working Directory:** `/home/sisawat/working/web/for-the-union`  
 **Current Branch:** `feature/react-hooks-exercises`  
 **Project Type:** Interactive TypeScript learning platform (Rustlings-style)
 
@@ -15,7 +15,7 @@
 
 ## Project Structure
 ```
-typescript-exercises/
+for-the-union/           # Repository root
 ├── src/
 │   ├── components/        # React components (ExerciseViewer, TestRunner, etc.)
 │   ├── hooks/            # useExercises hook with category management
@@ -28,7 +28,7 @@ typescript-exercises/
 │   ├── discriminated-unions/     # 2 exercises (traffic lights, shapes)
 │   ├── react-hooks/             # 6 exercises (useState → advanced patterns)
 │   └── elite-state-management/  # 3 exercises (1 complete, 2 planned)
-└── tools/               # CLI scaffolding tools
+└── scripts/             # CLI scaffolding tools
 ```
 
 ## Exercise Categories Status

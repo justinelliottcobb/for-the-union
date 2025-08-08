@@ -4,7 +4,7 @@
 **Project:** TypeScript Exercises (Rustlings-style learning platform)  
 **Repo:** `git@github.com:justinelliottcobb/for-the-union.git`  
 **Branch:** `feature/react-hooks-exercises`  
-**Dir:** `/home/sisawat/working/web/for-the-union/typescript-exercises`
+**Dir:** `/home/sisawat/working/web/for-the-union`
 
 ## Stack
 React 18 + TypeScript + Mantine UI v7 + Vite + file watching
@@ -29,7 +29,7 @@ React 18 + TypeScript + Mantine UI v7 + Vite + file watching
 - `src/hooks/useExercises.ts` - Category management
 - `src/exercises/*/config.ts` - Exercise configurations  
 - `exercise-files/` - Student TODO-driven exercises
-- `tools/create-exercise.ts` - CLI scaffolding
+- `scripts/create-exercise.ts` - CLI scaffolding
 
 ## Dev Commands
 - `npm run dev` - Start with file watching
