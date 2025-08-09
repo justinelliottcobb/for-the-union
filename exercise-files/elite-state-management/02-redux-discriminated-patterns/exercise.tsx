@@ -160,6 +160,170 @@ type UIAction =
   | { type: 'ui/toggleSidebar' }
   | { type: 'ui/setSidebar'; open: boolean };
 
+// TODO: Advanced Pattern - Tagged Union with Handler Map (Most TypeScript-idiomatic)
+// This pattern provides excellent type safety and eliminates the switch statement anti-pattern
+
+type ActionHandler<S, A> = (state: S, action: A) => S;
+
+type ActionHandlers<S, A extends { type: string }> = {
+  [K in A['type']]: ActionHandler<S, Extract<A, { type: K }>>
+};
+
+function createTypedReducer<S, A extends { type: string }>(
+  handlers: ActionHandlers<S, A>
+) {
+  return (state: S, action: A): S => {
+    const handler = handlers[action.type] as ActionHandler<S, A> | undefined;
+    return handler ? handler(state, action) : state;
+  };
+}
+
+// Example: Counter with business logic using the handler map pattern
+type CounterState = {
+  count: number;
+  error: string | null;
+  min: number;
+  max: number;
+};
+
+type CounterAction =
+  | { type: 'increment' }
+  | { type: 'decrement' }
+  | { type: 'reset' }
+  | { type: 'setLimits'; min: number; max: number };
+
+// TODO: Implement counter reducer using the handler map pattern
+const counterReducer = createTypedReducer<CounterState, CounterAction>({
+  increment: (state, action) => {
+    const newCount = state.count + 1;
+    const canIncrement = newCount <= state.max;
+    return {
+      ...state,
+      count: canIncrement ? newCount : state.count,
+      error: canIncrement ? null : `Maximum value ${state.max} reached!`,
+    };
+  },
+  
+  decrement: (state, action) => {
+    const newCount = state.count - 1;
+    const canDecrement = newCount >= state.min;
+    return {
+      ...state,
+      count: canDecrement ? newCount : state.count,
+      error: canDecrement ? null : `Minimum value ${state.min} reached!`,
+    };
+  },
+  
+  reset: (state, action) => ({
+    ...state,
+    count: 0,
+    error: null,
+  }),
+  
+  setLimits: (state, action) => ({
+    ...state,
+    min: action.min,
+    max: action.max,
+    error: null,
+  }),
+});
+
+// TODO: Example of using handler map pattern for complex entity management
+type EntityAction<T> =
+  | { type: 'create'; entity: T }
+  | { type: 'update'; id: string; updates: Partial<T> }
+  | { type: 'delete'; id: string }
+  | { type: 'setLoading'; id: string; loading: boolean }
+  | { type: 'setError'; id: string; error: string }
+  | { type: 'clearError'; id: string };
+
+type EntityState<T> = {
+  entities: Record<string, T & { loading?: boolean; error?: string }>;
+  ids: string[];
+};
+
+function createEntityReducer<T extends { id: string }>() {
+  return createTypedReducer<EntityState<T>, EntityAction<T>>({
+    create: (state, action) => {
+      const entity = action.entity;
+      return {
+        ...state,
+        entities: {
+          ...state.entities,
+          [entity.id]: { ...entity, loading: false, error: undefined },
+        },
+        ids: state.ids.includes(entity.id) ? state.ids : [...state.ids, entity.id],
+      };
+    },
+    
+    update: (state, action) => {
+      const existingEntity = state.entities[action.id];
+      if (!existingEntity) return state;
+      
+      return {
+        ...state,
+        entities: {
+          ...state.entities,
+          [action.id]: {
+            ...existingEntity,
+            ...action.updates,
+            loading: false,
+            error: undefined,
+          },
+        },
+      };
+    },
+    
+    delete: (state, action) => {
+      const { [action.id]: deleted, ...restEntities } = state.entities;
+      return {
+        ...state,
+        entities: restEntities,
+        ids: state.ids.filter(id => id !== action.id),
+      };
+    },
+    
+    setLoading: (state, action) => {
+      const entity = state.entities[action.id];
+      if (!entity) return state;
+      
+      return {
+        ...state,
+        entities: {
+          ...state.entities,
+          [action.id]: { ...entity, loading: action.loading },
+        },
+      };
+    },
+    
+    setError: (state, action) => {
+      const entity = state.entities[action.id];
+      if (!entity) return state;
+      
+      return {
+        ...state,
+        entities: {
+          ...state.entities,
+          [action.id]: { ...entity, error: action.error, loading: false },
+        },
+      };
+    },
+    
+    clearError: (state, action) => {
+      const entity = state.entities[action.id];
+      if (!entity) return state;
+      
+      return {
+        ...state,
+        entities: {
+          ...state.entities,
+          [action.id]: { ...entity, error: undefined },
+        },
+      };
+    },
+  });
+}
+
 // TODO: Create async thunks for API operations
 const fetchUser = createAsyncThunk(
   'users/fetchUser',
