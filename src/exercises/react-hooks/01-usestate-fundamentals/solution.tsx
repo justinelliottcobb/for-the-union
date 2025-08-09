@@ -1,7 +1,7 @@
 // useState Fundamentals - Solution
 // Master the basics of React useState hook for managing component state
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Define types for our state
 type CounterState = {

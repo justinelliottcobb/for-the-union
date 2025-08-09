@@ -20,6 +20,17 @@ export function ExerciseViewer({ exercise }: ExerciseViewerProps) {
     loadExerciseContent();
   }, [exercise]);
 
+  const convertPathToUrl = (path: string): string => {
+    // Convert relative paths to URLs that Vite dev server can serve
+    if (path.startsWith('./src/')) {
+      return path.replace('./src/', '/src/');
+    }
+    if (path.startsWith('./exercise-files/')) {
+      return path.replace('./', '/');
+    }
+    return path;
+  };
+
   const loadExerciseContent = async () => {
     setLoading(true);
     setError(null);
@@ -28,9 +39,13 @@ export function ExerciseViewer({ exercise }: ExerciseViewerProps) {
       // Load instructions
       if (exercise.instructionsPath) {
         try {
-          const instructionsResponse = await fetch(exercise.instructionsPath);
+          const url = convertPathToUrl(exercise.instructionsPath);
+          const instructionsResponse = await fetch(url);
           if (instructionsResponse.ok) {
             setInstructions(await instructionsResponse.text());
+          } else {
+            console.warn('Could not load instructions from:', url);
+            setInstructions(generateDefaultInstructions(exercise));
           }
         } catch (err) {
           console.warn('Could not load instructions:', err);
@@ -43,9 +58,13 @@ export function ExerciseViewer({ exercise }: ExerciseViewerProps) {
       // Load current exercise code
       if (exercise.filePath) {
         try {
-          const codeResponse = await fetch(exercise.filePath);
+          const url = convertPathToUrl(exercise.filePath);
+          const codeResponse = await fetch(url);
           if (codeResponse.ok) {
             setCurrentCode(await codeResponse.text());
+          } else {
+            console.warn('Could not load exercise code from:', url);
+            setCurrentCode(generateDefaultExerciseCode(exercise));
           }
         } catch (err) {
           console.warn('Could not load exercise code:', err);
@@ -56,9 +75,12 @@ export function ExerciseViewer({ exercise }: ExerciseViewerProps) {
       // Load solution (if available)
       if (exercise.solutionPath) {
         try {
-          const solutionResponse = await fetch(exercise.solutionPath);
+          const url = convertPathToUrl(exercise.solutionPath);
+          const solutionResponse = await fetch(url);
           if (solutionResponse.ok) {
             setSolutionCode(await solutionResponse.text());
+          } else {
+            console.warn('Could not load solution from:', url);
           }
         } catch (err) {
           console.warn('Could not load solution:', err);

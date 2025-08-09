@@ -19,14 +19,14 @@ import { useProgress } from '@/hooks/useProgress';
 export function DashboardPage() {
   const navigate = useNavigate();
   const { categories } = useExercises();
-  const { getCategoryProgress, getOverallProgress } = useProgress();
+  const { getCategoryProgress, getOverallProgress, getAllExerciseProgress } = useProgress();
   const overallProgress = getOverallProgress();
 
   const handleStartExercise = (categoryId: string) => {
     const category = categories.find(c => c.id === categoryId);
     if (category) {
       const firstIncompleteExercise = category.exercises.find(exercise => {
-        const progress = getProgress().exercises.find(p => p.exerciseId === exercise.id);
+        const progress = getAllExerciseProgress().find(p => p.exerciseId === exercise.id);
         return !progress || progress.status !== 'completed';
       });
       
