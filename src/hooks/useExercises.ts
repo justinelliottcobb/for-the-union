@@ -4,6 +4,7 @@ import { discriminatedUnionsCategory } from '@exercises/discriminated-unions/con
 import { reactHooksCategory } from '@exercises/react-hooks/config';
 import { eliteStateManagementCategory } from '@exercises/elite-state-management/config';
 import { advancedTypeScriptPatternsCategory } from '@exercises/advanced-typescript-patterns/config';
+import { graphqlCategory } from '@exercises/graphql/config';
 
 // Import all exercise categories
 const EXERCISE_CATEGORIES: ExerciseCategory[] = [
@@ -11,6 +12,7 @@ const EXERCISE_CATEGORIES: ExerciseCategory[] = [
   reactHooksCategory,
   eliteStateManagementCategory,
   advancedTypeScriptPatternsCategory,
+  graphqlCategory,
 ].sort((a, b) => a.order - b.order);
 
 export function useExercises() {

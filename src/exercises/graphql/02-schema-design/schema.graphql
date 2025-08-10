@@ -1,0 +1,702 @@
+# SocialConnect GraphQL Schema
+# Complete schema for a professional networking platform
+
+# Custom Scalars
+scalar DateTime
+scalar EmailAddress
+scalar URL
+scalar JSON
+scalar Upload
+
+# Enums
+enum UserStatus {
+  ACTIVE
+  INACTIVE
+  SUSPENDED
+  PENDING_VERIFICATION
+}
+
+enum ConnectionStatus {
+  PENDING
+  ACCEPTED
+  BLOCKED
+  DECLINED
+}
+
+enum PostType {
+  TEXT
+  IMAGE
+  VIDEO
+  POLL
+  ARTICLE
+  EVENT
+}
+
+enum ReactionType {
+  LIKE
+  LOVE
+  LAUGH
+  ANGRY
+  SAD
+  CELEBRATE
+}
+
+enum NotificationType {
+  POST_LIKE
+  POST_COMMENT
+  CONNECTION_REQUEST
+  CONNECTION_ACCEPTED
+  MENTION
+  MESSAGE
+}
+
+enum PrivacyLevel {
+  PUBLIC
+  CONNECTIONS
+  PRIVATE
+}
+
+# Interfaces
+interface Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+interface Reactable {
+  id: ID!
+  reactions: ReactionConnection!
+  totalReactions: Int!
+  myReaction: ReactionType
+}
+
+interface Commentable {
+  id: ID!
+  comments: CommentConnection!
+  totalComments: Int!
+  commentsEnabled: Boolean!
+}
+
+# Core Types
+type User implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  
+  # Profile Information
+  email: EmailAddress!
+  username: String!
+  displayName: String!
+  bio: String
+  avatar: String
+  coverImage: String
+  location: String
+  website: URL
+  
+  # Professional Information
+  title: String
+  company: String
+  skills: [Skill!]!
+  experience: [Experience!]!
+  education: [Education!]!
+  
+  # Social Information
+  posts(first: Int, after: String, type: PostType): PostConnection!
+  connections(first: Int, after: String, status: ConnectionStatus): ConnectionConnection!
+  followers(first: Int, after: String): UserConnection!
+  following(first: Int, after: String): UserConnection!
+  
+  # Privacy and Status
+  status: UserStatus!
+  privacy: PrivacyLevel!
+  isVerified: Boolean!
+  lastSeen: DateTime
+  
+  # Computed Fields
+  totalConnections: Int!
+  totalFollowers: Int!
+  totalPosts: Int!
+  isMyConnection: Boolean
+  isFollowedByMe: Boolean
+}
+
+type Skill implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  name: String!
+  category: String
+  endorsements: [Endorsement!]!
+  totalEndorsements: Int!
+}
+
+type Experience implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  title: String!
+  company: String!
+  location: String
+  startDate: DateTime!
+  endDate: DateTime
+  isCurrent: Boolean!
+  description: String
+}
+
+type Education implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  institution: String!
+  degree: String
+  fieldOfStudy: String
+  startDate: DateTime!
+  endDate: DateTime
+  grade: String
+  description: String
+}
+
+type Post implements Node & Reactable & Commentable {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  
+  # Content
+  content: String!
+  type: PostType!
+  media: [MediaFile!]!
+  poll: Poll
+  
+  # Metadata
+  author: User!
+  privacy: PrivacyLevel!
+  isEdited: Boolean!
+  editedAt: DateTime
+  
+  # Engagement
+  reactions: ReactionConnection!
+  totalReactions: Int!
+  myReaction: ReactionType
+  comments: CommentConnection!
+  totalComments: Int!
+  commentsEnabled: Boolean!
+  
+  # Social Features
+  shares: ShareConnection!
+  totalShares: Int!
+  mentions: [User!]!
+  hashtags: [String!]!
+  
+  # Computed Fields
+  engagementScore: Float!
+  isBookmarked: Boolean
+}
+
+type Comment implements Node & Reactable {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  
+  content: String!
+  author: User!
+  post: Post!
+  parent: Comment
+  children: CommentConnection!
+  
+  reactions: ReactionConnection!
+  totalReactions: Int!
+  myReaction: ReactionType
+  
+  mentions: [User!]!
+  isEdited: Boolean!
+  editedAt: DateTime
+  
+  # Computed
+  totalReplies: Int!
+  depth: Int!
+}
+
+type Reaction implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  type: ReactionType!
+  user: User!
+}
+
+type Connection implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  requester: User!
+  recipient: User!
+  status: ConnectionStatus!
+  message: String
+  respondedAt: DateTime
+}
+
+type MediaFile implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  url: URL!
+  thumbnailUrl: URL
+  filename: String!
+  mimeType: String!
+  size: Int!
+  width: Int
+  height: Int
+  duration: Int
+  alt: String
+  processingStatus: ProcessingStatus!
+}
+
+enum ProcessingStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
+
+type Poll implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  question: String!
+  options: [PollOption!]!
+  totalVotes: Int!
+  endsAt: DateTime
+  isMultipleChoice: Boolean!
+  myVote: [PollOption!]
+  hasVoted: Boolean!
+}
+
+type PollOption {
+  id: ID!
+  text: String!
+  votes: Int!
+  percentage: Float!
+}
+
+type Notification implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  type: NotificationType!
+  user: User!
+  actor: User
+  post: Post
+  comment: Comment
+  connection: Connection
+  isRead: Boolean!
+  readAt: DateTime
+  title: String!
+  message: String!
+  actionUrl: String
+}
+
+type Endorsement implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  skill: Skill!
+  endorser: User!
+  recipient: User!
+  message: String
+}
+
+type Share implements Node {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  post: Post!
+  user: User!
+  message: String
+}
+
+# Connection Types (Relay-style pagination)
+type UserConnection {
+  edges: [UserEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type UserEdge {
+  node: User!
+  cursor: String!
+  connectionDate: DateTime
+  mutualConnections: Int
+}
+
+type PostConnection {
+  edges: [PostEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type PostEdge {
+  node: Post!
+  cursor: String!
+  relevanceScore: Float
+}
+
+type CommentConnection {
+  edges: [CommentEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type CommentEdge {
+  node: Comment!
+  cursor: String!
+}
+
+type ReactionConnection {
+  edges: [ReactionEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+  summary: [ReactionSummary!]!
+}
+
+type ReactionEdge {
+  node: Reaction!
+  cursor: String!
+}
+
+type ReactionSummary {
+  type: ReactionType!
+  count: Int!
+}
+
+type ConnectionConnection {
+  edges: [ConnectionEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type ConnectionEdge {
+  node: Connection!
+  cursor: String!
+}
+
+type ShareConnection {
+  edges: [ShareEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+}
+
+type ShareEdge {
+  node: Share!
+  cursor: String!
+}
+
+type NotificationConnection {
+  edges: [NotificationEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+  unreadCount: Int!
+}
+
+type NotificationEdge {
+  node: Notification!
+  cursor: String!
+}
+
+type PageInfo {
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+  endCursor: String
+}
+
+# Search Result Types
+union SearchResult = User | Post | Comment
+
+type SearchConnection {
+  edges: [SearchEdge!]!
+  pageInfo: PageInfo!
+  totalCount: Int!
+  facets: [SearchFacet!]!
+}
+
+type SearchEdge {
+  node: SearchResult!
+  cursor: String!
+  score: Float!
+  highlights: [String!]!
+}
+
+type SearchFacet {
+  field: String!
+  values: [SearchFacetValue!]!
+}
+
+type SearchFacetValue {
+  value: String!
+  count: Int!
+}
+
+# Input Types
+input UserCreateInput {
+  email: EmailAddress!
+  username: String!
+  displayName: String!
+  password: String!
+  bio: String
+  title: String
+  company: String
+}
+
+input UserUpdateInput {
+  displayName: String
+  bio: String
+  avatar: Upload
+  coverImage: Upload
+  location: String
+  website: URL
+  title: String
+  company: String
+  privacy: PrivacyLevel
+}
+
+input PostCreateInput {
+  content: String!
+  type: PostType!
+  media: [Upload!]
+  poll: PollCreateInput
+  privacy: PrivacyLevel
+  mentionIds: [ID!]
+  hashtags: [String!]
+}
+
+input PostUpdateInput {
+  content: String
+  privacy: PrivacyLevel
+  commentsEnabled: Boolean
+}
+
+input PollCreateInput {
+  question: String!
+  options: [String!]!
+  endsAt: DateTime
+  isMultipleChoice: Boolean
+}
+
+input CommentCreateInput {
+  content: String!
+  postId: ID!
+  parentId: ID
+  mentionIds: [ID!]
+}
+
+input CommentUpdateInput {
+  content: String!
+}
+
+input ConnectionRequestInput {
+  recipientId: ID!
+  message: String
+}
+
+input SearchInput {
+  query: String!
+  types: [String!]
+  filters: JSON
+  sort: SearchSort
+  first: Int
+  after: String
+}
+
+enum SearchSort {
+  RELEVANCE
+  RECENT
+  POPULAR
+  ALPHABETICAL
+}
+
+input ReactionInput {
+  targetId: ID!
+  type: ReactionType!
+}
+
+# Root Types
+type Query {
+  # Current User
+  me: User
+  
+  # Users
+  user(id: ID, username: String): User
+  users(first: Int, after: String, filter: UserFilter): UserConnection!
+  
+  # Posts
+  post(id: ID!): Post
+  posts(first: Int, after: String, filter: PostFilter): PostConnection!
+  feed(first: Int, after: String): PostConnection!
+  
+  # Comments
+  comment(id: ID!): Comment
+  
+  # Connections
+  myConnections(first: Int, after: String, status: ConnectionStatus): ConnectionConnection!
+  connectionRequests(first: Int, after: String): ConnectionConnection!
+  
+  # Notifications
+  notifications(first: Int, after: String, unreadOnly: Boolean): NotificationConnection!
+  
+  # Search
+  search(input: SearchInput!): SearchConnection!
+  
+  # Node interface
+  node(id: ID!): Node
+  nodes(ids: [ID!]!): [Node]!
+}
+
+type Mutation {
+  # Authentication
+  register(input: UserCreateInput!): AuthPayload!
+  login(email: EmailAddress!, password: String!): AuthPayload!
+  logout: Boolean!
+  refreshToken: AuthPayload!
+  
+  # User Management
+  updateProfile(input: UserUpdateInput!): User!
+  deleteAccount: Boolean!
+  changePassword(currentPassword: String!, newPassword: String!): Boolean!
+  
+  # Posts
+  createPost(input: PostCreateInput!): Post!
+  updatePost(id: ID!, input: PostUpdateInput!): Post!
+  deletePost(id: ID!): Boolean!
+  sharePost(postId: ID!, message: String): Share!
+  bookmarkPost(postId: ID!): Boolean!
+  unbookmarkPost(postId: ID!): Boolean!
+  
+  # Comments
+  createComment(input: CommentCreateInput!): Comment!
+  updateComment(id: ID!, input: CommentUpdateInput!): Comment!
+  deleteComment(id: ID!): Boolean!
+  
+  # Reactions
+  addReaction(input: ReactionInput!): Reaction!
+  removeReaction(targetId: ID!): Boolean!
+  
+  # Connections
+  sendConnectionRequest(input: ConnectionRequestInput!): Connection!
+  acceptConnectionRequest(id: ID!): Connection!
+  declineConnectionRequest(id: ID!): Boolean!
+  removeConnection(id: ID!): Boolean!
+  blockUser(userId: ID!): Boolean!
+  unblockUser(userId: ID!): Boolean!
+  
+  # Following
+  followUser(userId: ID!): Boolean!
+  unfollowUser(userId: ID!): Boolean!
+  
+  # Skills & Endorsements
+  addSkill(name: String!, category: String): Skill!
+  removeSkill(id: ID!): Boolean!
+  endorseSkill(skillId: ID!, userId: ID!, message: String): Endorsement!
+  
+  # Experience & Education
+  addExperience(input: ExperienceInput!): Experience!
+  updateExperience(id: ID!, input: ExperienceInput!): Experience!
+  deleteExperience(id: ID!): Boolean!
+  
+  addEducation(input: EducationInput!): Education!
+  updateEducation(id: ID!, input: EducationInput!): Education!
+  deleteEducation(id: ID!): Boolean!
+  
+  # Notifications
+  markNotificationRead(id: ID!): Notification!
+  markAllNotificationsRead: Int!
+  deleteNotification(id: ID!): Boolean!
+  
+  # Polls
+  votePoll(pollId: ID!, optionIds: [ID!]!): Poll!
+  
+  # Media
+  uploadFile(file: Upload!): MediaFile!
+}
+
+type Subscription {
+  # Real-time Notifications
+  notificationAdded(userId: ID!): Notification!
+  
+  # Live Comments
+  commentAdded(postId: ID!): Comment!
+  
+  # Post Updates
+  postUpdated(userId: ID!): Post!
+  
+  # Connection Updates
+  connectionRequestReceived(userId: ID!): Connection!
+  connectionAccepted(userId: ID!): Connection!
+  
+  # Typing Indicators
+  userTyping(postId: ID!): TypingIndicator!
+  
+  # Presence
+  userPresence(userId: ID!): UserPresence!
+}
+
+# Supporting Types
+type AuthPayload {
+  token: String!
+  refreshToken: String!
+  user: User!
+  expiresIn: Int!
+}
+
+type TypingIndicator {
+  user: User!
+  postId: ID!
+  isTyping: Boolean!
+}
+
+type UserPresence {
+  user: User!
+  isOnline: Boolean!
+  lastSeen: DateTime
+}
+
+# Filter Input Types
+input UserFilter {
+  status: UserStatus
+  isVerified: Boolean
+  location: String
+  company: String
+  skills: [String!]
+}
+
+input PostFilter {
+  type: PostType
+  authorId: ID
+  privacy: PrivacyLevel
+  hasMedia: Boolean
+  dateRange: DateRangeInput
+}
+
+input DateRangeInput {
+  from: DateTime
+  to: DateTime
+}
+
+input ExperienceInput {
+  title: String!
+  company: String!
+  location: String
+  startDate: DateTime!
+  endDate: DateTime
+  isCurrent: Boolean
+  description: String
+}
+
+input EducationInput {
+  institution: String!
+  degree: String
+  fieldOfStudy: String
+  startDate: DateTime!
+  endDate: DateTime
+  grade: String
+  description: String
+}
