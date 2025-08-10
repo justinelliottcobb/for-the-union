@@ -117,7 +117,7 @@ const NetworkStateMachine = {
     [StateBrand]: 'Connected' as const,
   }),
 
-  connectionFailed: <From extends 'Connecting' | 'Authenticating'>(
+  connectionFailed: <From extends 'Connecting' | 'Authenticating',>(
     state: State<From, NetworkData>,
     payload: { error: string }
   ): State<'Failed', NetworkData> => ({
@@ -148,7 +148,7 @@ const NetworkStateMachine = {
     [StateBrand]: 'Authenticated' as const,
   }),
 
-  startDisconnection: <From extends 'Connected' | 'Authenticated'>(
+  startDisconnection: <From extends 'Connected' | 'Authenticated',>(
     state: State<From, NetworkData>
   ): State<'Disconnecting', NetworkData> => ({
     state: 'Disconnecting' as const,
@@ -156,7 +156,7 @@ const NetworkStateMachine = {
     [StateBrand]: 'Disconnecting' as const,
   }),
 
-  disconnected: <From extends 'Failed' | 'Disconnecting'>(
+  disconnected: <From extends 'Failed' | 'Disconnecting',>(
     state: State<From, NetworkData>
   ): State<'Disconnected', NetworkData> => ({
     state: 'Disconnected' as const,
@@ -425,13 +425,13 @@ type HttpEvents<T> =
   | Event<'Success' | 'Error' | 'Timeout' | 'Cancelled', 'Idle'>;
 
 const HttpStateMachine = {
-  initial: <T>(): State<'Idle', HttpData<T>> => ({
+  initial: <T,>(): State<'Idle', HttpData<T>> => ({
     state: 'Idle' as const,
     data: {},
     [StateBrand]: 'Idle' as const,
   }),
 
-  startRequest: <T>(
+  startRequest: <T,>(
     state: State<'Idle', HttpData<T>>,
     payload: { url: string; method: string; headers?: Record<string, string>; body?: unknown }
   ): State<'Pending', HttpData<T>> => ({
@@ -447,7 +447,7 @@ const HttpStateMachine = {
     [StateBrand]: 'Pending' as const,
   }),
 
-  requestSucceeded: <T>(
+  requestSucceeded: <T,>(
     state: State<'Pending', HttpData<T>>,
     payload: { response: T; statusCode: number }
   ): State<'Success', HttpData<T>> => {
@@ -467,7 +467,7 @@ const HttpStateMachine = {
     };
   },
 
-  requestFailed: <T>(
+  requestFailed: <T,>(
     state: State<'Pending', HttpData<T>>,
     payload: { error: string; statusCode?: number }
   ): State<'Error', HttpData<T>> => {
@@ -487,7 +487,7 @@ const HttpStateMachine = {
     };
   },
 
-  requestTimedOut: <T>(
+  requestTimedOut: <T,>(
     state: State<'Pending', HttpData<T>>
   ): State<'Timeout', HttpData<T>> => {
     const endTime = new Date();
@@ -505,7 +505,7 @@ const HttpStateMachine = {
     };
   },
 
-  requestCancelled: <T>(
+  requestCancelled: <T,>(
     state: State<'Pending', HttpData<T>>
   ): State<'Cancelled', HttpData<T>> => {
     const endTime = new Date();
@@ -523,7 +523,7 @@ const HttpStateMachine = {
     };
   },
 
-  reset: <T>(
+  reset: <T,>(
     state: State<'Success' | 'Error' | 'Timeout' | 'Cancelled', HttpData<T>>
   ): State<'Idle', HttpData<T>> => ({
     state: 'Idle' as const,
@@ -532,22 +532,22 @@ const HttpStateMachine = {
   }),
 
   // Query functions
-  isPending: <T>(state: State<HttpState, HttpData<T>>): boolean =>
+  isPending: <T,>(state: State<HttpState, HttpData<T>>): boolean =>
     state.state === 'Pending',
 
-  isComplete: <T>(state: State<HttpState, HttpData<T>>): boolean =>
+  isComplete: <T,>(state: State<HttpState, HttpData<T>>): boolean =>
     ['Success', 'Error', 'Timeout', 'Cancelled'].includes(state.state),
 
-  isSuccessful: <T>(state: State<HttpState, HttpData<T>>): state is State<'Success', HttpData<T>> =>
+  isSuccessful: <T,>(state: State<HttpState, HttpData<T>>): state is State<'Success', HttpData<T>> =>
     state.state === 'Success',
 
-  hasError: <T>(state: State<HttpState, HttpData<T>>): boolean =>
+  hasError: <T,>(state: State<HttpState, HttpData<T>>): boolean =>
     ['Error', 'Timeout', 'Cancelled'].includes(state.state),
 
-  canRetry: <T>(state: State<HttpState, HttpData<T>>): boolean =>
+  canRetry: <T,>(state: State<HttpState, HttpData<T>>): boolean =>
     ['Error', 'Timeout'].includes(state.state),
 
-  getRequestInfo: <T>(state: State<HttpState, HttpData<T>>) => ({
+  getRequestInfo: <T,>(state: State<HttpState, HttpData<T>>) => ({
     url: state.data.url,
     method: state.data.method,
     state: state.state,
@@ -734,7 +734,7 @@ const GameStateMachine = {
     [StateBrand]: 'Playing' as const,
   }),
 
-  openSettings: <From extends 'MainMenu' | 'Paused'>(
+  openSettings: <From extends 'MainMenu' | 'Paused',>(
     state: State<From, GameData>
   ): State<'Settings', GameData> => ({
     state: 'Settings' as const,
@@ -750,7 +750,7 @@ const GameStateMachine = {
     [StateBrand]: 'MainMenu' as const,
   }),
 
-  backToMenu: <From extends 'GameOver' | 'Victory' | 'Paused'>(
+  backToMenu: <From extends 'GameOver' | 'Victory' | 'Paused',>(
     state: State<From, GameData>
   ): State<'MainMenu', GameData> => ({
     state: 'MainMenu' as const,

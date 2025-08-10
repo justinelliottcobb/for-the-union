@@ -358,14 +358,14 @@ type StateMachineDef<States extends string, Events extends string> = {
 // Compile state machine to type-safe interface
 type CompileStateMachine<SM extends StateMachineDef<string, string>> = {
   readonly currentState: SM['initialState'];
-  readonly canTransition: <E extends SM['events'][number]>(
+  readonly canTransition: <E extends SM['events'][number],>(
     event: E
   ) => E extends keyof SM['transitions'][SM['currentState']]
     ? SM['transitions'][SM['currentState']][E] extends string
       ? true
       : false
     : false;
-  readonly transition: <E extends SM['events'][number]>(
+  readonly transition: <E extends SM['events'][number],>(
     event: E
   ) => E extends keyof SM['transitions'][SM['currentState']]
     ? SM['transitions'][SM['currentState']][E] extends infer NextState

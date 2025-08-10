@@ -31,20 +31,20 @@ type Free<F, A> =
 
 const Free = {
   // Pure value constructor
-  pure: <F, A>(value: A): Free<F, A> => ({
+  pure: <F, A,>(value: A): Free<F, A> => ({
     _tag: 'Pure' as const,
     value,
   }),
 
   // Lift a functor operation into Free monad
-  liftF: <F, A>(functor: F & { map?: (f: (a: any) => any) => any }): Free<F, A> => ({
+  liftF: <F, A,>(functor: F & { map?: (f: (a: any) => any) => any }): Free<F, A> => ({
     _tag: 'Impure' as const,
     functor,
     continuation: (result: A) => Free.pure(result),
   }),
 
   // Monadic bind/flatMap
-  flatMap: <F, A, B>(
+  flatMap: <F, A, B,>(
     free: Free<F, A>, 
     f: (a: A) => Free<F, B>
   ): Free<F, B> => {
@@ -61,15 +61,15 @@ const Free = {
   },
 
   // Functor map
-  map: <F, A, B>(free: Free<F, A>, f: (a: A) => B): Free<F, B> => 
+  map: <F, A, B,>(free: Free<F, A>, f: (a: A) => B): Free<F, B> => 
     Free.flatMap(free, (a: A) => Free.pure(f(a))),
 
   // Check if Free computation is pure
-  isPure: <F, A>(free: Free<F, A>): free is { _tag: 'Pure'; value: A } =>
+  isPure: <F, A,>(free: Free<F, A>): free is { _tag: 'Pure'; value: A } =>
     free._tag === 'Pure',
 
   // Check if Free computation is impure
-  isImpure: <F, A>(free: Free<F, A>): free is { _tag: 'Impure'; functor: F; continuation: (result: any) => Free<F, A> } =>
+  isImpure: <F, A,>(free: Free<F, A>): free is { _tag: 'Impure'; functor: F; continuation: (result: any) => Free<F, A> } =>
     free._tag === 'Impure',
 };
 
@@ -188,7 +188,7 @@ type ConsoleState = {
 
 const ConsoleInterpreter = {
   // Pure interpreter for testing - uses predefined inputs
-  pure: <A>(inputs: readonly string[]) => {
+  pure: <A,>(inputs: readonly string[]) => {
     const interpret = (program: Console<A>, state: ConsoleState): { result: A; state: ConsoleState } => {
       if (Free.isPure(program)) {
         return { result: program.value, state };
@@ -235,7 +235,7 @@ const ConsoleInterpreter = {
   },
 
   // Interactive interpreter for React components
-  interactive: <A>(
+  interactive: <A,>(
     onOutput: (message: string) => void,
     onInput: (prompt: string, callback: (input: string) => void) => void,
     onClear: () => void
@@ -312,13 +312,13 @@ const HttpOps = {
 
   // Helper for JSON operations
   json: {
-    get: <T>(url: string): Http<T> =>
+    get: <T,>(url: string): Http<T> =>
       Free.map(HttpOps.get(url), (response) => response.data as T),
 
-    post: <T>(url: string, body: unknown): Http<T> =>
+    post: <T,>(url: string, body: unknown): Http<T> =>
       Free.map(HttpOps.post(url, body), (response) => response.data as T),
 
-    put: <T>(url: string, body: unknown): Http<T> =>
+    put: <T,>(url: string, body: unknown): Http<T> =>
       Free.map(HttpOps.put(url, body), (response) => response.data as T),
   },
 
@@ -490,17 +490,17 @@ type State<S, A> = Free<StateF<S, A>, A>;
 
 // Smart constructors for State DSL
 const StateOps = {
-  get: <S>(): State<S, S> =>
+  get: <S,>(): State<S, S> =>
     Free.liftF({ _tag: 'Get' as const }),
 
-  put: <S>(newState: S): State<S, void> =>
+  put: <S,>(newState: S): State<S, void> =>
     Free.liftF({ _tag: 'Put' as const, newState }),
 
-  modify: <S>(f: (s: S) => S): State<S, void> =>
+  modify: <S,>(f: (s: S) => S): State<S, void> =>
     Free.liftF({ _tag: 'Modify' as const, f }),
 
   // Helper combinators
-  gets: <S, A>(f: (s: S) => A): State<S, A> =>
+  gets: <S, A,>(f: (s: S) => A): State<S, A> =>
     Free.map(StateOps.get<S>(), f),
 
   // Counter operations
@@ -590,7 +590,7 @@ const StateOps = {
 
 // State interpreter
 const StateInterpreter = {
-  run: <S, A>(initialState: S) => {
+  run: <S, A,>(initialState: S) => {
     const interpret = (program: State<S, A>, currentState: S): { result: A; finalState: S } => {
       if (Free.isPure(program)) {
         return { result: program.value, finalState: currentState };

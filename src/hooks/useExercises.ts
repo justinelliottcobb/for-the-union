@@ -3,12 +3,14 @@ import type { Exercise, ExerciseCategory } from '@/types';
 import { discriminatedUnionsCategory } from '@exercises/discriminated-unions/config';
 import { reactHooksCategory } from '@exercises/react-hooks/config';
 import { eliteStateManagementCategory } from '@exercises/elite-state-management/config';
+import { advancedTypeScriptPatternsCategory } from '@exercises/advanced-typescript-patterns/config';
 
 // Import all exercise categories
 const EXERCISE_CATEGORIES: ExerciseCategory[] = [
   discriminatedUnionsCategory,
   reactHooksCategory,
   eliteStateManagementCategory,
+  advancedTypeScriptPatternsCategory,
 ].sort((a, b) => a.order - b.order);
 
 export function useExercises() {

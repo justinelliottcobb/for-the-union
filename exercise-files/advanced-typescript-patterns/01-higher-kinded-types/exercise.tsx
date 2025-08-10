@@ -43,37 +43,37 @@ type Kind<F extends keyof HKTRegistry, A> = HKT<F, A> & {
 
 // Functor - Types that can be mapped over
 interface Functor<F extends keyof HKTRegistry> {
-  readonly map: <A, B>(fa: Kind<F, A>, f: (a: A) => B) => Kind<F, B>;
+  readonly map: <A, B,>(fa: Kind<F, A>, f: (a: A) => B) => Kind<F, B>;
 }
 
 // Applicative - Types that support applying functions in context
 interface Applicative<F extends keyof HKTRegistry> extends Functor<F> {
-  readonly of: <A>(a: A) => Kind<F, A>;
-  readonly ap: <A, B>(fab: Kind<F, (a: A) => B>, fa: Kind<F, A>) => Kind<F, B>;
+  readonly of: <A,>(a: A) => Kind<F, A>;
+  readonly ap: <A, B,>(fab: Kind<F, (a: A) => B>, fa: Kind<F, A>) => Kind<F, B>;
 }
 
 // Monad - Types that support flatMap/bind operations
 interface Monad<F extends keyof HKTRegistry> extends Applicative<F> {
-  readonly flatMap: <A, B>(fa: Kind<F, A>, f: (a: A) => Kind<F, B>) => Kind<F, B>;
-  readonly chain: <A, B>(f: (a: A) => Kind<F, B>) => (fa: Kind<F, A>) => Kind<F, B>;
+  readonly flatMap: <A, B,>(fa: Kind<F, A>, f: (a: A) => Kind<F, B>) => Kind<F, B>;
+  readonly chain: <A, B,>(f: (a: A) => Kind<F, B>) => (fa: Kind<F, A>) => Kind<F, B>;
 }
 
 // Foldable - Types that can be reduced to a single value
 interface Foldable<F extends keyof HKTRegistry> {
-  readonly foldLeft: <A, B>(fa: Kind<F, A>, initial: B, f: (b: B, a: A) => B) => B;
-  readonly foldRight: <A, B>(fa: Kind<F, A>, initial: B, f: (a: A, b: B) => B) => B;
-  readonly foldMap: <A, M>(fa: Kind<F, A>, f: (a: A) => M, monoid: Monoid<M>) => M;
+  readonly foldLeft: <A, B,>(fa: Kind<F, A>, initial: B, f: (b: B, a: A) => B) => B;
+  readonly foldRight: <A, B,>(fa: Kind<F, A>, initial: B, f: (a: A, b: B) => B) => B;
+  readonly foldMap: <A, M,>(fa: Kind<F, A>, f: (a: A) => M, monoid: Monoid<M>) => M;
 }
 
 // Traversable - Types that can be traversed with effects
 interface Traversable<T extends keyof HKTRegistry> extends Functor<T>, Foldable<T> {
-  readonly traverse: <F extends keyof HKTRegistry, A, B>(
+  readonly traverse: <F extends keyof HKTRegistry, A, B,>(
     fa: Kind<T, A>, 
     f: (a: A) => Kind<F, B>, 
     applicative: Applicative<F>
   ) => Kind<F, Kind<T, B>>;
   
-  readonly sequence: <F extends keyof HKTRegistry, A>(
+  readonly sequence: <F extends keyof HKTRegistry, A,>(
     fa: Kind<T, Kind<F, A>>, 
     applicative: Applicative<F>
   ) => Kind<F, Kind<T, A>>;
@@ -102,46 +102,46 @@ type Maybe<A> = Kind<'Maybe', A> & MaybeContainer<A>;
 
 // Maybe constructor functions
 const Maybe = {
-  some: <A>(value: A): Maybe<A> => ({
+  some: <A,>(value: A): Maybe<A> => ({
     _tag: 'Some',
     value,
     [HKTBrand]: 'Maybe' as const,
   } as Maybe<A>),
 
-  none: <A = never>(): Maybe<A> => ({
+  none: <A = never,>(): Maybe<A> => ({
     _tag: 'None',
     [HKTBrand]: 'Maybe' as const,
   } as Maybe<A>),
 
-  of: <A>(value: A): Maybe<A> => Maybe.some(value),
+  of: <A,>(value: A): Maybe<A> => Maybe.some(value),
 
-  fromNullable: <A>(value: A | null | undefined): Maybe<A> =>
+  fromNullable: <A,>(value: A | null | undefined): Maybe<A> =>
     value != null ? Maybe.some(value) : Maybe.none(),
 
-  isSome: <A>(maybe: Maybe<A>): maybe is Maybe<A> & { _tag: 'Some' } =>
+  isSome: <A,>(maybe: Maybe<A>): maybe is Maybe<A> & { _tag: 'Some' } =>
     maybe._tag === 'Some',
 
-  isNone: <A>(maybe: Maybe<A>): maybe is Maybe<A> & { _tag: 'None' } =>
+  isNone: <A,>(maybe: Maybe<A>): maybe is Maybe<A> & { _tag: 'None' } =>
     maybe._tag === 'None',
 
   // TODO: Implement utilities
-  getOrElse: <A>(maybe: Maybe<A>, defaultValue: A): A =>
+  getOrElse: <A,>(maybe: Maybe<A>, defaultValue: A): A =>
     Maybe.isSome(maybe) ? maybe.value : defaultValue,
 
-  fold: <A, B>(maybe: Maybe<A>, onNone: () => B, onSome: (value: A) => B): B =>
+  fold: <A, B,>(maybe: Maybe<A>, onNone: () => B, onSome: (value: A) => B): B =>
     Maybe.isSome(maybe) ? onSome(maybe.value) : onNone(),
 };
 
 // TODO: Implement Maybe instances
 const MaybeFunctor: Functor<'Maybe'> = {
-  map: <A, B>(fa: Maybe<A>, f: (a: A) => B): Maybe<B> =>
+  map: <A, B,>(fa: Maybe<A>, f: (a: A) => B): Maybe<B> =>
     Maybe.isSome(fa) ? Maybe.some(f(fa.value)) : Maybe.none(),
 };
 
 const MaybeApplicative: Applicative<'Maybe'> = {
   ...MaybeFunctor,
   of: Maybe.of,
-  ap: <A, B>(fab: Maybe<(a: A) => B>, fa: Maybe<A>): Maybe<B> =>
+  ap: <A, B,>(fab: Maybe<(a: A) => B>, fa: Maybe<A>): Maybe<B> =>
     Maybe.isSome(fab) && Maybe.isSome(fa) 
       ? Maybe.some(fab.value(fa.value))
       : Maybe.none(),
@@ -149,9 +149,9 @@ const MaybeApplicative: Applicative<'Maybe'> = {
 
 const MaybeMonad: Monad<'Maybe'> = {
   ...MaybeApplicative,
-  flatMap: <A, B>(fa: Maybe<A>, f: (a: A) => Maybe<B>): Maybe<B> =>
+  flatMap: <A, B,>(fa: Maybe<A>, f: (a: A) => Maybe<B>): Maybe<B> =>
     Maybe.isSome(fa) ? f(fa.value) : Maybe.none(),
-  chain: <A, B>(f: (a: A) => Maybe<B>) => (fa: Maybe<A>): Maybe<B> =>
+  chain: <A, B,>(f: (a: A) => Maybe<B>) => (fa: Maybe<A>): Maybe<B> =>
     MaybeMonad.flatMap(fa, f),
 };
 
@@ -171,24 +171,24 @@ type Either<E, A> = Kind<'Either', A> & EitherContainer<E, A>;
 
 // Either constructor functions
 const Either = {
-  left: <E, A = never>(error: E): Either<E, A> => ({
+  left: <E, A = never,>(error: E): Either<E, A> => ({
     _tag: 'Left',
     left: error,
     [HKTBrand]: 'Either' as const,
   } as Either<E, A>),
 
-  right: <E = never, A = unknown>(value: A): Either<E, A> => ({
+  right: <E = never, A = unknown,>(value: A): Either<E, A> => ({
     _tag: 'Right',
     right: value,
     [HKTBrand]: 'Either' as const,
   } as Either<E, A>),
 
-  of: <E = never, A = unknown>(value: A): Either<E, A> => Either.right(value),
+  of: <E = never, A = unknown,>(value: A): Either<E, A> => Either.right(value),
 
-  fromNullable: <E, A>(value: A | null | undefined, error: E): Either<E, A> =>
+  fromNullable: <E, A,>(value: A | null | undefined, error: E): Either<E, A> =>
     value != null ? Either.right(value) : Either.left(error),
 
-  tryCatch: <E, A>(f: () => A, onError: (error: unknown) => E): Either<E, A> => {
+  tryCatch: <E, A,>(f: () => A, onError: (error: unknown) => E): Either<E, A> => {
     try {
       return Either.right(f());
     } catch (error) {
@@ -196,36 +196,36 @@ const Either = {
     }
   },
 
-  isLeft: <E, A>(either: Either<E, A>): either is Either<E, A> & { _tag: 'Left' } =>
+  isLeft: <E, A,>(either: Either<E, A>): either is Either<E, A> & { _tag: 'Left' } =>
     either._tag === 'Left',
 
-  isRight: <E, A>(either: Either<E, A>): either is Either<E, A> & { _tag: 'Right' } =>
+  isRight: <E, A,>(either: Either<E, A>): either is Either<E, A> & { _tag: 'Right' } =>
     either._tag === 'Right',
 
   // TODO: Implement utilities
-  fold: <E, A, B>(either: Either<E, A>, onLeft: (error: E) => B, onRight: (value: A) => B): B =>
+  fold: <E, A, B,>(either: Either<E, A>, onLeft: (error: E) => B, onRight: (value: A) => B): B =>
     Either.isLeft(either) ? onLeft(either.left) : onRight(either.right),
 
-  getOrElse: <E, A>(either: Either<E, A>, defaultValue: A): A =>
+  getOrElse: <E, A,>(either: Either<E, A>, defaultValue: A): A =>
     Either.isRight(either) ? either.right : defaultValue,
 
-  swap: <E, A>(either: Either<E, A>): Either<A, E> =>
+  swap: <E, A,>(either: Either<E, A>): Either<A, E> =>
     Either.isLeft(either) ? Either.right(either.left) : Either.left(either.right),
 
-  mapLeft: <E, A, F>(either: Either<E, A>, f: (error: E) => F): Either<F, A> =>
+  mapLeft: <E, A, F,>(either: Either<E, A>, f: (error: E) => F): Either<F, A> =>
     Either.isLeft(either) ? Either.left(f(either.left)) : either as Either<F, A>,
 };
 
 // TODO: Implement Either instances (fix the E parameter)
 const EitherFunctor = <E>(): Functor<'Either'> => ({
-  map: <A, B>(fa: Either<E, A>, f: (a: A) => B): Either<E, B> =>
+  map: <A, B,>(fa: Either<E, A>, f: (a: A) => B): Either<E, B> =>
     Either.isRight(fa) ? Either.right(f(fa.right)) : fa as Either<E, B>,
 });
 
 const EitherApplicative = <E>(): Applicative<'Either'> => ({
   ...EitherFunctor<E>(),
   of: Either.of,
-  ap: <A, B>(fab: Either<E, (a: A) => B>, fa: Either<E, A>): Either<E, B> =>
+  ap: <A, B,>(fab: Either<E, (a: A) => B>, fa: Either<E, A>): Either<E, B> =>
     Either.isRight(fab) && Either.isRight(fa)
       ? Either.right(fab.right(fa.right))
       : Either.isLeft(fab) ? fab as Either<E, B> : fa as Either<E, B>,
@@ -233,9 +233,9 @@ const EitherApplicative = <E>(): Applicative<'Either'> => ({
 
 const EitherMonad = <E>(): Monad<'Either'> => ({
   ...EitherApplicative<E>(),
-  flatMap: <A, B>(fa: Either<E, A>, f: (a: A) => Either<E, B>): Either<E, B> =>
+  flatMap: <A, B,>(fa: Either<E, A>, f: (a: A) => Either<E, B>): Either<E, B> =>
     Either.isRight(fa) ? f(fa.right) : fa as Either<E, B>,
-  chain: <A, B>(f: (a: A) => Either<E, B>) => (fa: Either<E, A>): Either<E, B> =>
+  chain: <A, B,>(f: (a: A) => Either<E, B>) => (fa: Either<E, A>): Either<E, B> =>
     EitherMonad<E>().flatMap(fa, f),
 });
 
@@ -249,47 +249,47 @@ declare module './exercise.tsx' {
 type HKTArray<A> = Kind<'Array', A> & Array<A>;
 
 const HKTArray = {
-  of: <A>(value: A): HKTArray<A> => [value] as HKTArray<A>,
-  empty: <A>(): HKTArray<A> => [] as HKTArray<A>,
+  of: <A,>(value: A): HKTArray<A> => [value] as HKTArray<A>,
+  empty: <A,>(): HKTArray<A> => [] as HKTArray<A>,
 };
 
 // Array instances
 const ArrayFunctor: Functor<'Array'> = {
-  map: <A, B>(fa: HKTArray<A>, f: (a: A) => B): HKTArray<B> =>
+  map: <A, B,>(fa: HKTArray<A>, f: (a: A) => B): HKTArray<B> =>
     fa.map(f) as HKTArray<B>,
 };
 
 const ArrayApplicative: Applicative<'Array'> = {
   ...ArrayFunctor,
   of: HKTArray.of,
-  ap: <A, B>(fab: HKTArray<(a: A) => B>, fa: HKTArray<A>): HKTArray<B> =>
+  ap: <A, B,>(fab: HKTArray<(a: A) => B>, fa: HKTArray<A>): HKTArray<B> =>
     fab.flatMap(f => fa.map(f)) as HKTArray<B>,
 };
 
 const ArrayMonad: Monad<'Array'> = {
   ...ArrayApplicative,
-  flatMap: <A, B>(fa: HKTArray<A>, f: (a: A) => HKTArray<B>): HKTArray<B> =>
+  flatMap: <A, B,>(fa: HKTArray<A>, f: (a: A) => HKTArray<B>): HKTArray<B> =>
     fa.flatMap(f) as HKTArray<B>,
-  chain: <A, B>(f: (a: A) => HKTArray<B>) => (fa: HKTArray<A>): HKTArray<B> =>
+  chain: <A, B,>(f: (a: A) => HKTArray<B>) => (fa: HKTArray<A>): HKTArray<B> =>
     ArrayMonad.flatMap(fa, f),
 };
 
 // TODO: Higher-order functions that work with any HKT
 const HKT = {
   // Lift a binary function to work in any Applicative context
-  lift2: <F extends keyof HKTRegistry>(A: Applicative<F>) => 
+  lift2: <F extends keyof HKTRegistry,>(A: Applicative<F>) => 
     <A, B, C>(f: (a: A, b: B) => C) => 
     (fa: Kind<F, A>, fb: Kind<F, B>): Kind<F, C> =>
       A.ap(A.map(fa, (a: A) => (b: B) => f(a, b)), fb),
 
   // Lift a ternary function to work in any Applicative context  
-  lift3: <F extends keyof HKTRegistry>(A: Applicative<F>) =>
+  lift3: <F extends keyof HKTRegistry,>(A: Applicative<F>) =>
     <A, B, C, D>(f: (a: A, b: B, c: C) => D) =>
     (fa: Kind<F, A>, fb: Kind<F, B>, fc: Kind<F, C>): Kind<F, D> =>
       A.ap(A.ap(A.map(fa, (a: A) => (b: B) => (c: C) => f(a, b, c)), fb), fc),
 
   // Sequence a list of computations
-  sequence: <F extends keyof HKTRegistry>(A: Applicative<F>) => 
+  sequence: <F extends keyof HKTRegistry,>(A: Applicative<F>) => 
     <A>(fas: Array<Kind<F, A>>): Kind<F, Array<A>> =>
       fas.reduce(
         (acc, fa) => HKT.lift2(A)((as: A[], a: A) => [...as, a])(acc, fa),
@@ -297,13 +297,13 @@ const HKT = {
       ),
 
   // Map and then sequence
-  traverse: <F extends keyof HKTRegistry>(A: Applicative<F>) =>
+  traverse: <F extends keyof HKTRegistry,>(A: Applicative<F>) =>
     <A, B>(f: (a: A) => Kind<F, B>) =>
     (as: Array<A>): Kind<F, Array<B>> =>
       HKT.sequence(A)(as.map(f)),
 
   // Filter with effects
-  filterA: <F extends keyof HKTRegistry>(A: Applicative<F>) =>
+  filterA: <F extends keyof HKTRegistry,>(A: Applicative<F>) =>
     <A>(predicate: (a: A) => Kind<F, boolean>) =>
     (as: Array<A>): Kind<F, Array<A>> =>
       HKT.lift2(A)((results: boolean[], values: A[]) =>
@@ -314,12 +314,12 @@ const HKT = {
       ),
 
   // Replicate a computation n times
-  replicate: <F extends keyof HKTRegistry>(A: Applicative<F>) =>
+  replicate: <F extends keyof HKTRegistry,>(A: Applicative<F>) =>
     <A>(n: number, fa: Kind<F, A>): Kind<F, Array<A>> =>
       HKT.sequence(A)(Array.from({ length: n }, () => fa)),
 
   // Kleisli composition for monads
-  kleisli: <F extends keyof HKTRegistry>(M: Monad<F>) =>
+  kleisli: <F extends keyof HKTRegistry,>(M: Monad<F>) =>
     <A, B, C>(f: (a: A) => Kind<F, B>, g: (b: B) => Kind<F, C>) =>
     (a: A): Kind<F, C> =>
       M.flatMap(f(a), g),
@@ -342,16 +342,16 @@ type NaturalTransformation<F extends keyof HKTRegistry, G extends keyof HKTRegis
 type Validation<E, A> = Either<E[], A>;
 
 const Validation = {
-  success: <E, A>(value: A): Validation<E, A> => Either.right(value),
-  failure: <E, A>(error: E): Validation<E, A> => Either.left([error]),
-  failures: <E, A>(errors: E[]): Validation<E, A> => Either.left(errors),
+  success: <E, A,>(value: A): Validation<E, A> => Either.right(value),
+  failure: <E, A,>(error: E): Validation<E, A> => Either.left([error]),
+  failures: <E, A,>(errors: E[]): Validation<E, A> => Either.left(errors),
 };
 
 // Validation Applicative that accumulates errors
 const ValidationApplicative = <E>(): Applicative<'Either'> => ({
   map: EitherFunctor<E[]>().map,
   of: Validation.success,
-  ap: <A, B>(fab: Validation<E, (a: A) => B>, fa: Validation<E, A>): Validation<E, B> => {
+  ap: <A, B,>(fab: Validation<E, (a: A) => B>, fa: Validation<E, A>): Validation<E, B> => {
     if (Either.isLeft(fab) && Either.isLeft(fa)) {
       return Either.left([...fab.left, ...fa.left]);
     }
