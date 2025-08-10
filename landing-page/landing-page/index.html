@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For The Union - Advanced TypeScript Learning Platform</title>
+    <meta name="description" content="Master TypeScript through hands-on exercises covering discriminated unions, React hooks, state management, and advanced type-level programming patterns.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="landing-styles.css">
+</head>
+<body>
+    <!-- Header -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>For The Union</h1>
+                    <p class="tagline">Advanced TypeScript Learning Platform</p>
+                </div>
+                <nav class="nav">
+                    <a href="#overview" class="nav-link">Overview</a>
+                    <a href="#exercises" class="nav-link">Exercises</a>
+                    <a href="#getting-started" class="nav-link">Get Started</a>
+                    <a href="https://github.com/justinelliottcobb/for-the-union" class="nav-link github-link" target="_blank">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                            <path d="M12 0c-6.626 0-12 5.373-12 12 0 5.302 3.438 9.8 8.207 11.387.599.111.793-.261.793-.577v-2.234c-3.338.726-4.033-1.416-4.033-1.416-.546-1.387-1.333-1.756-1.333-1.756-1.089-.745.083-.729.083-.729 1.205.084 1.839 1.237 1.839 1.237 1.07 1.834 2.807 1.304 3.492.997.107-.775.418-1.305.762-1.604-2.665-.305-5.467-1.334-5.467-5.931 0-1.311.469-2.381 1.236-3.221-.124-.303-.535-1.524.117-3.176 0 0 1.008-.322 3.301 1.23.957-.266 1.983-.399 3.003-.404 1.02.005 2.047.138 3.006.404 2.291-1.552 3.297-1.23 3.297-1.23.653 1.653.242 2.874.118 3.176.77.84 1.235 1.911 1.235 3.221 0 4.609-2.807 5.624-5.479 5.921.43.372.823 1.102.823 2.222v3.293c0 .319.192.694.801.576 4.765-1.589 8.199-6.086 8.199-11.386 0-6.627-5.373-12-12-12z"/>
+                        </svg>
+                        GitHub
+                    </a>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <div class="hero-content">
+                <h2 class="hero-title">Master Advanced TypeScript Through Practice</h2>
+                <p class="hero-description">
+                    A comprehensive learning platform inspired by Rust's Rustlings, featuring hands-on exercises 
+                    that progress from fundamental discriminated unions to cutting-edge type-level programming 
+                    and category theory implementations.
+                </p>
+                <div class="hero-stats">
+                    <div class="stat">
+                        <span class="stat-number">21</span>
+                        <span class="stat-label">Interactive Exercises</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">4</span>
+                        <span class="stat-label">Skill Categories</span>
+                    </div>
+                    <div class="stat">
+                        <span class="stat-number">5</span>
+                        <span class="stat-label">Difficulty Levels</span>
+                    </div>
+                </div>
+                <div class="hero-actions">
+                    <a href="#getting-started" class="btn btn-primary">Start Learning</a>
+                    <a href="#exercises" class="btn btn-secondary">View Exercises</a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Overview Section -->
+    <section id="overview" class="overview">
+        <div class="container">
+            <h2 class="section-title">Why For The Union?</h2>
+            <div class="features-grid">
+                <div class="feature">
+                    <div class="feature-icon">🎯</div>
+                    <h3>Practical Learning</h3>
+                    <p>Learn by doing with TODO-driven exercises that build real understanding through hands-on practice.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">📊</div>
+                    <h3>Progressive Difficulty</h3>
+                    <p>Start with fundamentals and advance to elite-level patterns used in production TypeScript codebases.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🧪</div>
+                    <h3>Interactive Testing</h3>
+                    <p>Instant feedback with comprehensive test suites that validate your understanding.</p>
+                </div>
+                <div class="feature">
+                    <div class="feature-icon">🚀</div>
+                    <h3>Modern Stack</h3>
+                    <p>Built with React 18, TypeScript 5.8, and Vite for the best development experience.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Exercises Section -->
+    <section id="exercises" class="exercises">
+        <div class="container">
+            <h2 class="section-title">Exercise Categories</h2>
+            <div class="tabs">
+                <div class="tab-buttons">
+                    <button class="tab-button active" data-tab="discriminated-unions">Discriminated Unions</button>
+                    <button class="tab-button" data-tab="react-hooks">React Hooks</button>
+                    <button class="tab-button" data-tab="state-management">State Management</button>
+                    <button class="tab-button" data-tab="advanced-patterns">Advanced Patterns</button>
+                </div>
+
+                <!-- Discriminated Unions Tab -->
+                <div class="tab-content active" data-tab="discriminated-unions">
+                    <div class="tab-header">
+                        <h3>Discriminated Unions</h3>
+                        <div class="difficulty-badge difficulty-2">Foundation Level</div>
+                    </div>
+                    <p class="tab-description">
+                        Master the fundamental building blocks of type-safe TypeScript. Discriminated unions provide 
+                        compile-time guarantees and eliminate entire classes of runtime errors.
+                    </p>
+                    <div class="exercises-list">
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>01 - Traffic Light State Machine</h4>
+                                <span class="duration">15-20 min</span>
+                            </div>
+                            <p>Build a type-safe traffic light system using discriminated unions to model states and transitions.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">Union Types</span>
+                                <span class="concept">Type Guards</span>
+                                <span class="concept">State Machines</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>02 - Geometric Shapes Calculator</h4>
+                                <span class="duration">20-25 min</span>
+                            </div>
+                            <p>Implement area and perimeter calculations for different shapes using discriminated unions.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">Pattern Matching</span>
+                                <span class="concept">Exhaustive Checking</span>
+                                <span class="concept">Type Safety</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- React Hooks Tab -->
+                <div class="tab-content" data-tab="react-hooks">
+                    <div class="tab-header">
+                        <h3>React Hooks Integration</h3>
+                        <div class="difficulty-badge difficulty-3">Intermediate Level</div>
+                    </div>
+                    <p class="tab-description">
+                        Bridge TypeScript's type system with React's component model. Learn to build type-safe, 
+                        reusable components using modern React patterns.
+                    </p>
+                    <div class="exercises-list">
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>01 - useState Fundamentals</h4>
+                                <span class="duration">25-30 min</span>
+                            </div>
+                            <p>Master type-safe state management with discriminated unions in React components.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">useState</span>
+                                <span class="concept">State Types</span>
+                                <span class="concept">Event Handling</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>02 - useEffect Lifecycle</h4>
+                                <span class="duration">30-35 min</span>
+                            </div>
+                            <p>Implement component lifecycle with type-safe effect management and cleanup.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">useEffect</span>
+                                <span class="concept">Cleanup</span>
+                                <span class="concept">Dependencies</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>03 - useContext Data Sharing</h4>
+                                <span class="duration">35-40 min</span>
+                            </div>
+                            <p>Build type-safe context providers using discriminated unions for global state.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">useContext</span>
+                                <span class="concept">Context API</span>
+                                <span class="concept">Global State</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>04 - Custom Hooks</h4>
+                                <span class="duration">40-45 min</span>
+                            </div>
+                            <p>Create reusable custom hooks with discriminated union patterns for complex state.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">Custom Hooks</span>
+                                <span class="concept">Reusability</span>
+                                <span class="concept">State Logic</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>05 - useRef Caching</h4>
+                                <span class="duration">25-30 min</span>
+                            </div>
+                            <p>Implement memoization and caching using useRef with type-safe discriminated unions.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">useRef</span>
+                                <span class="concept">Memoization</span>
+                                <span class="concept">Performance</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>06 - useEffect Preloading</h4>
+                                <span class="duration">30-35 min</span>
+                            </div>
+                            <p>Build sophisticated data preloading with loading states using discriminated unions.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">Data Loading</span>
+                                <span class="concept">Async State</span>
+                                <span class="concept">Error Handling</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- State Management Tab -->
+                <div class="tab-content" data-tab="state-management">
+                    <div class="tab-header">
+                        <h3>Elite State Management</h3>
+                        <div class="difficulty-badge difficulty-4">Advanced Level</div>
+                    </div>
+                    <p class="tab-description">
+                        Master advanced state management patterns combining Redux, state machines, and higher-order 
+                        TypeScript patterns for bulletproof application architecture.
+                    </p>
+                    <div class="exercises-list">
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>01 - useReducer Patterns</h4>
+                                <span class="duration">45-50 min</span>
+                            </div>
+                            <p>Build complex state reducers using discriminated unions for action types and state transitions.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">useReducer</span>
+                                <span class="concept">Action Types</span>
+                                <span class="concept">State Machines</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>02 - Redux Discriminated Patterns</h4>
+                                <span class="duration">50-55 min</span>
+                            </div>
+                            <p>Implement Redux with type-safe actions and reducers using advanced discriminated union patterns.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">Redux</span>
+                                <span class="concept">Action Creators</span>
+                                <span class="concept">Type Safety</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>03 - Advanced State Machines</h4>
+                                <span class="duration">55-60 min</span>
+                            </div>
+                            <p>Design complex state machines with nested states and parallel execution using discriminated unions.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">State Charts</span>
+                                <span class="concept">Nested States</span>
+                                <span class="concept">Guards & Actions</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>04 - Discriminated Union State Patterns</h4>
+                                <span class="duration">45-50 min</span>
+                            </div>
+                            <p>Advanced patterns combining multiple discriminated unions for complex application state.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">Union Composition</span>
+                                <span class="concept">State Modeling</span>
+                                <span class="concept">Type Inference</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>05 - Higher-Kinded Types State</h4>
+                                <span class="duration">60+ min</span>
+                            </div>
+                            <p>Implement generic state containers using higher-kinded types for maximum reusability.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">HKT</span>
+                                <span class="concept">Generic State</span>
+                                <span class="concept">Type-Level Programming</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Advanced Patterns Tab -->
+                <div class="tab-content" data-tab="advanced-patterns">
+                    <div class="tab-header">
+                        <h3>Advanced TypeScript Patterns</h3>
+                        <div class="difficulty-badge difficulty-5">Elite Level</div>
+                    </div>
+                    <p class="tab-description">
+                        The pinnacle of TypeScript mastery. Explore cutting-edge type-level programming, category theory, 
+                        and mathematical abstractions implemented in production-ready TypeScript code.
+                    </p>
+                    <div class="exercises-list">
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>01 - Higher-Kinded Types and Type Constructors</h4>
+                                <span class="duration">60-75 min</span>
+                            </div>
+                            <p>Build HKT infrastructure with Functor, Applicative, and Monad abstractions for generic programming.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">HKT Registry</span>
+                                <span class="concept">Type Classes</span>
+                                <span class="concept">Generic Abstractions</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>02 - Phantom Types and Compile-time Safety</h4>
+                                <span class="duration">60-75 min</span>
+                            </div>
+                            <p>Implement zero-runtime-cost type safety with phantom types for state machines and branded primitives.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">Phantom Types</span>
+                                <span class="concept">Branded Types</span>
+                                <span class="concept">Compile-time Safety</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>03 - Dependent Types and Value-Level Types</h4>
+                                <span class="duration">60-75 min</span>
+                            </div>
+                            <p>Explore length-indexed arrays, type-level arithmetic, and template literal programming.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">Dependent Types</span>
+                                <span class="concept">Type-Level Arithmetic</span>
+                                <span class="concept">Refinement Types</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>04 - GADTs and Type-Safe State Machines</h4>
+                                <span class="duration">60-75 min</span>
+                            </div>
+                            <p>Master Generalized Algebraic Data Types for impossible-to-break state machine implementations.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">GADTs</span>
+                                <span class="concept">Impossible States</span>
+                                <span class="concept">Type-Safe Transitions</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>05 - Profunctors and Variance Patterns</h4>
+                                <span class="duration">60-75 min</span>
+                            </div>
+                            <p>Implement profunctor encodings for lenses, optics, and data transformation pipelines.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">Profunctors</span>
+                                <span class="concept">Optics</span>
+                                <span class="concept">Variance</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>06 - Free Monads and Abstract Computation</h4>
+                                <span class="duration">60-75 min</span>
+                            </div>
+                            <p>Separate program structure from interpretation using free monads and algebraic effects.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">Free Monads</span>
+                                <span class="concept">Effect Systems</span>
+                                <span class="concept">Program Composition</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>07 - Type-Level Computation and Meta-Programming</h4>
+                                <span class="duration">60-75 min</span>
+                            </div>
+                            <p>Harness TypeScript's Turing-complete type system for compile-time computation and code generation.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">Type-Level Programming</span>
+                                <span class="concept">Template Literals</span>
+                                <span class="concept">Compile-time Computation</span>
+                            </div>
+                        </div>
+                        <div class="exercise">
+                            <div class="exercise-header">
+                                <h4>08 - Category Theory Foundations</h4>
+                                <span class="duration">60-75 min</span>
+                            </div>
+                            <p>The mathematical foundation uniting all patterns: categories, functors, and natural transformations.</p>
+                            <div class="exercise-concepts">
+                                <span class="concept">Category Theory</span>
+                                <span class="concept">Mathematical Laws</span>
+                                <span class="concept">Universal Constructions</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Getting Started Section -->
+    <section id="getting-started" class="getting-started">
+        <div class="container">
+            <h2 class="section-title">Getting Started</h2>
+            <div class="getting-started-content">
+                <div class="setup-steps">
+                    <h3>Quick Setup</h3>
+                    <ol class="steps-list">
+                        <li>
+                            <strong>Clone the repository</strong>
+                            <code>git clone https://github.com/justinelliottcobb/for-the-union.git</code>
+                        </li>
+                        <li>
+                            <strong>Install dependencies</strong>
+                            <code>npm install</code>
+                        </li>
+                        <li>
+                            <strong>Start the development server</strong>
+                            <code>npm run dev</code>
+                        </li>
+                        <li>
+                            <strong>Open your browser</strong>
+                            Navigate to <code>http://localhost:3000</code>
+                        </li>
+                    </ol>
+                </div>
+                <div class="requirements">
+                    <h3>Requirements</h3>
+                    <ul>
+                        <li>Node.js 18+ and npm</li>
+                        <li>Modern browser with ES2022 support</li>
+                        <li>VS Code with TypeScript extension (recommended)</li>
+                        <li>Basic knowledge of TypeScript and React</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="learning-path">
+                <h3>Recommended Learning Path</h3>
+                <div class="path-steps">
+                    <div class="path-step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <h4>Discriminated Unions</h4>
+                            <p>Master the foundations with type-safe union patterns</p>
+                        </div>
+                    </div>
+                    <div class="path-step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <h4>React Integration</h4>
+                            <p>Apply TypeScript patterns in React components</p>
+                        </div>
+                    </div>
+                    <div class="path-step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <h4>State Management</h4>
+                            <p>Build complex applications with advanced patterns</p>
+                        </div>
+                    </div>
+                    <div class="path-step">
+                        <div class="step-number">4</div>
+                        <div class="step-content">
+                            <h4>Advanced Patterns</h4>
+                            <p>Master elite-level type-system programming</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-info">
+                    <h3>For The Union</h3>
+                    <p>Advanced TypeScript Learning Platform</p>
+                    <p>Inspired by Rust's Rustlings • Built for TypeScript mastery</p>
+                </div>
+                <div class="footer-links">
+                    <div class="link-group">
+                        <h4>Project</h4>
+                        <a href="https://github.com/justinelliottcobb/for-the-union" target="_blank">GitHub Repository</a>
+                        <a href="https://github.com/justinelliottcobb/for-the-union/issues" target="_blank">Issues & Feedback</a>
+                        <a href="https://github.com/justinelliottcobb/for-the-union/blob/main/README.md" target="_blank">Documentation</a>
+                    </div>
+                    <div class="link-group">
+                        <h4>Resources</h4>
+                        <a href="https://www.typescriptlang.org/docs/" target="_blank">TypeScript Documentation</a>
+                        <a href="https://react.dev/learn" target="_blank">React Documentation</a>
+                        <a href="https://github.com/rust-lang/rustlings" target="_blank">Rustlings (Inspiration)</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="landing-script.js"></script>
+</body>
+</html>

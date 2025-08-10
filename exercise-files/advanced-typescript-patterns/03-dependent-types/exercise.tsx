@@ -90,13 +90,13 @@ type Vector<T, N extends Nat> = readonly T[] & {
 // Vector constructor utilities
 const Vector = {
   // Create empty vector
-  empty: <T>(): Vector<T, Zero> => [] as Vector<T, Zero>,
+  empty: <T,>(): Vector<T, Zero> => [] as Vector<T, Zero>,
 
   // Create single-element vector
-  singleton: <T>(value: T): Vector<T, One> => [value] as Vector<T, One>,
+  singleton: <T,>(value: T): Vector<T, One> => [value] as Vector<T, One>,
 
   // Create vector from array with length assertion
-  fromArray: <T, N extends Nat>(
+  fromArray: <T, N extends Nat,>(
     array: readonly T[], 
     _length: N
   ): Vector<T, N> => {
@@ -107,7 +107,7 @@ const Vector = {
   },
 
   // Safe head - only works on non-empty vectors
-  head: <T, N extends Nat>(
+  head: <T, N extends Nat,>(
     vector: Vector<T, N>
   ): N extends Zero ? never : T => {
     if (vector.length === 0) {
@@ -117,7 +117,7 @@ const Vector = {
   },
 
   // Safe tail - reduces length by one
-  tail: <T, N extends Nat>(
+  tail: <T, N extends Nat,>(
     vector: Vector<T, N>
   ): N extends readonly [infer _, ...infer Rest]
     ? Rest extends Nat
@@ -131,7 +131,7 @@ const Vector = {
   },
 
   // Safe indexing - prevents out-of-bounds access
-  get: <T, N extends Nat, I extends number>(
+  get: <T, N extends Nat, I extends number,>(
     vector: Vector<T, N>,
     index: I
   ): LessThan<ToNat<I>, N> extends true ? T : never => {
@@ -142,46 +142,46 @@ const Vector = {
   },
 
   // Prepend element - increases length by one
-  prepend: <T, N extends Nat>(
+  prepend: <T, N extends Nat,>(
     element: T,
     vector: Vector<T, N>
   ): Vector<T, Add<One, N>> => 
     [element, ...vector] as Vector<T, Add<One, N>>,
 
   // Append element - increases length by one
-  append: <T, N extends Nat>(
+  append: <T, N extends Nat,>(
     vector: Vector<T, N>,
     element: T
   ): Vector<T, Add<N, One>> =>
     [...vector, element] as Vector<T, Add<N, One>>,
 
   // Concatenate vectors - adds lengths
-  concat: <T, A extends Nat, B extends Nat>(
+  concat: <T, A extends Nat, B extends Nat,>(
     vectorA: Vector<T, A>,
     vectorB: Vector<T, B>
   ): Vector<T, Add<A, B>> =>
     [...vectorA, ...vectorB] as Vector<T, Add<A, B>>,
 
   // Map preserves length
-  map: <T, U, N extends Nat>(
+  map: <T, U, N extends Nat,>(
     vector: Vector<T, N>,
     f: (value: T, index: number) => U
   ): Vector<U, N> =>
     vector.map(f) as Vector<U, N>,
 
   // Zip two vectors of same length
-  zip: <T, U, N extends Nat>(
+  zip: <T, U, N extends Nat,>(
     vectorA: Vector<T, N>,
     vectorB: Vector<U, N>
   ): Vector<readonly [T, U], N> =>
     vectorA.map((a, i) => [a, vectorB[i]] as const) as Vector<readonly [T, U], N>,
 
   // Reverse preserves length
-  reverse: <T, N extends Nat>(vector: Vector<T, N>): Vector<T, N> =>
+  reverse: <T, N extends Nat,>(vector: Vector<T, N>): Vector<T, N> =>
     [...vector].reverse() as Vector<T, N>,
 
   // Take first n elements (compile-time safe)
-  take: <T, N extends Nat, K extends Nat>(
+  take: <T, N extends Nat, K extends Nat,>(
     vector: Vector<T, N>,
     count: K
   ): LessThan<K, Add<N, One>> extends true ? Vector<T, K> : never => {
@@ -193,7 +193,7 @@ const Vector = {
   },
 
   // Create vector from repeating element
-  replicate: <T, N extends Nat>(count: N, element: T): Vector<T, N> => {
+  replicate: <T, N extends Nat,>(count: N, element: T): Vector<T, N> => {
     const n = (count as any).length || 0;
     return Array.from({ length: n }, () => element) as Vector<T, N>;
   },
@@ -250,7 +250,7 @@ const Refined = {
   },
 
   // Generic refinement with custom predicate
-  refine: <T, P extends string>(
+  refine: <T, P extends string,>(
     value: T,
     predicate: (v: T) => boolean,
     _proof: P
@@ -258,7 +258,7 @@ const Refined = {
     predicate(value) ? value as Refined<T, P> : null,
 
   // Unsafe extraction (use sparingly)
-  unsafeExtract: <T, P extends string>(refined: Refined<T, P>): T =>
+  unsafeExtract: <T, P extends string,>(refined: Refined<T, P>): T =>
     refined as T,
 };
 
@@ -337,10 +337,10 @@ type Config<Env extends Environment> = {
 };
 
 const ConfigBuilder = {
-  create: <Env extends Environment>(env: Env) => ({
+  create: <Env extends Environment,>(env: Env) => ({
     environment: env,
     
-    database: <Host extends string, Port extends number>(
+    database: <Host extends string, Port extends number,>(
       host: Env extends 'production' ? URL : Host,
       port: Port
     ) => {
@@ -423,8 +423,8 @@ type QueryResult<Schema extends TableSchema, Selected extends keyof Schema> =
   readonly (Pick<TypeFromSchema<Schema>, Selected>)[];
 
 const QueryBuilder = {
-  from: <Schema extends TableSchema>(schema: Schema) => ({
-    select: <Fields extends readonly (keyof Schema)[]>(...fields: Fields) => ({
+  from: <Schema extends TableSchema,>(schema: Schema) => ({
+    select: <Fields extends readonly (keyof Schema)[],>(...fields: Fields) => ({
       where: (conditions: Partial<TypeFromSchema<Schema>>) => ({
         orderBy: (...orderFields: readonly (keyof Schema)[]) => ({
           build: (): Query<Schema, Fields[number]> => ({
@@ -468,7 +468,7 @@ type StateMachine<
 > = {
   readonly config: Config;
   readonly currentState: CurrentState;
-  readonly send: <Event extends string>(
+  readonly send: <Event extends string,>(
     event: Event
   ) => Event extends keyof NonNullable<Config['transitions'][CurrentState]>
     ? NonNullable<Config['transitions'][CurrentState]>[Event] extends string
@@ -478,7 +478,7 @@ type StateMachine<
 };
 
 const StateMachine = {
-  create: <States extends string, Events extends string>(
+  create: <States extends string, Events extends string,>(
     config: StateMachineConfig<States, Events>
   ): StateMachine<typeof config> => ({
     config,

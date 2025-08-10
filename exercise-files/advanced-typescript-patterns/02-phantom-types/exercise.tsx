@@ -83,7 +83,7 @@ const Door = {
   },
 
   // Query functions work on any door state
-  describe: <State>(door: Door<State>): string => {
+  describe: <State,>(door: Door<State>): string => {
     const { material, width, height } = unphantom(door);
     return `${material} door: ${width}x${height}`;
   },
@@ -129,20 +129,20 @@ const Units = {
     phantom(unphantom(velocity) * unphantom(time)),
 
   // Generic arithmetic for same-unit values
-  add: <Unit>(a: Distance<Unit>, b: Distance<Unit>): Distance<Unit> =>
+  add: <Unit,>(a: Distance<Unit>, b: Distance<Unit>): Distance<Unit> =>
     phantom(unphantom(a) + unphantom(b)),
 
-  subtract: <Unit>(a: Distance<Unit>, b: Distance<Unit>): Distance<Unit> =>
+  subtract: <Unit,>(a: Distance<Unit>, b: Distance<Unit>): Distance<Unit> =>
     phantom(unphantom(a) - unphantom(b)),
 
-  multiply: <Unit>(distance: Distance<Unit>, scalar: number): Distance<Unit> =>
+  multiply: <Unit,>(distance: Distance<Unit>, scalar: number): Distance<Unit> =>
     phantom(unphantom(distance) * scalar),
 
   // Comparison operations
-  compare: <Unit>(a: Distance<Unit>, b: Distance<Unit>): number =>
+  compare: <Unit,>(a: Distance<Unit>, b: Distance<Unit>): number =>
     unphantom(a) - unphantom(b),
 
-  isGreater: <Unit>(a: Distance<Unit>, b: Distance<Unit>): boolean =>
+  isGreater: <Unit,>(a: Distance<Unit>, b: Distance<Unit>): boolean =>
     unphantom(a) > unphantom(b),
 };
 
@@ -256,7 +256,7 @@ const HTTPRequest = {
     phantom({ headers: {} }),
 
   // Set method (transitions MethodNotSet -> MethodSet)
-  method: <URL, Headers>(
+  method: <URL, Headers,>(
     builder: HTTPRequestBuilder<MethodNotSet, URL, Headers>,
     method: 'GET' | 'POST' | 'PUT' | 'DELETE'
   ): HTTPRequestBuilder<MethodSet, URL, Headers> => {
@@ -265,7 +265,7 @@ const HTTPRequest = {
   },
 
   // Set URL (transitions URLNotSet -> URLSet)
-  url: <Method, Headers>(
+  url: <Method, Headers,>(
     builder: HTTPRequestBuilder<Method, URLNotSet, Headers>,
     url: string
   ): HTTPRequestBuilder<Method, URLSet, Headers> => {
@@ -274,7 +274,7 @@ const HTTPRequest = {
   },
 
   // Add header (transitions HeadersNotSet -> HeadersSet)
-  header: <Method, URL>(
+  header: <Method, URL,>(
     builder: HTTPRequestBuilder<Method, URL, HeadersNotSet>,
     key: string,
     value: string
@@ -287,7 +287,7 @@ const HTTPRequest = {
   },
 
   // Add header to existing headers
-  addHeader: <Method, URL>(
+  addHeader: <Method, URL,>(
     builder: HTTPRequestBuilder<Method, URL, HeadersSet>,
     key: string,
     value: string
@@ -411,31 +411,31 @@ const FileSystem = {
     phantom({ path, size: 4096 }),
 
   // Operations requiring specific permissions
-  read: <P>(file: FileHandle<P & ReadPermission>): string => {
+  read: <P,>(file: FileHandle<P & ReadPermission>): string => {
     const { path } = unphantom(file);
     return `Contents of ${path}`;
   },
 
-  write: <P>(file: FileHandle<P & WritePermission>, data: string): void => {
+  write: <P,>(file: FileHandle<P & WritePermission>, data: string): void => {
     const { path } = unphantom(file);
     console.log(`Writing to ${path}: ${data}`);
   },
 
-  execute: <P>(file: FileHandle<P & ExecutePermission>): string => {
+  execute: <P,>(file: FileHandle<P & ExecutePermission>): string => {
     const { path } = unphantom(file);
     return `Executing ${path}...`;
   },
 
   // Metadata operations (work on any file)
-  getSize: <P>(file: FileHandle<P>): number => unphantom(file).size,
-  getPath: <P>(file: FileHandle<P>): string => unphantom(file).path,
+  getSize: <P,>(file: FileHandle<P>): number => unphantom(file).size,
+  getPath: <P,>(file: FileHandle<P>): string => unphantom(file).path,
 
   // Permission escalation/de-escalation
-  addWritePermission: <P extends ReadPermission>(
+  addWritePermission: <P extends ReadPermission,>(
     file: FileHandle<P>
   ): FileHandle<P & WritePermission> => phantom(unphantom(file)),
 
-  removeWritePermission: <P extends WritePermission>(
+  removeWritePermission: <P extends WritePermission,>(
     file: FileHandle<P>
   ): FileHandle<Exclude<P, WritePermission>> => phantom(unphantom(file)),
 };
