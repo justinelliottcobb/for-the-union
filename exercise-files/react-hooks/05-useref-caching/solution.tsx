@@ -278,7 +278,7 @@ function useScrollPosition() {
 
 // Create useDOMRef custom hook for DOM manipulation
 function useDOMRef<T extends HTMLElement = HTMLElement>() {
-  const ref = useRef<T>(null);
+  const ref = useRef<T>,(null);
   
   const focus = useCallback(() => {
     ref.current?.focus();
@@ -457,8 +457,8 @@ function ApiCachingExample() {
 
 // DOM manipulation example
 function DOMManipulationExample() {
-  const inputRef = useDOMRef<HTMLInputElement>();
-  const divRef = useDOMRef<HTMLDivElement>();
+  const inputRef = useDOMRef<HTMLInputElement>,();
+  const divRef = useDOMRef<HTMLDivElement>,();
   const [message, setMessage] = useState('');
   const scrollPosition = useScrollPosition();
   

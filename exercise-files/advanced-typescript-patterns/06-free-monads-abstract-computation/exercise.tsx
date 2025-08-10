@@ -375,7 +375,7 @@ const HttpOps = {
 const HttpInterpreter = {
   // Mock interpreter for testing
   mock: (responses: Record<string, { status: number; data: unknown }>) => {
-    const interpret = <A>(program: Http<A>): Promise<A> => {
+    const interpret = <A,>(program: Http<A>): Promise<A> => {
       if (Free.isPure(program)) {
         return Promise.resolve(program.value);
       }
@@ -413,7 +413,7 @@ const HttpInterpreter = {
 
   // Real fetch interpreter
   fetch: () => {
-    const interpret = <A>(program: Http<A>): Promise<A> => {
+    const interpret = <A,>(program: Http<A>): Promise<A> => {
       if (Free.isPure(program)) {
         return Promise.resolve(program.value);
       }

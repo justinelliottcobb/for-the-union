@@ -44,7 +44,7 @@ const functionStrong: Strong<'Function'> = {
 };
 
 // Lens using Profunctor encoding
-type Lens<S, T, A, B> = <P extends keyof Strong>(
+type Lens<S, T, A, B> = <P extends keyof Strong,>(
   P: Strong<P>
 ) => (pab: HKT2<P, A, B>) => HKT2<P, S, T>;
 
@@ -113,7 +113,7 @@ const stringToUpperPipeline: Pipeline<string, string> = {
 // Interactive Demo Component
 export const ProfunctorDemo: React.FC = () => {
   const [input, setInput] = useState('hello world');
-  const [user, setUser] = useState<User>({ name: 'John', age: 30, email: 'john@example.com' });
+  const [user, setUser] = useState<User>,({ name: 'John', age: 30, email: 'john@example.com' });
 
   // Function profunctor demo
   const addOne = (x: number) => x + 1;

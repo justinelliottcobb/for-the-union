@@ -59,7 +59,7 @@ function Counter() {
 
 // UserForm component for handling form inputs
 function UserForm() {
-  const [user, setUser] = useState<UserFormData>({
+  const [user, setUser] = useState<UserFormData>,({
     name: '',
     email: '',
     age: 0,

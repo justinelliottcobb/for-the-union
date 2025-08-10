@@ -119,7 +119,7 @@ function useApiCache<T = any>(url: string, ttl: number = 60000) {
 }
 
 // TODO: Create usePrevious custom hook
-function usePrevious<T>(value: T): T | undefined {
+function usePrevious<T>,(value: T): T | undefined {
   // TODO: Use useRef to store previous value
   // TODO: Update ref after render using useEffect
   // TODO: Return previous value

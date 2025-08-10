@@ -45,19 +45,19 @@ type Kind<F extends keyof HKTRegistry, A> = HKT<F, A> & {
 
 // TODO: Define Functor typeclass
 interface Functor<F extends keyof HKTRegistry> {
-  readonly map: <A, B>(fa: Kind<F, A>, f: (a: A) => B) => Kind<F, B>;
+  readonly map: <A, B,>(fa: Kind<F, A>, f: (a: A) => B) => Kind<F, B>;
 }
 
 // TODO: Define Applicative typeclass  
 interface Applicative<F extends keyof HKTRegistry> extends Functor<F> {
-  readonly of: <A>(a: A) => Kind<F, A>;
-  readonly ap: <A, B>(fab: Kind<F, (a: A) => B>, fa: Kind<F, A>) => Kind<F, B>;
+  readonly of: <A,>(a: A) => Kind<F, A>;
+  readonly ap: <A, B,>(fab: Kind<F, (a: A) => B>, fa: Kind<F, A>) => Kind<F, B>;
 }
 
 // TODO: Define Monad typeclass
 interface Monad<F extends keyof HKTRegistry> extends Applicative<F> {
-  readonly flatMap: <A, B>(fa: Kind<F, A>, f: (a: A) => Kind<F, B>) => Kind<F, B>;
-  readonly chain: <A, B>(f: (a: A) => Kind<F, B>) => (fa: Kind<F, A>) => Kind<F, B>;
+  readonly flatMap: <A, B,>(fa: Kind<F, A>, f: (a: A) => Kind<F, B>) => Kind<F, B>;
+  readonly chain: <A, B,>(f: (a: A) => Kind<F, B>) => (fa: Kind<F, A>) => Kind<F, B>;
 }
 
 // TODO: Define State Container with HKT
@@ -78,38 +78,38 @@ type State<S, A> = Kind<'State', A> & StateContainer<S, A>;
 
 // TODO: Create State constructor
 const State = {
-  of: <S, A>(value: A): State<S, A> => ({
+  of: <S, A,>(value: A): State<S, A> => ({
     tag: 'State',
     runState: (state: S) => [value, state] as const,
     [HKTBrand]: 'State' as const,
   }),
 
-  get: <S>(): State<S, S> => ({
+  get: <S,>(): State<S, S> => ({
     tag: 'State',
     runState: (state: S) => [state, state] as const,
     [HKTBrand]: 'State' as const,
   }),
 
-  put: <S>(newState: S): State<S, void> => ({
+  put: <S,>(newState: S): State<S, void> => ({
     tag: 'State',
     runState: (_: S) => [undefined, newState] as const,
     [HKTBrand]: 'State' as const,
   }),
 
-  modify: <S>(f: (state: S) => S): State<S, void> => ({
+  modify: <S,>(f: (state: S) => S): State<S, void> => ({
     tag: 'State',
     runState: (state: S) => [undefined, f(state)] as const,
     [HKTBrand]: 'State' as const,
   }),
 
-  runState: <S, A>(state: State<S, A>, initialState: S) => {
+  runState: <S, A,>(state: State<S, A>, initialState: S) => {
     return state.runState(initialState);
   },
 };
 
 // TODO: Implement Functor instance for State
 const StateFunctor: Functor<'State'> = {
-  map: <A, B>(fa: State<any, A>, f: (a: A) => B): State<any, B> => ({
+  map: <A, B,>(fa: State<any, A>, f: (a: A) => B): State<any, B> => ({
     tag: 'State',
     runState: (state) => {
       const [value, newState] = fa.runState(state);
@@ -125,7 +125,7 @@ const StateMonad: Monad<'State'> = {
   
   of: State.of,
   
-  ap: <A, B>(fab: State<any, (a: A) => B>, fa: State<any, A>): State<any, B> => ({
+  ap: <A, B,>(fab: State<any, (a: A) => B>, fa: State<any, A>): State<any, B> => ({
     tag: 'State',
     runState: (state) => {
       const [f, state1] = fab.runState(state);
@@ -135,7 +135,7 @@ const StateMonad: Monad<'State'> = {
     [HKTBrand]: 'State' as const,
   }),
   
-  flatMap: <A, B>(fa: State<any, A>, f: (a: A) => State<any, B>): State<any, B> => ({
+  flatMap: <A, B,>(fa: State<any, A>, f: (a: A) => State<any, B>): State<any, B> => ({
     tag: 'State',
     runState: (state) => {
       const [value, newState] = fa.runState(state);
@@ -144,7 +144,7 @@ const StateMonad: Monad<'State'> = {
     [HKTBrand]: 'State' as const,
   }),
   
-  chain: <A, B>(f: (a: A) => State<any, B>) => (fa: State<any, A>): State<any, B> =>
+  chain: <A, B,>(f: (a: A) => State<any, B>) => (fa: State<any, A>): State<any, B> =>
     StateMonad.flatMap(fa, f),
 };
 
@@ -164,37 +164,37 @@ declare module './exercise.tsx' {
 }
 
 const AsyncState = {
-  of: <S, A>(value: A): AsyncState<S, A> => ({
+  of: <S, A,>(value: A): AsyncState<S, A> => ({
     tag: 'AsyncState',
     runAsyncState: async (state: S) => [value, state] as const,
     [HKTBrand]: 'AsyncState' as const,
   }),
 
-  fromState: <S, A>(state: State<S, A>): AsyncState<S, A> => ({
+  fromState: <S, A,>(state: State<S, A>): AsyncState<S, A> => ({
     tag: 'AsyncState',
     runAsyncState: async (initialState: S) => state.runState(initialState),
     [HKTBrand]: 'AsyncState' as const,
   }),
 
-  fromPromise: <S, A>(promise: Promise<A>): AsyncState<S, A> => ({
+  fromPromise: <S, A,>(promise: Promise<A>): AsyncState<S, A> => ({
     tag: 'AsyncState',
     runAsyncState: async (state: S) => [await promise, state] as const,
     [HKTBrand]: 'AsyncState' as const,
   }),
 
-  get: <S>(): AsyncState<S, S> => ({
+  get: <S,>(): AsyncState<S, S> => ({
     tag: 'AsyncState',
     runAsyncState: async (state: S) => [state, state] as const,
     [HKTBrand]: 'AsyncState' as const,
   }),
 
-  put: <S>(newState: S): AsyncState<S, void> => ({
+  put: <S,>(newState: S): AsyncState<S, void> => ({
     tag: 'AsyncState',
     runAsyncState: async (_: S) => [undefined, newState] as const,
     [HKTBrand]: 'AsyncState' as const,
   }),
 
-  delay: <S>(ms: number): AsyncState<S, void> => ({
+  delay: <S,>(ms: number): AsyncState<S, void> => ({
     tag: 'AsyncState',
     runAsyncState: async (state: S) => {
       await new Promise(resolve => setTimeout(resolve, ms));
@@ -203,14 +203,14 @@ const AsyncState = {
     [HKTBrand]: 'AsyncState' as const,
   }),
 
-  runAsyncState: <S, A>(asyncState: AsyncState<S, A>, initialState: S) => {
+  runAsyncState: <S, A,>(asyncState: AsyncState<S, A>, initialState: S) => {
     return asyncState.runAsyncState(initialState);
   },
 };
 
 // TODO: Implement AsyncState Monad
 const AsyncStateMonad: Monad<'AsyncState'> = {
-  map: <A, B>(fa: AsyncState<any, A>, f: (a: A) => B): AsyncState<any, B> => ({
+  map: <A, B,>(fa: AsyncState<any, A>, f: (a: A) => B): AsyncState<any, B> => ({
     tag: 'AsyncState',
     runAsyncState: async (state) => {
       const [value, newState] = await fa.runAsyncState(state);
@@ -221,7 +221,7 @@ const AsyncStateMonad: Monad<'AsyncState'> = {
 
   of: AsyncState.of,
 
-  ap: <A, B>(fab: AsyncState<any, (a: A) => B>, fa: AsyncState<any, A>): AsyncState<any, B> => ({
+  ap: <A, B,>(fab: AsyncState<any, (a: A) => B>, fa: AsyncState<any, A>): AsyncState<any, B> => ({
     tag: 'AsyncState',
     runAsyncState: async (state) => {
       const [f, state1] = await fab.runAsyncState(state);
@@ -231,7 +231,7 @@ const AsyncStateMonad: Monad<'AsyncState'> = {
     [HKTBrand]: 'AsyncState' as const,
   }),
 
-  flatMap: <A, B>(fa: AsyncState<any, A>, f: (a: A) => AsyncState<any, B>): AsyncState<any, B> => ({
+  flatMap: <A, B,>(fa: AsyncState<any, A>, f: (a: A) => AsyncState<any, B>): AsyncState<any, B> => ({
     tag: 'AsyncState',
     runAsyncState: async (state) => {
       const [value, newState] = await fa.runAsyncState(state);
@@ -240,7 +240,7 @@ const AsyncStateMonad: Monad<'AsyncState'> = {
     [HKTBrand]: 'AsyncState' as const,
   }),
 
-  chain: <A, B>(f: (a: A) => AsyncState<any, B>) => (fa: AsyncState<any, A>): AsyncState<any, B> =>
+  chain: <A, B,>(f: (a: A) => AsyncState<any, B>) => (fa: AsyncState<any, A>): AsyncState<any, B> =>
     AsyncStateMonad.flatMap(fa, f),
 };
 
@@ -259,22 +259,22 @@ declare module './exercise.tsx' {
 }
 
 const Result = {
-  success: <E, A>(value: A): Result<E, A> => ({
+  success: <E, A,>(value: A): Result<E, A> => ({
     tag: 'Success',
     value,
     [HKTBrand]: 'Result' as const,
   }),
 
-  failure: <E, A>(error: E): Result<E, A> => ({
+  failure: <E, A,>(error: E): Result<E, A> => ({
     tag: 'Failure',
     error,
     [HKTBrand]: 'Result' as const,
   }),
 
-  fromNullable: <E, A>(value: A | null | undefined, error: E): Result<E, A> =>
+  fromNullable: <E, A,>(value: A | null | undefined, error: E): Result<E, A> =>
     value != null ? Result.success(value) : Result.failure(error),
 
-  tryCatch: <E, A>(f: () => A, onError: (error: unknown) => E): Result<E, A> => {
+  tryCatch: <E, A,>(f: () => A, onError: (error: unknown) => E): Result<E, A> => {
     try {
       return Result.success(f());
     } catch (error) {
@@ -282,31 +282,31 @@ const Result = {
     }
   },
 
-  isSuccess: <E, A>(result: Result<E, A>): result is Result<E, A> & { tag: 'Success' } =>
+  isSuccess: <E, A,>(result: Result<E, A>): result is Result<E, A> & { tag: 'Success' } =>
     result.tag === 'Success',
 
-  isFailure: <E, A>(result: Result<E, A>): result is Result<E, A> & { tag: 'Failure' } =>
+  isFailure: <E, A,>(result: Result<E, A>): result is Result<E, A> & { tag: 'Failure' } =>
     result.tag === 'Failure',
 };
 
 // TODO: Implement Result Monad
 const ResultMonad: Monad<'Result'> = {
-  map: <A, B>(fa: Result<any, A>, f: (a: A) => B): Result<any, B> =>
+  map: <A, B,>(fa: Result<any, A>, f: (a: A) => B): Result<any, B> =>
     fa.tag === 'Success' 
       ? Result.success(f(fa.value))
       : fa as any,
 
   of: Result.success,
 
-  ap: <A, B>(fab: Result<any, (a: A) => B>, fa: Result<any, A>): Result<any, B> =>
+  ap: <A, B,>(fab: Result<any, (a: A) => B>, fa: Result<any, A>): Result<any, B> =>
     fab.tag === 'Success' && fa.tag === 'Success'
       ? Result.success(fab.value(fa.value))
       : fab.tag === 'Failure' ? fab as any : fa as any,
 
-  flatMap: <A, B>(fa: Result<any, A>, f: (a: A) => Result<any, B>): Result<any, B> =>
+  flatMap: <A, B,>(fa: Result<any, A>, f: (a: A) => Result<any, B>): Result<any, B> =>
     fa.tag === 'Success' ? f(fa.value) : fa as any,
 
-  chain: <A, B>(f: (a: A) => Result<any, B>) => (fa: Result<any, A>): Result<any, B> =>
+  chain: <A, B,>(f: (a: A) => Result<any, B>) => (fa: Result<any, A>): Result<any, B> =>
     ResultMonad.flatMap(fa, f),
 };
 
@@ -326,13 +326,13 @@ declare module './exercise.tsx' {
 }
 
 const IO = {
-  of: <A>(value: A): IO<A> => ({
+  of: <A,>(value: A): IO<A> => ({
     tag: 'IO',
     unsafeRun: () => value,
     [HKTBrand]: 'IO' as const,
   }),
 
-  lazy: <A>(thunk: () => A): IO<A> => ({
+  lazy: <A,>(thunk: () => A): IO<A> => ({
     tag: 'IO',
     unsafeRun: thunk,
     [HKTBrand]: 'IO' as const,
@@ -356,12 +356,12 @@ const IO = {
       IO.lazy(() => localStorage.removeItem(key)),
   },
 
-  unsafeRun: <A>(io: IO<A>): A => io.unsafeRun(),
+  unsafeRun: <A,>(io: IO<A>): A => io.unsafeRun(),
 };
 
 // TODO: Implement IO Monad
 const IOMonad: Monad<'IO'> = {
-  map: <A, B>(fa: IO<A>, f: (a: A) => B): IO<B> => ({
+  map: <A, B,>(fa: IO<A>, f: (a: A) => B): IO<B> => ({
     tag: 'IO',
     unsafeRun: () => f(fa.unsafeRun()),
     [HKTBrand]: 'IO' as const,
@@ -369,49 +369,49 @@ const IOMonad: Monad<'IO'> = {
 
   of: IO.of,
 
-  ap: <A, B>(fab: IO<(a: A) => B>, fa: IO<A>): IO<B> => ({
+  ap: <A, B,>(fab: IO<(a: A) => B>, fa: IO<A>): IO<B> => ({
     tag: 'IO',
     unsafeRun: () => fab.unsafeRun()(fa.unsafeRun()),
     [HKTBrand]: 'IO' as const,
   }),
 
-  flatMap: <A, B>(fa: IO<A>, f: (a: A) => IO<B>): IO<B> => ({
+  flatMap: <A, B,>(fa: IO<A>, f: (a: A) => IO<B>): IO<B> => ({
     tag: 'IO',
     unsafeRun: () => f(fa.unsafeRun()).unsafeRun(),
     [HKTBrand]: 'IO' as const,
   }),
 
-  chain: <A, B>(f: (a: A) => IO<B>) => (fa: IO<A>): IO<B> =>
+  chain: <A, B,>(f: (a: A) => IO<B>) => (fa: IO<A>): IO<B> =>
     IOMonad.flatMap(fa, f),
 };
 
 // TODO: Create higher-order combinators that work with any Functor/Monad
 const Combinators = {
   // Lift a regular function to work in any Functor context
-  lift: <F extends keyof HKTRegistry>(F: Functor<F>) => 
+  lift: <F extends keyof HKTRegistry,>(F: Functor<F>) => 
     <A, B>(f: (a: A) => B) => (fa: Kind<F, A>): Kind<F, B> =>
       F.map(fa, f),
 
   // Apply a function in a context to a value in a context
-  liftA2: <F extends keyof HKTRegistry>(F: Applicative<F>) => 
+  liftA2: <F extends keyof HKTRegistry,>(F: Applicative<F>) => 
     <A, B, C>(f: (a: A, b: B) => C) => (fa: Kind<F, A>, fb: Kind<F, B>): Kind<F, C> =>
       F.ap(F.map(fa, (a: A) => (b: B) => f(a, b)), fb),
 
   // Sequence a list of computations
-  sequence: <F extends keyof HKTRegistry>(F: Applicative<F>) => 
-    <A>(fas: Array<Kind<F, A>>): Kind<F, Array<A>> =>
+  sequence: <F extends keyof HKTRegistry,>(F: Applicative<F>) => 
+    (<A>(fas: Array<Kind<F, A>>): Kind<F, Array<A>> =>
       fas.reduce(
         (acc, fa) => Combinators.liftA2(F)((as: A[], a: A) => [...as, a])(acc, fa),
         F.of([] as A[])
       ),
 
   // Map and then flatten
-  bind: <F extends keyof HKTRegistry>(M: Monad<F>) => 
+  bind: <F extends keyof HKTRegistry,>(M: Monad<F>) => 
     <A, B>(f: (a: A) => Kind<F, B>) => (fa: Kind<F, A>): Kind<F, B> =>
       M.flatMap(fa, f),
 
   // Compose monadic functions
-  compose: <F extends keyof HKTRegistry>(M: Monad<F>) => 
+  compose: <F extends keyof HKTRegistry,>(M: Monad<F>) => 
     <A, B, C>(f: (a: A) => Kind<F, B>, g: (b: B) => Kind<F, C>) => 
     (a: A): Kind<F, C> =>
       M.flatMap(f(a), g),
@@ -429,7 +429,7 @@ type CounterState = {
 const CounterActions = {
   // Pure state operations
   increment: (): State<CounterState, number> =>
-    StateMonad.flatMap(State.get<CounterState>(), state =>
+    StateMonad.flatMap(State.get<CounterState>,(), state =>
       StateMonad.flatMap(State.put({
         ...state,
         count: state.count + 1,
@@ -438,7 +438,7 @@ const CounterActions = {
     ),
 
   decrement: (): State<CounterState, number> =>
-    StateMonad.flatMap(State.get<CounterState>(), state =>
+    StateMonad.flatMap(State.get<CounterState>,(), state =>
       StateMonad.flatMap(State.put({
         ...state,
         count: state.count - 1,
@@ -463,7 +463,7 @@ const CounterActions = {
     ),
 
   persistCount: (): AsyncState<CounterState, Result<string, void>> =>
-    AsyncStateMonad.flatMap(AsyncState.get<CounterState>(), state =>
+    AsyncStateMonad.flatMap(AsyncState.get<CounterState>,(), state =>
       AsyncState.fromPromise(
         new Promise<Result<string, void>>(resolve => {
           try {
@@ -500,7 +500,7 @@ function useHKTState<S, A>(
   initialState: S
 ): [A, S, (newComputation: State<S, any>) => void] {
   const [state, setState] = React.useState(initialState);
-  const [value, setValue] = React.useState<A>(() => {
+  const [value, setValue] = React.useState(<A>(() => {
     const [val] = State.runState(computation, initialState);
     return val;
   });
@@ -585,7 +585,7 @@ function HKTCounter() {
       AsyncStateMonad.flatMap(CounterActions.loadCount(), result => {
         if (Result.isSuccess(result)) {
           return AsyncState.fromState(
-            State.modify<CounterState>(s => ({ ...s, count: result.value }))
+            State.modify<CounterState>,(s => ({ ...s, count: result.value }))
           );
         }
         return AsyncState.of(result);
@@ -676,7 +676,7 @@ const FormValidation = {
 
 // Form Component using Result HKT
 function HKTForm() {
-  const [formData, setFormData] = React.useState<FormData>({
+  const [formData, setFormData] = React.useState<FormData>,({
     name: '',
     email: '',
     age: '',

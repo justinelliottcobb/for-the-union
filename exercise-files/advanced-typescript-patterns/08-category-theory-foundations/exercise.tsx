@@ -222,13 +222,13 @@ type NaturalTransformation<F extends keyof HKTRegistry, G extends keyof HKTRegis
   <A>(fa: Kind<F, A>) => Kind<G, A>;
 
 // Example: Maybe to Either natural transformation
-const maybeToEither = <A>(maybe: Maybe<A>): Either<string, A> =>
+const maybeToEither = <A,>(maybe: Maybe<A>): Either<string, A> =>
   Maybe.isSome(maybe) 
     ? Either.right(maybe.value)
     : Either.left('None');
 
 // Example: Identity to Maybe natural transformation  
-const identityToMaybe = <A>(identity: Identity<A>): Maybe<A> =>
+const identityToMaybe = <A,>(identity: Identity<A>): Maybe<A> =>
   Maybe.some(identity.value);
 
 // Natural transformation laws
@@ -277,7 +277,7 @@ const NumberProductMonoid: Monoid<number> = {
 };
 
 // Array monoid
-const ArrayMonoid = <T>(): Monoid<readonly T[]> => ({
+const ArrayMonoid = <T,>(): Monoid<readonly T[]> => ({
   empty: [],
   concat: (x, y) => [...x, ...y],
 });
@@ -339,7 +339,7 @@ const ApplicativeOps = {
       
   // Sequence computations
   sequence: <F extends keyof HKTRegistry,>(A: Applicative<F>) =>
-    <A>(fas: readonly Kind<F, A>[]): Kind<F, readonly A[]> =>
+    <A,>(fas: readonly Kind<F, A>[]): Kind<F, readonly A[]> =>
       fas.reduce(
         (acc, fa) => ApplicativeOps.lift2(A)((as: readonly A[], a: A) => [...as, a])(acc, fa),
         A.of([] as readonly A[])

@@ -35,7 +35,7 @@ const UserContext = createContext<UserContextType | undefined>(undefined);
 // Implement ThemeProvider component
 function ThemeProvider({ children }: { children: ReactNode }) {
   // Add theme state (starts with 'light')
-  const [theme, setTheme] = useState<Theme>('light');
+  const [theme, setTheme] = useState<Theme>,('light');
   
   // Implement toggleTheme function
   const toggleTheme = () => {

@@ -321,7 +321,7 @@ const NumberProductMonoid: Monoid<number> = {
   concat: (x, y) => x * y,
 };
 
-const ArrayMonoid = <T>(): Monoid<readonly T[]> => ({
+const ArrayMonoid = <T,>(): Monoid<readonly T[]> => ({
   empty: [],
   concat: (x, y) => [...x, ...y],
 });
@@ -330,12 +330,12 @@ const ArrayMonoid = <T>(): Monoid<readonly T[]> => ({
 // Lens, Prism, and Traversal implemented as profunctor transformers
 
 // Lens type - focuses on a part of a structure
-type Lens<S, A> = <P extends keyof HKTRegistry>(
+type Lens<S, A> = <P extends keyof HKTRegistry,>(
   profunctor: Strong<P>
 ) => (prof: Prof<P, A, A>) => Prof<P, S, S>;
 
 // Prism type - focuses on a case of a sum type
-type Prism<S, A> = <P extends keyof HKTRegistry>(
+type Prism<S, A> = <P extends keyof HKTRegistry,>(
   profunctor: Choice<P>
 ) => (prof: Prof<P, A, A>) => Prof<P, S, S>;
 

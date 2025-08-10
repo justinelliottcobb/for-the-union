@@ -172,7 +172,7 @@ function Timer() {
 
 // WindowSizeTracker component
 function WindowSizeTracker() {
-  const [windowSize, setWindowSize] = useState<WindowSize>({ width: 0, height: 0 });
+  const [windowSize, setWindowSize] = useState<WindowSize>,({ width: 0, height: 0 });
   
   const getWindowSize = (): WindowSize => {
     return {

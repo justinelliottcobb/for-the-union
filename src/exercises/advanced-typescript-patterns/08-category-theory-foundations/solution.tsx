@@ -17,9 +17,9 @@ interface Functor<F> {
 }
 
 // Verify functor laws
-const verifyFunctorLaws = <F>(functor: Functor<F>, fa: F, f: (a: any) => any, g: (b: any) => any) => {
+const verifyFunctorLaws = <F,>(functor: Functor<F>, fa: F, f: (a: any) => any, g: (b: any) => any) => {
   // Law 1: map(fa, id) ≡ fa
-  const id = <T>(x: T): T => x;
+  const id = <T,>(x: T): T => x;
   const law1 = JSON.stringify(functor.map(fa, id)) === JSON.stringify(fa);
   
   // Law 2: map(fa, compose(f, g)) ≡ map(map(fa, f), g)
@@ -39,7 +39,7 @@ const arrayFunctor: Functor<any[]> = {
 // Maybe Functor
 type Maybe<T> = { tag: 'some'; value: T } | { tag: 'none' };
 
-const some = <T>(value: T): Maybe<T> => ({ tag: 'some', value });
+const some = <T,>(value: T): Maybe<T> => ({ tag: 'some', value });
 const none: Maybe<never> = { tag: 'none' };
 
 const maybeFunctor: Functor<Maybe<any>> = {
@@ -47,14 +47,14 @@ const maybeFunctor: Functor<Maybe<any>> = {
 };
 
 // Natural Transformation
-type NaturalTransformation<F, G> = <A>(fa: F) => G;
+type NaturalTransformation<F, G> = <A,>(fa: F) => G;
 
 // head: Array → Maybe (natural transformation)
 const head: NaturalTransformation<any[], Maybe<any>> = (arr) => 
   arr.length > 0 ? some(arr[0]) : none;
 
 // Verify naturality condition
-const verifyNaturality = <F, G>(
+const verifyNaturality = <F, G,>(
   nt: NaturalTransformation<F, G>,
   fa: F,
   f: (a: any) => any,
@@ -86,7 +86,7 @@ const arrayMonoid: Monoid<any[]> = {
 };
 
 // Verify monoid laws
-const verifyMonoidLaws = <T>(monoid: Monoid<T>, a: T, b: T, c: T) => {
+const verifyMonoidLaws = <T,>(monoid: Monoid<T>, a: T, b: T, c: T) => {
   // Left identity: concat(empty, a) ≡ a
   const leftIdentity = JSON.stringify(monoid.concat(monoid.empty, a)) === JSON.stringify(a);
   
@@ -103,7 +103,7 @@ const verifyMonoidLaws = <T>(monoid: Monoid<T>, a: T, b: T, c: T) => {
 
 // Applicative
 interface Applicative<F> extends Functor<F> {
-  pure<A>(a: A): F;
+  pure(<A>(a: A): F;
   apply<A, B>(fab: F, fa: F): F;
 }
 
@@ -132,7 +132,7 @@ const maybeMonad: Monad<Maybe<any>> = {
 
 // Comonad (dual of Monad)
 interface Comonad<F> {
-  extract<A>(fa: F): A;
+  extract(<A>(fa: F): A;
   extend<A, B>(fa: F, f: (fa: F) => B): F;
 }
 

@@ -308,7 +308,7 @@ type Join<Paths extends readonly string[]> =
       : `${First}/${Join<Rest>}`
     : never;
 
-type Split<Path extends string, Delimiter extends string = '/') =
+type Split<Path extends string, Delimiter extends string = '/'> =
   Path extends `${infer First}${Delimiter}${infer Rest}`
     ? [First, ...Split<Rest, Delimiter>]
     : [Path];

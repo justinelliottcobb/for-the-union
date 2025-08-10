@@ -34,7 +34,7 @@ function useToggle(initialValue: boolean = false) {
 }
 
 // TODO: Create useLocalStorage custom hook
-function useLocalStorage<T>(key: string, initialValue: T) {
+function useLocalStorage<T>,(key: string, initialValue: T) {
   // TODO: Add state that reads from localStorage on init
   // TODO: Implement setValue function that updates both state and localStorage
   // TODO: Handle JSON serialization/deserialization
@@ -55,7 +55,7 @@ type FetchState<T> = {
   refetch: () => void;
 };
 
-function useFetch<T>(url: string): FetchState<T> {
+function useFetch<T>,(url: string): FetchState<T> {
   // TODO: Add states for data, loading, error
   // TODO: Add useEffect to fetch data when url changes
   // TODO: Implement refetch function to manually trigger fetch
@@ -75,7 +75,7 @@ function useFetch<T>(url: string): FetchState<T> {
 }
 
 // TODO: Create useDebounce custom hook
-function useDebounce<T>(value: T, delay: number): T {
+function useDebounce<T>,(value: T, delay: number): T {
   // TODO: Add state for debounced value
   // TODO: Add useEffect with timeout to update debounced value
   // TODO: Clear timeout on cleanup
@@ -85,7 +85,7 @@ function useDebounce<T>(value: T, delay: number): T {
 }
 
 // TODO: Create usePrevious custom hook
-function usePrevious<T>(value: T): T | undefined {
+function usePrevious<T>,(value: T): T | undefined {
   // TODO: Use useRef to store previous value
   // TODO: Update ref after render
   // TODO: Return previous value
@@ -126,7 +126,7 @@ type AsyncState<T> = {
   execute: () => Promise<void>;
 };
 
-function useAsync<T>(asyncFunction: () => Promise<T>): AsyncState<T> {
+function useAsync<T>,(asyncFunction: () => Promise<T>): AsyncState<T> {
   // TODO: Add states for data, loading, error
   // TODO: Implement execute function that calls asyncFunction
   // TODO: Handle loading states and errors
