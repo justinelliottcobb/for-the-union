@@ -46,18 +46,18 @@ type Prof<F extends keyof HKTRegistry, A, B> = HKT2<F, A, B> & {
 
 // Basic Profunctor - contravariant in first argument, covariant in second
 interface Profunctor<F extends keyof HKTRegistry> {
-  readonly dimap: <A, B, C, D,>(
+  readonly dimap: <A, B, C, D>(
     f: (c: C) => A,  // Contravariant function
     g: (b: B) => D,  // Covariant function
     prof: Prof<F, A, B>
   ) => Prof<F, C, D>;
   
-  readonly lmap: <A, B, C,>(
+  readonly lmap: <A, B, C>(
     f: (c: C) => A,
     prof: Prof<F, A, B>
   ) => Prof<F, C, B>;
   
-  readonly rmap: <A, B, D,>(
+  readonly rmap: <A, B, D>(
     g: (b: B) => D,
     prof: Prof<F, A, B>
   ) => Prof<F, A, D>;
@@ -65,22 +65,22 @@ interface Profunctor<F extends keyof HKTRegistry> {
 
 // Strong Profunctor - can handle products (pairs, tuples, records)
 interface Strong<F extends keyof HKTRegistry> extends Profunctor<F> {
-  readonly first: <A, B, C,>(
+  readonly first: <A, B, C>(
     prof: Prof<F, A, B>
   ) => Prof<F, readonly [A, C], readonly [B, C]>;
   
-  readonly second: <A, B, C,>(
+  readonly second: <A, B, C>(
     prof: Prof<F, A, B>
   ) => Prof<F, readonly [C, A], readonly [C, B]>;
 }
 
 // Choice Profunctor - can handle sums (Either, union types)
 interface Choice<F extends keyof HKTRegistry> extends Profunctor<F> {
-  readonly left: <A, B, C,>(
+  readonly left: <A, B, C>(
     prof: Prof<F, A, B>
   ) => Prof<F, Either<A, C>, Either<B, C>>;
   
-  readonly right: <A, B, C,>(
+  readonly right: <A, B, C>(
     prof: Prof<F, A, B>
   ) => Prof<F, Either<C, A>, Either<C, B>>;
 }
@@ -91,23 +91,23 @@ type Either<L, R> =
   | { readonly _tag: 'Right'; readonly right: R };
 
 const Either = {
-  left: <L, R = never,>(value: L): Either<L, R> => ({
+  left: <L, R = never>(value: L): Either<L, R> => ({
     _tag: 'Left' as const,
     left: value,
   }),
   
-  right: <L = never, R = unknown,>(value: R): Either<L, R> => ({
+  right: <L = never, R = unknown>(value: R): Either<L, R> => ({
     _tag: 'Right' as const,
     right: value,
   }),
   
-  isLeft: <L, R,>(either: Either<L, R>): either is Either<L, R> & { _tag: 'Left' } =>
+  isLeft: <L, R>(either: Either<L, R>): either is Either<L, R> & { _tag: 'Left' } =>
     either._tag === 'Left',
     
-  isRight: <L, R,>(either: Either<L, R>): either is Either<L, R> & { _tag: 'Right' } =>
+  isRight: <L, R>(either: Either<L, R>): either is Either<L, R> & { _tag: 'Right' } =>
     either._tag === 'Right',
     
-  fold: <L, R, T,>(either: Either<L, R>, onLeft: (l: L) => T, onRight: (r: R) => T): T =>
+  fold: <L, R, T>(either: Either<L, R>, onLeft: (l: L) => T, onRight: (r: R) => T): T =>
     Either.isLeft(either) ? onLeft(either.left) : onRight(either.right),
 };
 
@@ -123,7 +123,7 @@ declare module './exercise.tsx' {
 type FunctionProf<A, B> = Prof<'Function', A, B> & ((input: A) => B);
 
 const FunctionProfunctor: Profunctor<'Function'> = {
-  dimap: <A, B, C, D,>(
+  dimap: <A, B, C, D>(
     f: (c: C) => A,
     g: (b: B) => D,
     prof: FunctionProf<A, B>
@@ -131,14 +131,14 @@ const FunctionProfunctor: Profunctor<'Function'> = {
     return ((c: C) => g(prof(f(c)))) as FunctionProf<C, D>;
   },
   
-  lmap: <A, B, C,>(
+  lmap: <A, B, C>(
     f: (c: C) => A,
     prof: FunctionProf<A, B>
   ): FunctionProf<C, B> => {
     return ((c: C) => prof(f(c))) as FunctionProf<C, B>;
   },
   
-  rmap: <A, B, D,>(
+  rmap: <A, B, D>(
     g: (b: B) => D,
     prof: FunctionProf<A, B>
   ): FunctionProf<A, D> => {
@@ -149,13 +149,13 @@ const FunctionProfunctor: Profunctor<'Function'> = {
 const FunctionStrong: Strong<'Function'> = {
   ...FunctionProfunctor,
   
-  first: <A, B, C,>(
+  first: <A, B, C>(
     prof: FunctionProf<A, B>
   ): FunctionProf<readonly [A, C], readonly [B, C]> => {
     return (([a, c]: readonly [A, C]) => [prof(a), c] as const) as FunctionProf<readonly [A, C], readonly [B, C]>;
   },
   
-  second: <A, B, C,>(
+  second: <A, B, C>(
     prof: FunctionProf<A, B>
   ): FunctionProf<readonly [C, A], readonly [C, B]> => {
     return (([c, a]: readonly [C, A]) => [c, prof(a)] as const) as FunctionProf<readonly [C, A], readonly [C, B]>;
@@ -165,7 +165,7 @@ const FunctionStrong: Strong<'Function'> = {
 const FunctionChoice: Choice<'Function'> = {
   ...FunctionProfunctor,
   
-  left: <A, B, C,>(
+  left: <A, B, C>(
     prof: FunctionProf<A, B>
   ): FunctionProf<Either<A, C>, Either<B, C>> => {
     return ((either: Either<A, C>) =>
@@ -175,7 +175,7 @@ const FunctionChoice: Choice<'Function'> = {
     ) as FunctionProf<Either<A, C>, Either<B, C>>;
   },
   
-  right: <A, B, C,>(
+  right: <A, B, C>(
     prof: FunctionProf<A, B>
   ): FunctionProf<Either<C, A>, Either<C, B>> => {
     return ((either: Either<C, A>) =>
@@ -201,13 +201,13 @@ type TaggedProf<A, B> = Prof<'Tagged', A, B> & {
 };
 
 const Tagged = {
-  create: <A, B,>(tag: A, value: B): TaggedProf<A, B> => ({
+  create: <A, B>(tag: A, value: B): TaggedProf<A, B> => ({
     tag,
     value,
     [ProfunctorBrand]: { F: 'Tagged' as const, A: tag, B: value },
   } as TaggedProf<A, B>),
   
-  retag: <A, B, C,>(tagged: TaggedProf<A, B>, newTag: C): TaggedProf<C, B> => ({
+  retag: <A, B, C>(tagged: TaggedProf<A, B>, newTag: C): TaggedProf<C, B> => ({
     tag: newTag,
     value: tagged.value,
     [ProfunctorBrand]: { F: 'Tagged' as const, A: newTag, B: tagged.value },
@@ -215,7 +215,7 @@ const Tagged = {
 };
 
 const TaggedProfunctor: Profunctor<'Tagged'> = {
-  dimap: <A, B, C, D,>(
+  dimap: <A, B, C, D>(
     f: (c: C) => A,
     g: (b: B) => D,
     prof: TaggedProf<A, B>
@@ -225,14 +225,14 @@ const TaggedProfunctor: Profunctor<'Tagged'> = {
     return Tagged.create(f as any, g(prof.value));
   },
   
-  lmap: <A, B, C,>(
+  lmap: <A, B, C>(
     f: (c: C) => A,
     prof: TaggedProf<A, B>
   ): TaggedProf<C, B> => {
     return Tagged.create(f as any, prof.value);
   },
   
-  rmap: <A, B, D,>(
+  rmap: <A, B, D>(
     g: (b: B) => D,
     prof: TaggedProf<A, B>
   ): TaggedProf<A, D> => {
@@ -254,7 +254,7 @@ type StarProf<F, A, B> = Prof<'Star', A, B> & {
 };
 
 const Star = {
-  create: <F, A, B,>(run: (input: A) => F): StarProf<F, A, B> => ({
+  create: <F, A, B>(run: (input: A) => F): StarProf<F, A, B> => ({
     run,
     [ProfunctorBrand]: { F: 'Star' as const, A: undefined as A, B: undefined as B },
   } as StarProf<F, A, B>),
@@ -266,11 +266,11 @@ type MaybeStarProf<A, B> = StarProf<Maybe<B>, A, B>;
 type Maybe<A> = A | null | undefined;
 
 const MaybeStar = {
-  create: <A, B,>(run: (input: A) => Maybe<B>): MaybeStarProf<A, B> =>
+  create: <A, B>(run: (input: A) => Maybe<B>): MaybeStarProf<A, B> =>
     Star.create(run) as MaybeStarProf<A, B>,
     
   // Kleisli composition for Maybe
-  compose: <A, B, C,>(
+  compose: <A, B, C>(
     f: MaybeStarProf<A, B>,
     g: MaybeStarProf<B, C>
   ): MaybeStarProf<A, C> =>
@@ -299,7 +299,7 @@ type ForgetProf<M, A, B> = Prof<'Forget', A, B> & {
 };
 
 const Forget = {
-  create: <M, A, B,>(run: (input: A) => M): ForgetProf<M, A, B> => ({
+  create: <M, A, B>(run: (input: A) => M): ForgetProf<M, A, B> => ({
     run,
     [ProfunctorBrand]: { F: 'Forget' as const, A: undefined as A, B: undefined as B },
   } as ForgetProf<M, A, B>),
@@ -342,7 +342,7 @@ type Prism<S, A> = <P extends keyof HKTRegistry>(
 // Lens constructors
 const Lens = {
   // Create a lens from getter and setter
-  create: <S, A,>(
+  create: <S, A>(
     get: (s: S) => A,
     set: (a: A) => (s: S) => S
   ): Lens<S, A> => 
@@ -357,14 +357,14 @@ const Lens = {
       },
 
   // Property lens for objects
-  prop: <S, K extends keyof S,>(key: K): Lens<S, S[K]> =>
+  prop: <S, K extends keyof S>(key: K): Lens<S, S[K]> =>
     Lens.create(
       (s: S) => s[key],
       (a: S[K]) => (s: S) => ({ ...s, [key]: a })
     ),
 
   // Index lens for arrays
-  index: <T,>(i: number): Lens<readonly T[], T | undefined> =>
+  index: <T>(i: number): Lens<readonly T[], T | undefined> =>
     Lens.create(
       (arr: readonly T[]) => arr[i],
       (value: T | undefined) => (arr: readonly T[]) => {
@@ -376,7 +376,7 @@ const Lens = {
     ),
 
   // Compose lenses
-  compose: <S, A, B,>(
+  compose: <S, A, B>(
     lens1: Lens<S, A>,
     lens2: Lens<A, B>
   ): Lens<S, B> =>
@@ -385,27 +385,27 @@ const Lens = {
         lens1(profunctor)(lens2(profunctor)(prof)),
 
   // View through a lens (using Forget profunctor)
-  view: <S, A,>(lens: Lens<S, A>) => (s: S): A => {
+  view: <S, A>(lens: Lens<S, A>) => (s: S): A => {
     const forget = Forget.create((a: A) => a);
     const applied = lens({
       ...TaggedProfunctor,
-      first: <X, Y, Z,>(prof: ForgetProf<X, Y, Z>) =>
+      first: <X, Y, Z>(prof: ForgetProf<X, Y, Z>) =>
         Forget.create(([y, _]: readonly [Y, unknown]) => prof.run(y)),
-      second: <X, Y, Z,>(prof: ForgetProf<X, Y, Z>) =>
+      second: <X, Y, Z>(prof: ForgetProf<X, Y, Z>) =>
         Forget.create(([_, y]: readonly [unknown, Y]) => prof.run(y)),
     } as Strong<'Forget'>)(forget as any);
     return (applied as ForgetProf<A, S, S>).run(s);
   },
 
   // Set through a lens (using Function profunctor)
-  set: <S, A,>(lens: Lens<S, A>) => (a: A) => (s: S): S => {
+  set: <S, A>(lens: Lens<S, A>) => (a: A) => (s: S): S => {
     const identity = ((x: A) => a) as FunctionProf<A, A>;
     const applied = lens(FunctionStrong)(identity);
     return (applied as FunctionProf<S, S>)(s);
   },
 
   // Over/modify through a lens
-  over: <S, A,>(lens: Lens<S, A>) => (f: (a: A) => A) => (s: S): S => {
+  over: <S, A>(lens: Lens<S, A>) => (f: (a: A) => A) => (s: S): S => {
     const mapper = f as FunctionProf<A, A>;
     const applied = lens(FunctionStrong)(mapper);
     return (applied as FunctionProf<S, S>)(s);
@@ -494,7 +494,7 @@ type Parser<A> = {
 };
 
 const Parser = {
-  create: <A,>(parse: (input: string) => readonly [A, string] | null): Parser<A> => ({
+  create: <A>(parse: (input: string) => readonly [A, string] | null): Parser<A> => ({
     parse,
   }),
 
@@ -528,7 +528,7 @@ const Parser = {
     }),
 
   // Parser combinators
-  map: <A, B,>(parser: Parser<A>, f: (a: A) => B): Parser<B> =>
+  map: <A, B>(parser: Parser<A>, f: (a: A) => B): Parser<B> =>
     Parser.create((input) => {
       const result = parser.parse(input);
       if (result) {
@@ -538,7 +538,7 @@ const Parser = {
       return null;
     }),
 
-  chain: <A, B,>(parser: Parser<A>, f: (a: A) => Parser<B>): Parser<B> =>
+  chain: <A, B>(parser: Parser<A>, f: (a: A) => Parser<B>): Parser<B> =>
     Parser.create((input) => {
       const result = parser.parse(input);
       if (result) {
@@ -548,7 +548,7 @@ const Parser = {
       return null;
     }),
 
-  sequence: <A, B,>(parserA: Parser<A>, parserB: Parser<B>): Parser<readonly [A, B]> =>
+  sequence: <A, B>(parserA: Parser<A>, parserB: Parser<B>): Parser<readonly [A, B]> =>
     Parser.create((input) => {
       const resultA = parserA.parse(input);
       if (resultA) {
@@ -562,14 +562,14 @@ const Parser = {
       return null;
     }),
 
-  alternative: <A,>(parser1: Parser<A>, parser2: Parser<A>): Parser<A> =>
+  alternative: <A>(parser1: Parser<A>, parser2: Parser<A>): Parser<A> =>
     Parser.create((input) => {
       const result1 = parser1.parse(input);
       if (result1) return result1;
       return parser2.parse(input);
     }),
 
-  many: <A,>(parser: Parser<A>): Parser<readonly A[]> =>
+  many: <A>(parser: Parser<A>): Parser<readonly A[]> =>
     Parser.create((input) => {
       const results: A[] = [];
       let remaining = input;
@@ -588,7 +588,7 @@ const Parser = {
       return [results, remaining];
     }),
 
-  optional: <A,>(parser: Parser<A>): Parser<A | null> =>
+  optional: <A>(parser: Parser<A>): Parser<A | null> =>
     Parser.create((input) => {
       const result = parser.parse(input);
       return result || [null, input];

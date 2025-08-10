@@ -73,25 +73,25 @@ interface Category<Ob, Mor> {
 // - Identity is the identity function
 // - Composition is function composition
 const TypesCategory = {
-  identity: <A,>(a: A): A => a,
-  compose: <A, B, C,>(f: (a: A) => B, g: (b: B) => C) => (a: A): C => g(f(a)),
+  identity: <A>(a: A): A => a,
+  compose: <A, B, C>(f: (a: A) => B, g: (b: B) => C) => (a: A): C => g(f(a)),
   
   // Verify category laws
   laws: {
     // Left identity: id ∘ f = f
-    leftIdentity: <A, B,>(f: (a: A) => B, a: A): boolean => {
+    leftIdentity: <A, B>(f: (a: A) => B, a: A): boolean => {
       const composed = TypesCategory.compose(TypesCategory.identity, f);
       return composed(a) === f(a);
     },
     
     // Right identity: f ∘ id = f  
-    rightIdentity: <A, B,>(f: (a: A) => B, a: A): boolean => {
+    rightIdentity: <A, B>(f: (a: A) => B, a: A): boolean => {
       const composed = TypesCategory.compose(f, TypesCategory.identity);
       return composed(a) === f(a);
     },
     
     // Associativity: (f ∘ g) ∘ h = f ∘ (g ∘ h)
-    associativity: <A, B, C, D,>(
+    associativity: <A, B, C, D>(
       f: (a: A) => B,
       g: (b: B) => C, 
       h: (c: C) => D,
@@ -107,16 +107,16 @@ const TypesCategory = {
 // TODO: Functors - Structure-preserving mappings between categories
 
 interface Functor<F extends keyof HKTRegistry> {
-  readonly map: <A, B,>(fa: Kind<F, A>, f: (a: A) => B) => Kind<F, B>;
+  readonly map: <A, B>(fa: Kind<F, A>, f: (a: A) => B) => Kind<F, B>;
 }
 
 // Functor Laws
 interface FunctorLaws<F extends keyof HKTRegistry> {
   // Identity: map(id) = id
-  readonly identity: <A,>(fa: Kind<F, A>) => boolean;
+  readonly identity: <A>(fa: Kind<F, A>) => boolean;
   
   // Composition: map(f ∘ g) = map(f) ∘ map(g)
-  readonly composition: <A, B, C,>(
+  readonly composition: <A, B, C>(
     fa: Kind<F, A>,
     f: (a: A) => B,
     g: (b: B) => C
@@ -133,15 +133,15 @@ declare module './exercise.tsx' {
 type Identity<A> = Kind<'Identity', A> & { readonly value: A };
 
 const Identity = {
-  of: <A,>(value: A): Identity<A> => ({ 
+  of: <A>(value: A): Identity<A> => ({ 
     value, 
     [HKTBrand]: 'Identity' as const 
   } as Identity<A>),
   
-  map: <A, B,>(fa: Identity<A>, f: (a: A) => B): Identity<B> => 
+  map: <A, B>(fa: Identity<A>, f: (a: A) => B): Identity<B> => 
     Identity.of(f(fa.value)),
     
-  extract: <A,>(fa: Identity<A>): A => fa.value,
+  extract: <A>(fa: Identity<A>): A => fa.value,
 };
 
 const IdentityFunctor: Functor<'Identity'> = {
@@ -155,27 +155,27 @@ type Maybe<A> = Kind<'Maybe', A> & (
 );
 
 const Maybe = {
-  some: <A,>(value: A): Maybe<A> => ({ 
+  some: <A>(value: A): Maybe<A> => ({ 
     _tag: 'Some' as const, 
     value, 
     [HKTBrand]: 'Maybe' as const 
   } as Maybe<A>),
   
-  none: <A = never,>(): Maybe<A> => ({ 
+  none: <A = never>(): Maybe<A> => ({ 
     _tag: 'None' as const, 
     [HKTBrand]: 'Maybe' as const 
   } as Maybe<A>),
   
-  isSome: <A,>(maybe: Maybe<A>): maybe is Maybe<A> & { _tag: 'Some' } =>
+  isSome: <A>(maybe: Maybe<A>): maybe is Maybe<A> & { _tag: 'Some' } =>
     maybe._tag === 'Some',
     
-  isNone: <A,>(maybe: Maybe<A>): maybe is Maybe<A> & { _tag: 'None' } =>
+  isNone: <A>(maybe: Maybe<A>): maybe is Maybe<A> & { _tag: 'None' } =>
     maybe._tag === 'None',
     
-  map: <A, B,>(fa: Maybe<A>, f: (a: A) => B): Maybe<B> =>
+  map: <A, B>(fa: Maybe<A>, f: (a: A) => B): Maybe<B> =>
     Maybe.isSome(fa) ? Maybe.some(f(fa.value)) : Maybe.none(),
     
-  fold: <A, B,>(maybe: Maybe<A>, onNone: () => B, onSome: (a: A) => B): B =>
+  fold: <A, B>(maybe: Maybe<A>, onNone: () => B, onSome: (a: A) => B): B =>
     Maybe.isSome(maybe) ? onSome(maybe.value) : onNone(),
 };
 
@@ -190,28 +190,28 @@ type Either<E, A> = Kind<'Either', A> & (
 );
 
 const Either = {
-  left: <E, A = never,>(error: E): Either<E, A> => ({ 
+  left: <E, A = never>(error: E): Either<E, A> => ({ 
     _tag: 'Left' as const, 
     left: error, 
     [HKTBrand]: 'Either' as const 
   } as Either<E, A>),
   
-  right: <E = never, A = unknown,>(value: A): Either<E, A> => ({ 
+  right: <E = never, A = unknown>(value: A): Either<E, A> => ({ 
     _tag: 'Right' as const, 
     right: value, 
     [HKTBrand]: 'Either' as const 
   } as Either<E, A>),
   
-  isLeft: <E, A,>(either: Either<E, A>): either is Either<E, A> & { _tag: 'Left' } =>
+  isLeft: <E, A>(either: Either<E, A>): either is Either<E, A> & { _tag: 'Left' } =>
     either._tag === 'Left',
     
-  isRight: <E, A,>(either: Either<E, A>): either is Either<E, A> & { _tag: 'Right' } =>
+  isRight: <E, A>(either: Either<E, A>): either is Either<E, A> & { _tag: 'Right' } =>
     either._tag === 'Right',
     
-  map: <E, A, B,>(fa: Either<E, A>, f: (a: A) => B): Either<E, B> =>
+  map: <E, A, B>(fa: Either<E, A>, f: (a: A) => B): Either<E, B> =>
     Either.isRight(fa) ? Either.right(f(fa.right)) : fa as Either<E, B>,
     
-  fold: <E, A, B,>(either: Either<E, A>, onLeft: (e: E) => B, onRight: (a: A) => B): B =>
+  fold: <E, A, B>(either: Either<E, A>, onLeft: (e: E) => B, onRight: (a: A) => B): B =>
     Either.isLeft(either) ? onLeft(either.left) : onRight(either.right),
 };
 
@@ -234,7 +234,7 @@ const identityToMaybe = <A>(identity: Identity<A>): Maybe<A> =>
 // Natural transformation laws
 const NaturalTransformationLaws = {
   // Naturality: nt ∘ map_F(f) = map_G(f) ∘ nt
-  naturality: <F extends keyof HKTRegistry, G extends keyof HKTRegistry, A, B,>(
+  naturality: <F extends keyof HKTRegistry, G extends keyof HKTRegistry, A, B>(
     nt: NaturalTransformation<F, G>,
     functorF: Functor<F>,
     functorG: Functor<G>,
@@ -297,11 +297,11 @@ const BooleanAndMonoid: Monoid<boolean> = {
 // Monoid operations
 const MonoidOps = {
   // Fold a list using a monoid
-  fold: <A,>(monoid: Monoid<A>, list: readonly A[]): A =>
+  fold: <A>(monoid: Monoid<A>, list: readonly A[]): A =>
     list.reduce(monoid.concat, monoid.empty),
     
   // Power operation - repeated application
-  power: <A,>(monoid: Monoid<A>, a: A, n: number): A => {
+  power: <A>(monoid: Monoid<A>, a: A, n: number): A => {
     if (n <= 0) return monoid.empty;
     if (n === 1) return a;
     const half = MonoidOps.power(monoid, a, Math.floor(n / 2));
@@ -310,7 +310,7 @@ const MonoidOps = {
   },
   
   // Dual monoid - reverse the operation order
-  dual: <A,>(monoid: Monoid<A>): Monoid<A> => ({
+  dual: <A>(monoid: Monoid<A>): Monoid<A> => ({
     empty: monoid.empty,
     concat: (x, y) => monoid.concat(y, x),
   }),
@@ -319,26 +319,26 @@ const MonoidOps = {
 // TODO: Applicative Functors - Functors with application
 
 interface Applicative<F extends keyof HKTRegistry> extends Functor<F> {
-  readonly of: <A,>(a: A) => Kind<F, A>;
-  readonly ap: <A, B,>(fab: Kind<F, (a: A) => B>, fa: Kind<F, A>) => Kind<F, B>;
+  readonly of: <A>(a: A) => Kind<F, A>;
+  readonly ap: <A, B>(fab: Kind<F, (a: A) => B>, fa: Kind<F, A>) => Kind<F, B>;
 }
 
 // Applicative operations
 const ApplicativeOps = {
   // Lift a binary function
-  lift2: <F extends keyof HKTRegistry,>(A: Applicative<F>) => 
+  lift2: <F extends keyof HKTRegistry>(A: Applicative<F>) => 
     <A, B, C>(f: (a: A, b: B) => C) => 
     (fa: Kind<F, A>, fb: Kind<F, B>): Kind<F, C> =>
       A.ap(A.map(fa, (a: A) => (b: B) => f(a, b)), fb),
       
   // Lift a ternary function
-  lift3: <F extends keyof HKTRegistry,>(A: Applicative<F>) =>
+  lift3: <F extends keyof HKTRegistry>(A: Applicative<F>) =>
     <A, B, C, D>(f: (a: A, b: B, c: C) => D) =>
     (fa: Kind<F, A>, fb: Kind<F, B>, fc: Kind<F, C>): Kind<F, D> =>
       A.ap(A.ap(A.map(fa, (a: A) => (b: B) => (c: C) => f(a, b, c)), fb), fc),
       
   // Sequence computations
-  sequence: <F extends keyof HKTRegistry,>(A: Applicative<F>) =>
+  sequence: <F extends keyof HKTRegistry>(A: Applicative<F>) =>
     <A>(fas: readonly Kind<F, A>[]): Kind<F, readonly A[]> =>
       fas.reduce(
         (acc, fa) => ApplicativeOps.lift2(A)((as: readonly A[], a: A) => [...as, a])(acc, fa),
@@ -350,7 +350,7 @@ const ApplicativeOps = {
 const MaybeApplicative: Applicative<'Maybe'> = {
   map: Maybe.map,
   of: Maybe.some,
-  ap: <A, B,>(fab: Maybe<(a: A) => B>, fa: Maybe<A>): Maybe<B> =>
+  ap: <A, B>(fab: Maybe<(a: A) => B>, fa: Maybe<A>): Maybe<B> =>
     Maybe.isSome(fab) && Maybe.isSome(fa) 
       ? Maybe.some(fab.value(fa.value))
       : Maybe.none(),
@@ -360,7 +360,7 @@ const MaybeApplicative: Applicative<'Maybe'> = {
 const EitherApplicative = <E>(): Applicative<'Either'> => ({
   map: Either.map,
   of: Either.right,
-  ap: <A, B,>(fab: Either<E, (a: A) => B>, fa: Either<E, A>): Either<E, B> =>
+  ap: <A, B>(fab: Either<E, (a: A) => B>, fa: Either<E, A>): Either<E, B> =>
     Either.isRight(fab) && Either.isRight(fa)
       ? Either.right(fab.right(fa.right))
       : Either.isLeft(fab) ? fab as Either<E, B> : fa as Either<E, B>,
@@ -369,23 +369,23 @@ const EitherApplicative = <E>(): Applicative<'Either'> => ({
 // TODO: Monads - Applicatives with sequential composition
 
 interface Monad<F extends keyof HKTRegistry> extends Applicative<F> {
-  readonly flatMap: <A, B,>(fa: Kind<F, A>, f: (a: A) => Kind<F, B>) => Kind<F, B>;
+  readonly flatMap: <A, B>(fa: Kind<F, A>, f: (a: A) => Kind<F, B>) => Kind<F, B>;
 }
 
 // Monad operations
 const MonadOps = {
   // Kleisli composition
-  kleisli: <F extends keyof HKTRegistry,>(M: Monad<F>) =>
+  kleisli: <F extends keyof HKTRegistry>(M: Monad<F>) =>
     <A, B, C>(f: (a: A) => Kind<F, B>, g: (b: B) => Kind<F, C>) =>
     (a: A): Kind<F, C> => M.flatMap(f(a), g),
     
   // Join operation
-  join: <F extends keyof HKTRegistry,>(M: Monad<F>) =>
+  join: <F extends keyof HKTRegistry>(M: Monad<F>) =>
     <A>(mma: Kind<F, Kind<F, A>>): Kind<F, A> =>
       M.flatMap(mma, (ma: Kind<F, A>) => ma),
       
   // Sequence with effects
-  sequence: <F extends keyof HKTRegistry,>(M: Monad<F>) =>
+  sequence: <F extends keyof HKTRegistry>(M: Monad<F>) =>
     <A>(mas: readonly Kind<F, A>[]): Kind<F, readonly A[]> =>
       mas.reduce(
         (acc, ma) => M.flatMap(acc, (as: readonly A[]) => 
@@ -394,7 +394,7 @@ const MonadOps = {
       ),
       
   // Replicate operation
-  replicate: <F extends keyof HKTRegistry,>(M: Monad<F>) =>
+  replicate: <F extends keyof HKTRegistry>(M: Monad<F>) =>
     <A>(n: number, ma: Kind<F, A>): Kind<F, readonly A[]> =>
       MonadOps.sequence(M)(Array.from({ length: n }, () => ma)),
 };
@@ -402,23 +402,23 @@ const MonadOps = {
 // Maybe Monad
 const MaybeMonad: Monad<'Maybe'> = {
   ...MaybeApplicative,
-  flatMap: <A, B,>(fa: Maybe<A>, f: (a: A) => Maybe<B>): Maybe<B> =>
+  flatMap: <A, B>(fa: Maybe<A>, f: (a: A) => Maybe<B>): Maybe<B> =>
     Maybe.isSome(fa) ? f(fa.value) : Maybe.none(),
 };
 
 // Either Monad
 const EitherMonad = <E>(): Monad<'Either'> => ({
   ...EitherApplicative<E>(),
-  flatMap: <A, B,>(fa: Either<E, A>, f: (a: A) => Either<E, B>): Either<E, B> =>
+  flatMap: <A, B>(fa: Either<E, A>, f: (a: A) => Either<E, B>): Either<E, B> =>
     Either.isRight(fa) ? f(fa.right) : fa as Either<E, B>,
 });
 
 // TODO: Comonads - Dual to monads, representing context
 
 interface Comonad<F extends keyof HKTRegistry> extends Functor<F> {
-  readonly extract: <A,>(fa: Kind<F, A>) => A;
-  readonly extend: <A, B,>(fa: Kind<F, A>, f: (fa: Kind<F, A>) => B) => Kind<F, B>;
-  readonly duplicate: <A,>(fa: Kind<F, A>) => Kind<F, Kind<F, A>>;
+  readonly extract: <A>(fa: Kind<F, A>) => A;
+  readonly extend: <A, B>(fa: Kind<F, A>, f: (fa: Kind<F, A>) => B) => Kind<F, B>;
+  readonly duplicate: <A>(fa: Kind<F, A>) => Kind<F, Kind<F, A>>;
 }
 
 // Store Comonad - represents a value in a context with ability to look around
@@ -434,26 +434,26 @@ type Store<S, A> = Kind2<'Store', S, A> & {
 };
 
 const Store = {
-  create: <S, A,>(position: S, peek: (s: S) => A): Store<S, A> => ({
+  create: <S, A>(position: S, peek: (s: S) => A): Store<S, A> => ({
     position,
     peek,
     [HKTBrand]: 'Store' as const,
   } as Store<S, A>),
   
-  map: <S, A, B,>(fa: Store<S, A>, f: (a: A) => B): Store<S, B> =>
+  map: <S, A, B>(fa: Store<S, A>, f: (a: A) => B): Store<S, B> =>
     Store.create(fa.position, (s) => f(fa.peek(s))),
     
-  extract: <S, A,>(fa: Store<S, A>): A =>
+  extract: <S, A>(fa: Store<S, A>): A =>
     fa.peek(fa.position),
     
-  extend: <S, A, B,>(fa: Store<S, A>, f: (fa: Store<S, A>) => B): Store<S, B> =>
+  extend: <S, A, B>(fa: Store<S, A>, f: (fa: Store<S, A>) => B): Store<S, B> =>
     Store.create(fa.position, (s) => f(Store.create(s, fa.peek))),
     
-  duplicate: <S, A,>(fa: Store<S, A>): Store<S, Store<S, A>> =>
+  duplicate: <S, A>(fa: Store<S, A>): Store<S, Store<S, A>> =>
     Store.create(fa.position, (s) => Store.create(s, fa.peek)),
     
   // Move the focus
-  seek: <S, A,>(fa: Store<S, A>, position: S): Store<S, A> =>
+  seek: <S, A>(fa: Store<S, A>, position: S): Store<S, A> =>
     Store.create(position, fa.peek),
 };
 
@@ -463,30 +463,30 @@ const Store = {
 interface Adjunction<L extends keyof HKTRegistry, R extends keyof HKTRegistry> {
   readonly leftAdjoint: Functor<L>;
   readonly rightAdjoint: Functor<R>;
-  readonly unit: <A,>(a: A) => Kind<R, Kind<L, A>>;
-  readonly counit: <A,>(lra: Kind<L, Kind<R, A>>) => A;
+  readonly unit: <A>(a: A) => Kind<R, Kind<L, A>>;
+  readonly counit: <A>(lra: Kind<L, Kind<R, A>>) => A;
 }
 
 // Currying adjunction: (-) × A ⊣ (-) → A
 const CurryingAdjunction = <A>() => ({
   // Left adjoint: (-, A)
   leftAdjoint: {
-    map: <B, C,>(fab: readonly [B, A], f: (b: B) => C): readonly [C, A] =>
+    map: <B, C>(fab: readonly [B, A], f: (b: B) => C): readonly [C, A] =>
       [f(fab[0]), fab[1]],
   },
   
   // Right adjoint: (-) → A  
   rightAdjoint: {
-    map: <B, C,>(fba: (b: B) => A, f: (c: C) => B): (c: C) => A =>
+    map: <B, C>(fba: (b: B) => A, f: (c: C) => B): (c: C) => A =>
       (c) => fba(f(c)),
   },
   
   // Unit: B → (B × A) → A
-  unit: <B,>(b: B): ((ba: readonly [B, A]) => A) =>
+  unit: <B>(b: B): ((ba: readonly [B, A]) => A) =>
     (ba) => ba[1],
     
   // Counit: ((B → A) × A) → B
-  counit: <B,>(faa: readonly [(b: B) => A, A]): B => {
+  counit: <B>(faa: readonly [(b: B) => A, A]): B => {
     // This is not implementable in general - demonstrates limits
     throw new Error('Counit for currying adjunction cannot be implemented');
   },
@@ -499,16 +499,16 @@ type Yoneda<F extends keyof HKTRegistry, A> = <B>(f: (a: A) => B) => Kind<F, B>;
 
 const YonedaOps = {
   // Transform from functor to Yoneda
-  to: <F extends keyof HKTRegistry,>(functor: Functor<F>) =>
+  to: <F extends keyof HKTRegistry>(functor: Functor<F>) =>
     <A>(fa: Kind<F, A>): Yoneda<F, A> =>
       <B>(f: (a: A) => B) => functor.map(fa, f),
       
   // Transform from Yoneda to functor  
-  from: <F extends keyof HKTRegistry, A,>(yoneda: Yoneda<F, A>): Kind<F, A> =>
+  from: <F extends keyof HKTRegistry, A>(yoneda: Yoneda<F, A>): Kind<F, A> =>
     yoneda((a: A) => a) as Kind<F, A>,
     
   // Yoneda lemma isomorphism verification
-  isomorphism: <F extends keyof HKTRegistry, A,>(
+  isomorphism: <F extends keyof HKTRegistry, A>(
     functor: Functor<F>,
     fa: Kind<F, A>
   ): boolean => {
@@ -525,15 +525,15 @@ const YonedaOps = {
 type Validation<E, A> = Either<readonly E[], A>;
 
 const Validation = {
-  success: <E, A,>(value: A): Validation<E, A> => Either.right(value),
-  failure: <E, A,>(error: E): Validation<E, A> => Either.left([error]),
-  failures: <E, A,>(errors: readonly E[]): Validation<E, A> => Either.left(errors),
+  success: <E, A>(value: A): Validation<E, A> => Either.right(value),
+  failure: <E, A>(error: E): Validation<E, A> => Either.left([error]),
+  failures: <E, A>(errors: readonly E[]): Validation<E, A> => Either.left(errors),
 };
 
 const ValidationApplicative = <E>(): Applicative<'Either'> => ({
   map: Either.map,
   of: Validation.success,
-  ap: <A, B,>(fab: Validation<E, (a: A) => B>, fa: Validation<E, A>): Validation<E, B> => {
+  ap: <A, B>(fab: Validation<E, (a: A) => B>, fa: Validation<E, A>): Validation<E, B> => {
     if (Either.isLeft(fab) && Either.isLeft(fa)) {
       return Either.left([...fab.left, ...fa.left]);
     }
@@ -555,13 +555,13 @@ type Form<T> = {
 
 const FormOps = {
   // Create a form field with validation
-  field: <T,>(value: T, validate: (value: T) => Validation<string, T>): FormField<T> => ({
+  field: <T>(value: T, validate: (value: T) => Validation<string, T>): FormField<T> => ({
     value,
     validate,
   }),
   
   // Validate entire form using Applicative
-  validate: <T,>(form: Form<T>): Validation<string, T> => {
+  validate: <T>(form: Form<T>): Validation<string, T> => {
     const V = ValidationApplicative<string>();
     
     // This would need to be implemented generically for arbitrary record types
@@ -577,27 +577,27 @@ interface Pipeline<A, B> {
 
 const Pipeline = {
   // Identity morphism
-  identity: <A,>(): Pipeline<A, A> => ({
+  identity: <A>(): Pipeline<A, A> => ({
     run: (a) => a,
   }),
   
   // Composition
-  compose: <A, B, C,>(p1: Pipeline<A, B>, p2: Pipeline<B, C>): Pipeline<A, C> => ({
+  compose: <A, B, C>(p1: Pipeline<A, B>, p2: Pipeline<B, C>): Pipeline<A, C> => ({
     run: (a) => p2.run(p1.run(a)),
   }),
   
   // Lift a function to a pipeline
-  lift: <A, B,>(f: (a: A) => B): Pipeline<A, B> => ({
+  lift: <A, B>(f: (a: A) => B): Pipeline<A, B> => ({
     run: f,
   }),
   
   // Parallel composition (product)
-  parallel: <A, B, C, D,>(p1: Pipeline<A, B>, p2: Pipeline<C, D>): Pipeline<readonly [A, C], readonly [B, D]> => ({
+  parallel: <A, B, C, D>(p1: Pipeline<A, B>, p2: Pipeline<C, D>): Pipeline<readonly [A, C], readonly [B, D]> => ({
     run: ([a, c]) => [p1.run(a), p2.run(c)],
   }),
   
   // Choice composition (coproduct)
-  choice: <A, B, C,>(p1: Pipeline<A, C>, p2: Pipeline<B, C>): Pipeline<Either<A, B>, C> => ({
+  choice: <A, B, C>(p1: Pipeline<A, C>, p2: Pipeline<B, C>): Pipeline<Either<A, B>, C> => ({
     run: (either) => Either.isLeft(either) ? p1.run(either.left) : p2.run(either.right),
   }),
 };

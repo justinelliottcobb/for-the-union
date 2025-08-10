@@ -304,7 +304,7 @@ const HKT = {
 
   // Filter with effects
   filterA: <F extends keyof HKTRegistry,>(A: Applicative<F>) =>
-    <A,>(predicate: (a: A) => Kind<F, boolean>) =>
+    <A>(predicate: (a: A) => Kind<F, boolean>) =>
     (as: Array<A>): Kind<F, Array<A>> =>
       HKT.lift2(A)((results: boolean[], values: A[]) =>
         values.filter((_, i) => results[i])
@@ -315,12 +315,12 @@ const HKT = {
 
   // Replicate a computation n times
   replicate: <F extends keyof HKTRegistry,>(A: Applicative<F>) =>
-    <A,>(n: number, fa: Kind<F, A>): Kind<F, Array<A>> =>
+    <A>(n: number, fa: Kind<F, A>): Kind<F, Array<A>> =>
       HKT.sequence(A)(Array.from({ length: n }, () => fa)),
 
   // Kleisli composition for monads
   kleisli: <F extends keyof HKTRegistry,>(M: Monad<F>) =>
-    <A, B, C,>(f: (a: A) => Kind<F, B>, g: (b: B) => Kind<F, C>) =>
+    <A, B, C>(f: (a: A) => Kind<F, B>, g: (b: B) => Kind<F, C>) =>
     (a: A): Kind<F, C> =>
       M.flatMap(f(a), g),
 };
@@ -334,7 +334,7 @@ type Fix<F> = F extends (arg: any) => any ? F extends (arg: infer A) => any ? F 
 
 // Natural transformation - structure-preserving map between functors
 type NaturalTransformation<F extends keyof HKTRegistry, G extends keyof HKTRegistry> = 
-  <A,>(fa: Kind<F, A>) => Kind<G, A>;
+  <A>(fa: Kind<F, A>) => Kind<G, A>;
 
 // TODO: Practical examples demonstrating HKT power
 
@@ -408,7 +408,7 @@ const FormValidation = {
 // TODO: React components demonstrating HKT concepts
 
 // Generic component that works with any container
-function ContainerDisplay<F extends keyof HKTRegistry, A,>({
+function ContainerDisplay<F extends keyof HKTRegistry, A>({
   container,
   functor,
   render,
@@ -425,7 +425,7 @@ function ContainerDisplay<F extends keyof HKTRegistry, A,>({
 }
 
 // Maybe-specific component
-function MaybeDisplay<A,>({
+function MaybeDisplay<A>({
   maybe,
   render,
   empty = 'Nothing',
@@ -446,7 +446,7 @@ function MaybeDisplay<A,>({
 }
 
 // Either-specific component  
-function EitherDisplay<E, A,>({
+function EitherDisplay<E, A>({
   either,
   renderSuccess,
   renderError,
