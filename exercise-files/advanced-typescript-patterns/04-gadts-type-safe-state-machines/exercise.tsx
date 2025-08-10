@@ -117,7 +117,7 @@ const NetworkStateMachine = {
     [StateBrand]: 'Connected' as const,
   }),
 
-  connectionFailed: <From extends 'Connecting' | 'Authenticating'>(
+  connectionFailed: <From extends 'Connecting' | 'Authenticating',>(
     state: State<From, NetworkData>,
     payload: { error: string }
   ): State<'Failed', NetworkData> => ({
@@ -148,7 +148,7 @@ const NetworkStateMachine = {
     [StateBrand]: 'Authenticated' as const,
   }),
 
-  startDisconnection: <From extends 'Connected' | 'Authenticated'>(
+  startDisconnection: <From extends 'Connected' | 'Authenticated',>(
     state: State<From, NetworkData>
   ): State<'Disconnecting', NetworkData> => ({
     state: 'Disconnecting' as const,
@@ -156,7 +156,7 @@ const NetworkStateMachine = {
     [StateBrand]: 'Disconnecting' as const,
   }),
 
-  disconnected: <From extends 'Failed' | 'Disconnecting'>(
+  disconnected: <From extends 'Failed' | 'Disconnecting',>(
     state: State<From, NetworkData>
   ): State<'Disconnected', NetworkData> => ({
     state: 'Disconnected' as const,
@@ -734,7 +734,7 @@ const GameStateMachine = {
     [StateBrand]: 'Playing' as const,
   }),
 
-  openSettings: <From extends 'MainMenu' | 'Paused'>(
+  openSettings: <From extends 'MainMenu' | 'Paused',>(
     state: State<From, GameData>
   ): State<'Settings', GameData> => ({
     state: 'Settings' as const,
@@ -750,7 +750,7 @@ const GameStateMachine = {
     [StateBrand]: 'MainMenu' as const,
   }),
 
-  backToMenu: <From extends 'GameOver' | 'Victory' | 'Paused'>(
+  backToMenu: <From extends 'GameOver' | 'Victory' | 'Paused',>(
     state: State<From, GameData>
   ): State<'MainMenu', GameData> => ({
     state: 'MainMenu' as const,
