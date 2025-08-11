@@ -20,7 +20,7 @@ export function useProgress() {
     defaultValue: defaultProgressData,
   });
 
-  const getExerciseProgress = (exerciseId: string): ExerciseProgress => {
+  const getExerciseProgress = useCallback((exerciseId: string): ExerciseProgress => {
     const existing = progressData.exercises.find(p => p.exerciseId === exerciseId);
     return existing || {
       exerciseId,
@@ -29,13 +29,20 @@ export function useProgress() {
       timeSpent: 0,
       hintsUsed: [],
     };
-  };
+  }, [progressData.exercises]);
 
   const updateExerciseProgress = useCallback(
     (exerciseId: string, updates: Partial<Omit<ExerciseProgress, 'exerciseId'>>) => {
       setProgressData(prev => {
         const existingIndex = prev.exercises.findIndex(p => p.exerciseId === exerciseId);
-        const existing = existingIndex >= 0 ? prev.exercises[existingIndex] : getExerciseProgress(exerciseId);
+        // Use the previous data to avoid calling getExerciseProgress which could cause re-renders
+        const existing = existingIndex >= 0 ? prev.exercises[existingIndex] : {
+          exerciseId,
+          status: 'not_started' as ExerciseStatus,
+          attempts: 0,
+          timeSpent: 0,
+          hintsUsed: [],
+        };
         
         const updated: ExerciseProgress = {
           ...existing,
@@ -67,11 +74,11 @@ export function useProgress() {
     [setProgressData]
   );
 
-  const getAllExerciseProgress = (): ExerciseProgress[] => {
+  const getAllExerciseProgress = useCallback((): ExerciseProgress[] => {
     return progressData.exercises;
-  };
+  }, [progressData.exercises]);
 
-  const getCategoryProgress = (categoryId: string) => {
+  const getCategoryProgress = useCallback((categoryId: string) => {
     const categoryExercises = categories
       .find(c => c.id === categoryId)
       ?.exercises || [];
@@ -89,9 +96,9 @@ export function useProgress() {
         return progress.status === 'in_progress';
       }).length,
     };
-  };
+  }, [categories, getExerciseProgress]);
 
-  const getOverallProgress = (): LearningStats => {
+  const getOverallProgress = useCallback((): LearningStats => {
     const allExercises = getAllExercises();
     const completedExercises = allExercises.filter(exercise => {
       const progress = getExerciseProgress(exercise.id);
@@ -123,7 +130,7 @@ export function useProgress() {
       currentStreak: 0, // TODO: Implement streak calculation
       longestStreak: 0, // TODO: Implement streak calculation
     };
-  };
+  }, [getAllExercises, getExerciseProgress, progressData.exercises, categories, getCategoryProgress]);
 
   const resetProgress = () => {
     setProgressData(defaultProgressData);

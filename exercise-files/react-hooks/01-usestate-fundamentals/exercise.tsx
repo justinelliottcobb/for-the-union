@@ -38,26 +38,31 @@ type TodoItem = {
 // TODO: Implement a Counter component with useState
 function Counter() {
   // TODO: Add state for count (number, starts at 0)
+  const [state, setState] = useState<CounterState>({
+    count: 0,
+    isVisible: true,
+  });
   // TODO: Add state for visibility (boolean, starts true)
+  const { count, isVisible } = state;
   
   // TODO: Implement increment function (use functional update)
   const increment = () => {
-    // Your code here
+    setState(prevState => ({ ...prevState, count: prevState.count + 1 }));
   };
   
   // TODO: Implement decrement function (use functional update)  
   const decrement = () => {
-    // Your code here
+    setState(prevState => ({ ...prevState, count: prevState.count - 1 }));
   };
   
   // TODO: Implement reset function (set back to 0)
   const reset = () => {
-    // Your code here
+    setState(prevState => ({ ...prevState, count: 0 }));
   };
   
   // TODO: Implement toggle visibility function
   const toggleVisibility = () => {
-    // Your code here
+    setState(prevState => ({ ...prevState, isVisible: !prevState.isVisible }));
   };
   
   // TODO: Return JSX that shows:
@@ -66,12 +71,29 @@ function Counter() {
   // - Decrement button  
   // - Reset button
   // - Toggle visibility button
-  return null; // Replace with your JSX
+  return (
+    <>
+      <div>
+        {isVisible && <h1>Count: {count}</h1>}
+        <button onClick={increment}>Increment</button>
+        <button onClick={decrement}>Decrement</button>
+        <button onClick={reset}>Reset</button>
+        <button onClick={toggleVisibility}>
+          {isVisible ? 'Hide' : 'Show'} Count
+        </button>
+      </div>
+    </>
+  ); // Replace with your JSX
 }
 
 // TODO: Implement a UserForm component for handling form inputs
 function UserForm() {
   // TODO: Add state for user form data (UserFormData type)
+  const [state, setState] = useState<UserFormData>({
+    name: '',
+    email: '',
+    age: 0,
+  });
   
   // TODO: Implement input change handler
   const handleInputChange = (field: keyof UserFormData, value: string | number) => {

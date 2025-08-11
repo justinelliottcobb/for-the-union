@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Stack, Tabs, ScrollArea, Loader, Text, Alert } from '@mantine/core';
 import { CodeHighlight } from '@mantine/code-highlight';
 import ReactMarkdown from 'react-markdown';
@@ -65,13 +65,16 @@ export function ExerciseViewer({ exercise }: ExerciseViewerProps) {
             let content = await codeResponse.text();
             
             // Handle Vite's ?raw parameter response which exports the content as a string
-            if (content.startsWith('export default "') && content.includes('sourceMappingURL')) {
+            if (content.startsWith('export default "')) {
               try {
-                // Extract the actual file content from the exported string
-                const match = content.match(/^export default "(.*)";/s);
-                if (match && match[1]) {
+                // Find where the string content actually ends
+                const stringStart = content.indexOf('export default "') + 'export default "'.length;
+                const stringEnd = content.lastIndexOf('";');
+                
+                if (stringStart < stringEnd) {
+                  const rawContent = content.substring(stringStart, stringEnd);
                   // Decode the escaped string content
-                  content = match[1]
+                  content = rawContent
                     .replace(/\\n/g, '\n')
                     .replace(/\\t/g, '\t')
                     .replace(/\\"/g, '"')
@@ -201,6 +204,21 @@ export {};
                       {children}
                     </code>
                   );
+                },
+                // Prevent p elements from containing pre elements
+                p: ({ children, ...props }) => {
+                  // Check if any child is a CodeHighlight (which renders as pre)
+                  const hasCodeBlock = React.Children.toArray(children).some(child =>
+                    React.isValidElement(child) && 
+                    (child.type === CodeHighlight || 
+                     (child.props && child.props.className?.includes('language-')))
+                  );
+                  
+                  if (hasCodeBlock) {
+                    return <div {...props}>{children}</div>;
+                  }
+                  
+                  return <p {...props}>{children}</p>;
                 },
               }}
             >
