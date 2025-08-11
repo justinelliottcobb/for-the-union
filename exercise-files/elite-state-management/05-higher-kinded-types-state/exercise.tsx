@@ -399,21 +399,21 @@ const Combinators = {
 
   // Sequence a list of computations
   sequence: <F extends keyof HKTRegistry,>(F: Applicative<F,>) => 
-    (<A,>(fas: Array<Kind<F, A,>>): Kind<F, Array<A,>> =>
+    <A,>(fas: Array<Kind<F, A,>>): Kind<F, Array<A,>> =>
       fas.reduce(
         (acc, fa) => Combinators.liftA2(F)((as: A[], a: A) => [...as, a])(acc, fa),
         F.of([] as A[])
       ),
 
   // Map and then flatten
-  bind: <F extends keyof HKTRegistry,>(M: Monad<F,>) => 
-    <A, B,>(f: (a: A) => Kind<F, B,>) => (fa: Kind<F, A,>): Kind<F, B,> =>
+  bind: <F extends keyof HKTRegistry,>(M: Monad<F>) => 
+    <A, B,>(f: (a: A) => Kind<F, B>) => (fa: Kind<F, A>): Kind<F, B> =>
       M.flatMap(fa, f),
 
   // Compose monadic functions
-  compose: <F extends keyof HKTRegistry,>(M: Monad<F,>) => 
-    <A, B, C,>(f: (a: A) => Kind<F, B,>, g: (b: B) => Kind<F, C,>) => 
-    (a: A): Kind<F, C,> =>
+  compose: <F extends keyof HKTRegistry,>(M: Monad<F>) => 
+    <A, B, C,>(f: (a: A) => Kind<F, B>, g: (b: B) => Kind<F, C>) => 
+    (a: A): Kind<F, C> =>
       M.flatMap(f(a), g),
 };
 
@@ -500,7 +500,7 @@ function useHKTState<S, A,>(
   initialState: S
 ): [A, S, (newComputation: State<S, any>) => void] {
   const [state, setState] = React.useState(initialState);
-  const [value, setValue] = React.useState(<A,>(() => {
+  const [value, setValue] = React.useState(() => {
     const [val] = State.runState(computation, initialState);
     return val;
   });
