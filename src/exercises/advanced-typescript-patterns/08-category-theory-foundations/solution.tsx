@@ -12,12 +12,12 @@ interface Category<Obj, Mor> {
 }
 
 // Functor Laws
-interface Functor<F> {
-  map<A, B>(fa: F, f: (a: A) => B): F;
+interface Functor<F,> {
+  map<A, B,>(fa: F, f: (a: A) => B): F;
 }
 
 // Verify functor laws
-const verifyFunctorLaws = <F,>(functor: Functor<F>, fa: F, f: (a: any) => any, g: (b: any) => any) => {
+const verifyFunctorLaws = <F,>(functor: Functor<F,>, fa: F, f: (a: any) => any, g: (b: any) => any) => {
   // Law 1: map(fa, id) ≡ fa
   const id = <T,>(x: T): T => x;
   const law1 = JSON.stringify(functor.map(fa, id)) === JSON.stringify(fa);
@@ -47,7 +47,7 @@ const maybeFunctor: Functor<Maybe<any>> = {
 };
 
 // Natural Transformation
-type NaturalTransformation<F, G> = <A,>(fa: F) => G;
+type NaturalTransformation<F, G,> = <A,>(fa: F) => G;
 
 // head: Array → Maybe (natural transformation)
 const head: NaturalTransformation<any[], Maybe<any>> = (arr) => 
@@ -55,11 +55,11 @@ const head: NaturalTransformation<any[], Maybe<any>> = (arr) =>
 
 // Verify naturality condition
 const verifyNaturality = <F, G,>(
-  nt: NaturalTransformation<F, G>,
+  nt: NaturalTransformation<F, G,>,
   fa: F,
   f: (a: any) => any,
-  functorF: Functor<F>,
-  functorG: Functor<G>
+  functorF: Functor<F,>,
+  functorG: Functor<G,>
 ) => {
   // α(map_F(f, fa)) ≡ map_G(f, α(fa))
   const left = nt(functorF.map(fa, f));
@@ -74,7 +74,7 @@ interface Monoid<T> {
 }
 
 // String Monoid
-const stringMonoid: Monoid<string> = {
+const stringMonoid: Monoid<strinG,> = {
   empty: '',
   concat: (a, b) => a + b
 };
@@ -102,9 +102,9 @@ const verifyMonoidLaws = <T,>(monoid: Monoid<T>, a: T, b: T, c: T) => {
 };
 
 // Applicative
-interface Applicative<F> extends Functor<F> {
-  pure(<A>(a: A): F;
-  apply<A, B>(fab: F, fa: F): F;
+interface Applicative<F,> extends Functor<F,> {
+  pure(<A,>(a: A): F;
+  apply<A, B,>(fab: F, fa: F): F;
 }
 
 // Maybe Applicative
@@ -120,8 +120,8 @@ const maybeApplicative: Applicative<Maybe<any>> = {
 };
 
 // Monad
-interface Monad<F> extends Applicative<F> {
-  flatMap<A, B>(fa: F, f: (a: A) => F): F;
+interface Monad<F,> extends Applicative<F,> {
+  flatMap<A, B,>(fa: F, f: (a: A) => F): F;
 }
 
 // Maybe Monad
@@ -131,13 +131,13 @@ const maybeMonad: Monad<Maybe<any>> = {
 };
 
 // Comonad (dual of Monad)
-interface Comonad<F> {
-  extract(<A>(fa: F): A;
-  extend<A, B>(fa: F, f: (fa: F) => B): F;
+interface Comonad<F,> {
+  extract(<A,>(fa: F): A;
+  extend<A, B,>(fa: F, f: (fa: F) => B): F;
 }
 
 // Store Comonad (for context-dependent computations)
-type Store<S, A> = {
+type Store<S, A,> = {
   pos: S;
   peek: (s: S) => A;
 };
@@ -151,7 +151,7 @@ const storeComonad: Comonad<Store<any, any>> = {
 };
 
 // Example Store usage
-const gridStore: Store<[number, number], string> = {
+const gridStore: Store<[number, number], strinG,> = {
   pos: [0, 0],
   peek: ([x, y]) => `Cell(${x},${y})`
 };
