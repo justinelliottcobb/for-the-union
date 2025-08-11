@@ -15,16 +15,16 @@ type Kind<F extends keyof HKTRegistry, A> = HKT<F, A> & {
 
 // Type Classes
 interface Functor<F extends keyof HKTRegistry> {
-  readonly map: <A, B>(fa: Kind<F, A>, f: (a: A) => B) => Kind<F, B>;
+  readonly map: <A, B,>(fa: Kind<F, A>, f: (a: A) => B) => Kind<F, B>;
 }
 
 interface Applicative<F extends keyof HKTRegistry> extends Functor<F> {
-  readonly pure: <A>(a: A) => Kind<F, A>;
-  readonly apply: <A, B>(fab: Kind<F, (a: A) => B>, fa: Kind<F, A>) => Kind<F, B>;
+  readonly pure: <A,>(a: A) => Kind<F, A>;
+  readonly apply: <A, B,>(fab: Kind<F, (a: A) => B>, fa: Kind<F, A>) => Kind<F, B>;
 }
 
 interface Monad<F extends keyof HKTRegistry> extends Applicative<F> {
-  readonly flatMap: <A, B>(fa: Kind<F, A>, f: (a: A) => Kind<F, B>) => Kind<F, B>;
+  readonly flatMap: <A, B,>(fa: Kind<F, A>, f: (a: A) => Kind<F, B>) => Kind<F, B>;
 }
 
 // Maybe Implementation
@@ -32,7 +32,7 @@ type Maybe<T> = Some<T> | None;
 type Some<T> = { readonly tag: 'some'; readonly value: T };
 type None = { readonly tag: 'none' };
 
-const some = <T>(value: T): Some<T> => ({ tag: 'some', value });
+const some = <T,>(value: T): Some<T> => ({ tag: 'some', value });
 const none: None = { tag: 'none' };
 
 declare module './solution' {
@@ -59,8 +59,8 @@ type Either<E, A> = Left<E> | Right<A>;
 type Left<E> = { readonly tag: 'left'; readonly value: E };
 type Right<A> = { readonly tag: 'right'; readonly value: A };
 
-const left = <E>(value: E): Left<E> => ({ tag: 'left', value });
-const right = <A>(value: A): Right<A> => ({ tag: 'right', value });
+const left = <E,>(value: E): Left<E> => ({ tag: 'left', value });
+const right = <A,>(value: A): Right<A> => ({ tag: 'right', value });
 
 declare module './solution' {
   interface HKTRegistry {

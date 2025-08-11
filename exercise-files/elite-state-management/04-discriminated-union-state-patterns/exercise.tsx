@@ -346,7 +346,7 @@ type HistoryAction<T> =
   | { type: 'SET_MAX_SIZE'; size: number };
 
 // TODO: Implement generic history reducer
-const createHistoryReducer = <T>() => (
+const createHistoryReducer = <T,>() => (
   state: HistoryState<T>, 
   action: HistoryAction<T>
 ): HistoryState<T> => {
@@ -430,7 +430,7 @@ type NetworkAction<T> =
   | { type: 'RESET' };
 
 // TODO: Implement network request reducer
-const createNetworkReducer = <T>() => (
+const createNetworkReducer = <T,>() => (
   state: NetworkState<T>, 
   action: NetworkAction<T>
 ): NetworkState<T> => {

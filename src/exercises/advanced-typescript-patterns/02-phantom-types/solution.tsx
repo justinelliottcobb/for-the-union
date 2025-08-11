@@ -85,7 +85,7 @@ const createRequestBuilder = (): RequestBuilder => ({
   _hasMethod: false
 });
 
-const withUrl = <M extends boolean>(
+const withUrl = <M extends boolean,>(
   builder: RequestBuilder<false, M>,
   url: string
 ): RequestBuilder<true, M> => ({
@@ -94,7 +94,7 @@ const withUrl = <M extends boolean>(
   url
 });
 
-const withMethod = <U extends boolean>(
+const withMethod = <U extends boolean,>(
   builder: RequestBuilder<U, false>,
   method: HttpMethod
 ): RequestBuilder<U, true> => ({
@@ -103,7 +103,7 @@ const withMethod = <U extends boolean>(
   method
 });
 
-const withBody = <U extends boolean, M extends boolean>(
+const withBody = <U extends boolean, M extends boolean,>(
   builder: RequestBuilder<U, M>,
   body: any
 ): RequestBuilder<U, M> => ({
