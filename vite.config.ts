@@ -12,6 +12,7 @@ export default defineConfig({
       '@lib': resolve(__dirname, './src/lib'),
     },
   },
+  publicDir: false,
   server: {
     port: 3000,
     open: true,

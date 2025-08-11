@@ -26,7 +26,8 @@ export function ExerciseViewer({ exercise }: ExerciseViewerProps) {
       return path.replace('./src/', '/src/');
     }
     if (path.startsWith('./exercise-files/')) {
-      return path.replace('./', '/');
+      // Add ?raw query parameter to get raw file content instead of module
+      return path.replace('./', '/') + '?raw';
     }
     return path;
   };
@@ -61,7 +62,28 @@ export function ExerciseViewer({ exercise }: ExerciseViewerProps) {
           const url = convertPathToUrl(exercise.filePath);
           const codeResponse = await fetch(url);
           if (codeResponse.ok) {
-            setCurrentCode(await codeResponse.text());
+            let content = await codeResponse.text();
+            
+            // Handle Vite's ?raw parameter response which exports the content as a string
+            if (content.startsWith('export default "') && content.includes('sourceMappingURL')) {
+              try {
+                // Extract the actual file content from the exported string
+                const match = content.match(/^export default "(.*)";/s);
+                if (match && match[1]) {
+                  // Decode the escaped string content
+                  content = match[1]
+                    .replace(/\\n/g, '\n')
+                    .replace(/\\t/g, '\t')
+                    .replace(/\\"/g, '"')
+                    .replace(/\\\\/g, '\\');
+                }
+              } catch (parseError) {
+                console.warn('Could not parse raw file content, using default');
+                content = generateDefaultExerciseCode(exercise);
+              }
+            }
+            
+            setCurrentCode(content);
           } else {
             console.warn('Could not load exercise code from:', url);
             setCurrentCode(generateDefaultExerciseCode(exercise));
