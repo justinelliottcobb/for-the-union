@@ -113,7 +113,7 @@ const stringToUpperPipeline: Pipeline<string, string> = {
 // Interactive Demo Component
 export const ProfunctorDemo: React.FC = () => {
   const [input, setInput] = useState('hello world');
-  const [user, setUser] = useState<User>,({ name: 'John', age: 30, email: 'john@example.com' });
+  const [user, setUser] = useState<User>({ name: 'John', age: 30, email: 'john@example.com' });
 
   // Function profunctor demo
   const addOne = (x: number) => x + 1;

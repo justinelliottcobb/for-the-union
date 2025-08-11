@@ -102,7 +102,7 @@ function useRoutePreloader() {
 }
 
 // TODO: Create useBackgroundSync custom hook
-function useBackgroundSync<T>,(
+function useBackgroundSync<T>(
   fetchFn: () => Promise<T>,
   interval: number = 30000,
   immediate: boolean = true
@@ -183,7 +183,7 @@ function useSmartPreloader<T = any>(items: PreloadItem<T>[]) {
 }
 
 // TODO: Create usePrefetchOnHover custom hook
-function usePrefetchOnHover<T>,(
+function usePrefetchOnHover<T>(
   fetchFn: () => Promise<T>,
   delay: number = 300
 ): {
@@ -232,7 +232,7 @@ function usePrefetchOnHover<T>,(
 }
 
 // TODO: Create useInfiniteScroll custom hook
-function useInfiniteScroll<T>,(
+function useInfiniteScroll<T>(
   loadMore: (page: number) => Promise<T[]>,
   threshold = 0.8
 ) {
@@ -243,7 +243,7 @@ function useInfiniteScroll<T>,(
   // TODO: Preload next page when approaching threshold
   // TODO: Handle loading states and errors
 
-  const containerRef = useRef<HTMLDivElement>,(null);
+  const containerRef = useRef<HTMLDivElement>(null);
   
   return {
     items: [] as T[],

@@ -555,7 +555,7 @@ function FormWizard() {
 function DocumentEditor() {
   const [documentState, dispatchDocument] = useReducer(documentReducer, { status: 'empty' });
   const [historyState, dispatchHistory] = useReducer(
-    createHistoryReducer<DocumentState>,(), 
+    createHistoryReducer<DocumentState>(), 
     {
       past: [],
       present: documentState,

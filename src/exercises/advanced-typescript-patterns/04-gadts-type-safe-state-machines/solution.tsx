@@ -142,11 +142,11 @@ const makeMove = <P extends Player,>(
 
 // Interactive Component
 export const GADTDemo: React.FC = () => {
-  const [connectionState, setConnectionState] = useState<ConnectionStatus>,('disconnected');
-  const [docState, setDocState] = useState<DocumentStatus>,('clean');
+  const [connectionState, setConnectionState] = useState<ConnectionStatus>('disconnected');
+  const [docState, setDocState] = useState<DocumentStatus>('clean');
   const [docContent, setDocContent] = useState('Hello, World!');
-  const [gameState, setGameState] = useState<GameStatus>,('menu');
-  const [currentPlayer, setCurrentPlayer] = useState<Player>,('player1');
+  const [gameState, setGameState] = useState<GameStatus>('menu');
+  const [currentPlayer, setCurrentPlayer] = useState<Player>('player1');
 
   let connection: Connection<any> = createConnection();
   let document: Document<any> = createDocument(docContent);

@@ -37,9 +37,9 @@ function useToggle(initialValue: boolean = false) {
 }
 
 // Create useLocalStorage custom hook
-function useLocalStorage<T>,(key: string, initialValue: T) {
+function useLocalStorage<T>(key: string, initialValue: T) {
   // Add state that reads from localStorage on init
-  const [storedValue, setStoredValue] = useState<T>,(() => {
+  const [storedValue, setStoredValue] = useState<T>(() => {
     try {
       const item = window.localStorage.getItem(key);
       return item ? JSON.parse(item) : initialValue;
@@ -71,7 +71,7 @@ type FetchState<T> = {
   refetch: () => void;
 };
 
-function useFetch<T>,(url: string): FetchState<T> {
+function useFetch<T>(url: string): FetchState<T> {
   // Add states for data, loading, error
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -116,9 +116,9 @@ function useFetch<T>,(url: string): FetchState<T> {
 }
 
 // Create useDebounce custom hook
-function useDebounce<T>,(value: T, delay: number): T {
+function useDebounce<T>(value: T, delay: number): T {
   // Add state for debounced value
-  const [debouncedValue, setDebouncedValue] = useState<T>,(value);
+  const [debouncedValue, setDebouncedValue] = useState<T>(value);
   
   useEffect(() => {
     // Add useEffect with timeout to update debounced value
@@ -137,9 +137,9 @@ function useDebounce<T>,(value: T, delay: number): T {
 }
 
 // Create usePrevious custom hook
-function usePrevious<T>,(value: T): T | undefined {
+function usePrevious<T>(value: T): T | undefined {
   // Use useRef to store previous value
-  const ref = useRef<T>,();
+  const ref = useRef<T>();
   
   useEffect(() => {
     // Update ref after render
@@ -158,7 +158,7 @@ type WindowSize = {
 
 function useWindowSize(): WindowSize {
   // Add state for window size
-  const [windowSize, setWindowSize] = useState<WindowSize>,(() => ({
+  const [windowSize, setWindowSize] = useState<WindowSize>(() => ({
     width: typeof window !== 'undefined' ? window.innerWidth : 0,
     height: typeof window !== 'undefined' ? window.innerHeight : 0,
   }));
@@ -216,7 +216,7 @@ type AsyncState<T> = {
   execute: () => Promise<void>;
 };
 
-function useAsync<T>,(asyncFunction: () => Promise<T>): AsyncState<T> {
+function useAsync<T>(asyncFunction: () => Promise<T>): AsyncState<T> {
   // Add states for data, loading, error
   const [data, setData] = useState<T | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
@@ -265,7 +265,7 @@ type FormState<T> = {
 
 function useForm<T extends Record<string, any>>(config: FormConfig<T>): FormState<T> {
   // Add states for values, errors, touched, isSubmitting
-  const [values, setValues] = useState<T>,(config.initialValues);
+  const [values, setValues] = useState<T>(config.initialValues);
   const [errors, setErrors] = useState<Partial<Record<keyof T, string>>>({});
   const [touched, setTouched] = useState<Partial<Record<keyof T, boolean>>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);

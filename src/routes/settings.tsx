@@ -25,12 +25,12 @@ const defaultSettings: UserSettings = {
 };
 
 export function SettingsPage() {
-  const [settings, setSettings] = useLocalStorage<UserSettings>,({
+  const [settings, setSettings] = useLocalStorage<UserSettings>({
     key: 'typescript-exercises-settings',
     defaultValue: defaultSettings,
   });
 
-  const updateSetting = <K extends keyof UserSettings,>(
+  const updateSetting = <K extends keyof UserSettings>(
     key: K,
     value: UserSettings[K]
   ) => {

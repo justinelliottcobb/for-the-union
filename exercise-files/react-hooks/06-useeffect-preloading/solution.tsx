@@ -84,7 +84,7 @@ function useRoutePreloader() {
     abortControllersRef.current.set(route, abortController);
     
     // Start preload request
-    const promise = mockFetch<RouteData>,(route, 800 + Math.random() * 1200);
+    const promise = mockFetch<RouteData>(route, 800 + Math.random() * 1200);
     
     // Store promise in cache
     cache.set(route, {
@@ -166,7 +166,7 @@ function useIntersectionObserver(
   onIntersect: () => void,
   options: IntersectionObserverInit = {}
 ) {
-  const observerRef = useRef<IntersectionObserver>,();
+  const observerRef = useRef<IntersectionObserver>();
   
   useEffect(() => {
     if (!target.current) return;
@@ -245,7 +245,7 @@ function useImagePreloader() {
 }
 
 // Create useBackgroundSync for data freshness
-function useBackgroundSync<T>,(
+function useBackgroundSync<T>(
   fetchFn: () => Promise<T>,
   interval: number = 30000,
   enabled: boolean = true
@@ -530,7 +530,7 @@ function LazyImageItem({
   onIntersect: () => void;
   isPreloaded: boolean;
 }) {
-  const elementRef = useRef<HTMLDivElement>,(null);
+  const elementRef = useRef<HTMLDivElement>(null);
   const [loaded, setLoaded] = useState(false);
   
   useIntersectionObserver(elementRef, onIntersect, { threshold: 0.1 });

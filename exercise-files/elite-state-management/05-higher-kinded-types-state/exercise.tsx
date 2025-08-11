@@ -438,7 +438,7 @@ const CounterActions = {
     ),
 
   decrement: (): State<CounterState, number> =>
-    StateMonad.flatMap(State.get<CounterState>,(), state =>
+    StateMonad.flatMap(State.get<CounterState>(), state =>
       StateMonad.flatMap(State.put({
         ...state,
         count: state.count - 1,
@@ -463,7 +463,7 @@ const CounterActions = {
     ),
 
   persistCount: (): AsyncState<CounterState, Result<string, void>> =>
-    AsyncStateMonad.flatMap(AsyncState.get<CounterState>,(), state =>
+    AsyncStateMonad.flatMap(AsyncState.get<CounterState>(), state =>
       AsyncState.fromPromise(
         new Promise<Result<string, void>>(resolve => {
           try {
@@ -676,7 +676,7 @@ const FormValidation = {
 
 // Form Component using Result HKT
 function HKTForm() {
-  const [formData, setFormData] = React.useState<FormDatA,>,({
+  const [formData, setFormData] = React.useState<FormData>({
     name: '',
     email: '',
     age: '',

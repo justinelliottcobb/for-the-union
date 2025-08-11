@@ -533,7 +533,7 @@ const store = configureStore({
 type AppDispatch = typeof store.dispatch;
 
 // TODO: Create typed hooks
-const useAppDispatch = () => useDispatch<AppDispatch>,();
+const useAppDispatch = () => useDispatch<AppDispatch>();
 const useAppSelector = <T,>(selector: (state: RootState) => T) => useSelector(selector);
 
 // TODO: Create selector functions
