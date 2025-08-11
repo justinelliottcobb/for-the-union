@@ -103,8 +103,8 @@ const verifyMonoidLaws = <T,>(monoid: Monoid<T>, a: T, b: T, c: T) => {
 
 // Applicative
 interface Applicative<F,> extends Functor<F,> {
-  pure(<A,>(a: A): F;
-  apply<A, B,>(fab: F, fa: F): F;
+  pure: <A,>(a: A) => F;
+  apply: <A, B,>(fab: F, fa: F) => F;
 }
 
 // Maybe Applicative
@@ -132,8 +132,8 @@ const maybeMonad: Monad<Maybe<any>> = {
 
 // Comonad (dual of Monad)
 interface Comonad<F,> {
-  extract(<A,>(fa: F): A;
-  extend<A, B,>(fa: F, f: (fa: F) => B): F;
+  extract: <A,>(fa: F) => A;
+  extend: <A, B,>(fa: F, f: (fa: F) => B) => F;
 }
 
 // Store Comonad (for context-dependent computations)
