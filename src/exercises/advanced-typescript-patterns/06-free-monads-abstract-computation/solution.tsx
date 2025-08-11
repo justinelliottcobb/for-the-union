@@ -6,15 +6,15 @@ type Free<F extends string, A> =
   | { tag: 'Pure'; value: A }
   | { tag: 'Bind'; fa: any; f: (a: any) => Free<F, A> };
 
-const pure = <F extends string, A>(value: A): Free<F, A> => ({ tag: 'Pure', value });
+const pure = <F extends string, A,>(value: A): Free<F, A> => ({ tag: 'Pure', value });
 
-const liftF = <F extends string, A>(fa: any): Free<F, A> => ({
+const liftF = <F extends string, A,>(fa: any): Free<F, A> => ({
   tag: 'Bind',
   fa,
   f: (a: A) => pure(a)
 });
 
-const flatMap = <F extends string, A, B>(
+const flatMap = <F extends string, A, B,>(
   fa: Free<F, A>,
   f: (a: A) => Free<F, B>
 ): Free<F, B> => {
@@ -55,10 +55,10 @@ type StateF<S, A> =
   | { tag: 'Get'; next: (state: S) => A }
   | { tag: 'Put'; state: S; next: A };
 
-const getState = <S>(): Free<'State', S> =>
+const getState = <S,>(): Free<'State', S> =>
   liftF<'State', S>({ tag: 'Get', next: (s: S) => s });
 
-const putState = <S>(state: S): Free<'State', void> =>
+const putState = <S,>(state: S): Free<'State', void> =>
   liftF<'State', void>({ tag: 'Put', state, next: undefined });
 
 // Do-notation helper (simplified)
@@ -86,7 +86,7 @@ const doM = function*<F extends string, A>(
 type InterpreterLog = { type: 'log'; message: string };
 type InterpreterResult = { logs: InterpreterLog[]; result: any };
 
-const pureInterpreter = <A>(program: Free<any, A>): InterpreterResult => {
+const pureInterpreter = <A,>(program: Free<any, A>): InterpreterResult => {
   const logs: InterpreterLog[] = [];
   
   const interpret = (prog: Free<any, any>): any => {

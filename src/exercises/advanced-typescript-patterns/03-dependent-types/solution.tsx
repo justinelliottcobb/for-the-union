@@ -11,7 +11,7 @@ type Vector<T, N extends number> = {
 };
 
 // Safe vector construction
-const vector = <T, N extends number>(data: Tuple<T, N>): Vector<T, N> => ({
+const vector = <T, N extends number,>(data: Tuple<T, N>): Vector<T, N> => ({
   length: data.length as N,
   data
 });
@@ -79,7 +79,7 @@ type Config<E extends Environment> = {
   };
 } : {});
 
-const createConfig = <E extends Environment>(env: E): Config<E> => {
+const createConfig = <E extends Environment,>(env: E): Config<E> => {
   const baseConfig = {
     environment: env,
     database: {

@@ -44,7 +44,7 @@ const functionStrong: Strong<'Function'> = {
 };
 
 // Lens using Profunctor encoding
-type Lens<S, T, A, B> = <P extends keyof Strong>(
+type Lens<S, T, A, B> = <P extends keyof Strong,>(
   P: Strong<P>
 ) => (pab: HKT2<P, A, B>) => HKT2<P, S, T>;
 

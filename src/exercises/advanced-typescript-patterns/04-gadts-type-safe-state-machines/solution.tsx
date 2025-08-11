@@ -132,7 +132,7 @@ const startGame = (game: Game<'menu'>): Game<'playing', 'player1'> => ({
   data: { score: 0, turn: 1 }
 });
 
-const makeMove = <P extends Player>(
+const makeMove = <P extends Player,>(
   game: Game<'playing', P>
 ): Game<'playing', P extends 'player1' ? 'player2' : 'player1'> => ({
   status: 'playing',

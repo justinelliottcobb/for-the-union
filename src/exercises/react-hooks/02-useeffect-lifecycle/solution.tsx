@@ -1,7 +1,7 @@
 // useEffect Lifecycle Management - Solution
 // Master React's useEffect hook for handling side effects and lifecycle events
 
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 
 // Types
 type User = {
