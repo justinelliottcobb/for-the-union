@@ -501,10 +501,12 @@ function useResourcePreloader() {
     // Simulate route preloading
     switch (route) {
       case 'dashboard':
-        import('./dashboard').catch(() => console.log('Dashboard preload failed'));
+        console.log('🔄 Preloading dashboard route...');
+        // In real app: import('./pages/dashboard').catch(() => console.log('Dashboard preload failed'));
         break;
       case 'settings':
-        import('./settings').catch(() => console.log('Settings preload failed'));
+        console.log('🔄 Preloading settings route...');
+        // In real app: import('./pages/settings').catch(() => console.log('Settings preload failed'));
         break;
     }
   }, []);
