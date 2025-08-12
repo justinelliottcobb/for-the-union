@@ -52,10 +52,6 @@ export function runTests(compiledCode: string): TestResult[] {
 
   // Check UserForm component specifically
   const userFormSection = extractComponentCode(compiledCode, 'UserForm');
-  console.log('DEBUG: UserForm section extracted:', userFormSection.substring(0, 300));
-  console.log('DEBUG: UserForm includes form:', userFormSection.includes('form'));
-  console.log('DEBUG: UserForm includes input:', userFormSection.includes('input'));
-  console.log('DEBUG: UserForm includes _jsx:', userFormSection.includes('_jsx'));
   
   tests.push({
     name: 'UserForm component implementation',
