@@ -90,7 +90,7 @@ function VirtualList<T>({ items, itemHeight, height, renderItem, className }: Vi
   return (
     <div
       ref={containerRef}
-      className={`relative overflow-auto ${className}`}
+      className={"relative overflow-auto " + (className || "")}
       style={{ height }}
       onScroll={handleScroll}
       {...containerProps}
@@ -184,7 +184,7 @@ function WindowedGrid<T>({
         {/* TODO: Render visible cells */}
         {visibleCells.map((cell, index) => (
           <div
-            key={`${cell.rowIndex}-${cell.columnIndex}`}
+            key={cell.rowIndex + "-" + cell.columnIndex}
             style={{
               position: 'absolute',
               top: cell.rowIndex * rowHeight,
@@ -335,8 +335,8 @@ export default function VirtualScrollingDemo() {
   const listData = useMemo(() => {
     return Array.from({ length: listItemCount }, (_, i) => ({
       id: i,
-      name: `Item ${i}`,
-      description: `Description for item ${i}`,
+      name: "Item " + i,
+      description: "Description for item " + i,
       value: Math.floor(Math.random() * 1000),
       category: ['A', 'B', 'C'][i % 3]
     }));
@@ -345,7 +345,7 @@ export default function VirtualScrollingDemo() {
   const gridData = useMemo(() => {
     return Array.from({ length: gridItemCount }, (_, i) => ({
       id: i,
-      color: `hsl(${(i * 137) % 360}, 70%, 50%)`,
+      color: "hsl(" + ((i * 137) % 360) + ", 70%, 50%)",
       value: i
     }));
   }, [gridItemCount]);
@@ -406,25 +406,25 @@ export default function VirtualScrollingDemo() {
       <div className="flex justify-center space-x-4">
         <button
           onClick={() => setSelectedDemo('list')}
-          className={`px-4 py-2 rounded ${
+          className={"px-4 py-2 rounded " + (
             selectedDemo === 'list' ? 'bg-blue-500 text-white' : 'bg-gray-200'
-          }`}
+          )}
         >
           Virtual List
         </button>
         <button
           onClick={() => setSelectedDemo('grid')}
-          className={`px-4 py-2 rounded ${
+          className={"px-4 py-2 rounded " + (
             selectedDemo === 'grid' ? 'bg-blue-500 text-white' : 'bg-gray-200'
-          }`}
+          )}
         >
           Windowed Grid
         </button>
         <button
           onClick={() => setSelectedDemo('infinite')}
-          className={`px-4 py-2 rounded ${
+          className={"px-4 py-2 rounded " + (
             selectedDemo === 'infinite' ? 'bg-blue-500 text-white' : 'bg-gray-200'
-          }`}
+          )}
         >
           Infinite Scroll
         </button>

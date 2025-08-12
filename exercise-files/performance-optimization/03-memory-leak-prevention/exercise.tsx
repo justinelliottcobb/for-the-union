@@ -228,7 +228,7 @@ export default function MemoryLeakPreventionDemo() {
   // TODO: Generate sample data
   const sampleData = Array.from({ length: dataSize }, (_, i) => ({
     id: i,
-    content: `Item ${i} with some content data`,
+    content: "Item " + i + " with some content data",
     timestamp: new Date(),
   }));
 
