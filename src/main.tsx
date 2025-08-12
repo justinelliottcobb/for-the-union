@@ -6,6 +6,8 @@ import { ModalsProvider } from '@mantine/modals';
 import { Notifications } from '@mantine/notifications';
 import { theme } from './theme';
 import App from './App';
+import './lib/test-index'; // Initialize test registry
+import './lib/test-debug'; // Debug test system (development only)
 
 // Import Mantine styles
 import '@mantine/core/styles.css';

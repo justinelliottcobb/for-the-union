@@ -1,5 +1,7 @@
 import * as ts from 'typescript';
 import type { ExerciseResult, Exercise, TestResult, CompilationError } from '@/types';
+import { getTestRunner } from './test-registry';
+import { ensureTestRegistryInitialized } from './test-index';
 
 export class ExerciseRunner {
   private compilerOptions: ts.CompilerOptions = {
@@ -107,13 +109,13 @@ export class ExerciseRunner {
   private async runTests(exercise: Exercise, compiledCode: string): Promise<TestResult[]> {
     if (!exercise.testsPath) {
       // If no tests are defined, return basic implementation checks
-      return this.runBasicImplementationTests(exercise, compiledCode);
+      return await this.runBasicImplementationTests(exercise, compiledCode);
     }
 
     try {
       // TODO: Load and run actual test files when they exist
       // For now, fall back to basic implementation checks
-      return this.runBasicImplementationTests(exercise, compiledCode);
+      return await this.runBasicImplementationTests(exercise, compiledCode);
     } catch (error) {
       return [{
         name: 'Test execution',
@@ -124,7 +126,7 @@ export class ExerciseRunner {
     }
   }
 
-  private runBasicImplementationTests(exercise: Exercise, compiledCode: string): TestResult[] {
+  private async runBasicImplementationTests(exercise: Exercise, compiledCode: string): Promise<TestResult[]> {
     const tests: TestResult[] = [];
     
     // Check if code compiles (we already know it does at this point)
@@ -134,61 +136,26 @@ export class ExerciseRunner {
       executionTime: 1,
     });
 
-    // Basic implementation checks based on exercise ID
-    if (exercise.id === '01-usestate-fundamentals') {
-      // Check Counter component specifically
-      const counterSection = this.extractComponentCode(compiledCode, 'Counter');
-      
-      tests.push({
-        name: 'Counter component implementation',
-        passed: (counterSection.includes('_jsx') || counterSection.includes('<')) && 
-                (counterSection.includes('onClick') || counterSection.includes('click')) && 
-                !counterSection.includes('return null'),
-        error: (counterSection.includes('_jsx') || counterSection.includes('<')) && 
-               (counterSection.includes('onClick') || counterSection.includes('click')) && 
-               !counterSection.includes('return null')
-          ? undefined 
-          : 'Counter component needs JSX with click handlers (not return null)',
-        executionTime: 1,
-      });
+    // Ensure test registry is initialized before running tests
+    await ensureTestRegistryInitialized();
 
-      // Check UserForm component specifically
-      const userFormSection = this.extractComponentCode(compiledCode, 'UserForm');
+    // Try to load exercise-specific tests using the modular test registry
+    try {
+      const testRunner = await getTestRunner(exercise.category, exercise.id);
+      if (testRunner) {
+        const exerciseTests = testRunner(compiledCode);
+        tests.push(...exerciseTests);
+        console.log(`✓ Ran ${exerciseTests.length} tests for ${exercise.category}/${exercise.id}`);
+      } else {
+        console.log(`⚠ No custom tests found for ${exercise.category}/${exercise.id}`);
+      }
+    } catch (error) {
+      console.warn(`Failed to run tests for ${exercise.category}/${exercise.id}:`, error);
       tests.push({
-        name: 'UserForm component implementation',
-        passed: (userFormSection.includes('_jsx') || userFormSection.includes('<')) && 
-                !userFormSection.includes('return null'),
-        error: (userFormSection.includes('_jsx') || userFormSection.includes('<')) && 
-               !userFormSection.includes('return null')
-          ? undefined 
-          : 'UserForm component needs JSX implementation (not return null)',
-        executionTime: 1,
-      });
-
-      // Check TodoList component specifically  
-      const todoListSection = this.extractComponentCode(compiledCode, 'TodoList');
-      tests.push({
-        name: 'TodoList component implementation',
-        passed: (todoListSection.includes('_jsx') || todoListSection.includes('<')) && 
-                !todoListSection.includes('return null'),
-        error: (todoListSection.includes('_jsx') || todoListSection.includes('<')) && 
-               !todoListSection.includes('return null')
-          ? undefined 
-          : 'TodoList component needs JSX implementation (not return null)',
-        executionTime: 1,
-      });
-
-      // Check StateAnalyzer component specifically
-      const stateAnalyzerSection = this.extractComponentCode(compiledCode, 'StateAnalyzer');
-      tests.push({
-        name: 'StateAnalyzer component implementation',
-        passed: (stateAnalyzerSection.includes('_jsx') || stateAnalyzerSection.includes('<')) && 
-                !stateAnalyzerSection.includes('return null'),
-        error: (stateAnalyzerSection.includes('_jsx') || stateAnalyzerSection.includes('<')) && 
-               !stateAnalyzerSection.includes('return null')
-          ? undefined 
-          : 'StateAnalyzer component needs JSX implementation (not return null)',
-        executionTime: 1,
+        name: 'Test loading error',
+        passed: false,
+        error: error instanceof Error ? error.message : 'Failed to load tests',
+        executionTime: 0,
       });
     }
 
@@ -241,10 +208,17 @@ export class ExerciseRunner {
       
       let content = await response.text();
       
-      // Handle Vite's ?raw parameter response which exports the content as a string
-      if (content.startsWith('export default "')) {
+      // Handle Vite's ?raw parameter response - can be either string or template literal format
+      if (content.startsWith('export default `')) {
+        // Template literal format
+        const stringStart = content.indexOf('export default `') + 'export default `'.length;
+        const stringEnd = content.lastIndexOf('`;');
+        if (stringStart < stringEnd) {
+          content = content.substring(stringStart, stringEnd);
+        }
+      } else if (content.startsWith('export default "')) {
+        // String format
         try {
-          // Find where the string content actually ends
           const stringStart = content.indexOf('export default "') + 'export default "'.length;
           const stringEnd = content.lastIndexOf('";');
           
