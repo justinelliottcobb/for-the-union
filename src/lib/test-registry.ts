@@ -78,7 +78,8 @@ export async function initializeTestRegistry(): Promise<void> {
     'react-hooks',
     'discriminated-unions', 
     'advanced-typescript-patterns',
-    'elite-state-management'
+    'elite-state-management',
+    'graphql'
   ];
   
   for (const category of categories) {
