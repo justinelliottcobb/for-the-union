@@ -4,7 +4,7 @@
 import type { TestResult } from '@/types';
 import { extractComponentCode, createComponentTest, createHookTest } from '@/lib/test-utils';
 
-export default function runTests(compiledCode: string): TestResult[] {
+export function runTests(compiledCode: string): TestResult[] {
   const tests: TestResult[] = [];
 
   // Test 1: XState imports and basic setup
