@@ -41,16 +41,23 @@ export function runTests(compiledCode: string): TestResult[] {
   }
 
   // Test 1: useRenderPerformance hook implementation
+  const useRenderPerfCode = extractCode(compiledCode, 'useRenderPerformance');
   tests.push({
     name: 'useRenderPerformance hook tracks render metrics',
-    passed: compiledCode.includes('useRenderPerformance') && 
-            compiledCode.includes('useRef') &&
-            (compiledCode.includes('renderCount') || compiledCode.includes('performance')),
-    error: !compiledCode.includes('useRenderPerformance') 
-      ? 'useRenderPerformance hook not found'
-      : !compiledCode.includes('useRef')
+    passed: useRenderPerfCode.includes('useRef') && 
+            useRenderPerfCode.includes('renderCount') &&
+            useRenderPerfCode.includes('performance.now') &&
+            useRenderPerfCode.includes('useEffect') &&
+            useRenderPerfCode.length > 200, // Requires substantial implementation
+    error: !useRenderPerfCode.includes('useRef')
       ? 'useRenderPerformance should use useRef for metrics storage'
-      : 'useRenderPerformance should track render count and performance',
+      : !useRenderPerfCode.includes('renderCount')
+      ? 'useRenderPerformance should track renderCount'
+      : !useRenderPerfCode.includes('performance.now')
+      ? 'useRenderPerformance should use performance.now() for timing'
+      : !useRenderPerfCode.includes('useEffect')
+      ? 'useRenderPerformance should use useEffect for timing logic'
+      : 'useRenderPerformance needs more substantial implementation',
     executionTime: 1,
   });
 
@@ -59,13 +66,20 @@ export function runTests(compiledCode: string): TestResult[] {
   tests.push({
     name: 'expensiveCalculation function implements heavy computation',
     passed: expensiveCalcCode.includes('for') && 
-            (expensiveCalcCode.includes('console.log') || expensiveCalcCode.includes('console.')) &&
-            expensiveCalcCode.length > 50,
+            expensiveCalcCode.includes('console.log') &&
+            expensiveCalcCode.includes('items.length') &&
+            expensiveCalcCode.includes('return') &&
+            !expensiveCalcCode.includes('TODO') &&
+            expensiveCalcCode.length > 150, // Requires substantial loops and logic
     error: !expensiveCalcCode.includes('for')
       ? 'expensiveCalculation should use loops for heavy computation'
-      : !(expensiveCalcCode.includes('console.log') || expensiveCalcCode.includes('console.'))
+      : !expensiveCalcCode.includes('console.log')
       ? 'expensiveCalculation should log when it runs'
-      : 'expensiveCalculation needs more substantial implementation',
+      : !expensiveCalcCode.includes('items.length')
+      ? 'expensiveCalculation should process the items array'
+      : expensiveCalcCode.includes('TODO')
+      ? 'expensiveCalculation still contains TODO comments - needs implementation'
+      : 'expensiveCalculation needs more substantial implementation with nested loops',
     executionTime: 1,
   });
 
@@ -74,13 +88,23 @@ export function runTests(compiledCode: string): TestResult[] {
   tests.push({
     name: 'UserCard component renders user information',
     passed: (userCardCode.includes('_jsx') || userCardCode.includes('<')) && 
-            userCardCode.includes('user.') &&
-            !userCardCode.includes('return null'),
+            userCardCode.includes('user.name') &&
+            userCardCode.includes('user.email') &&
+            userCardCode.includes('onClick') &&
+            userCardCode.includes('useCallback') &&
+            !userCardCode.includes('TODO') &&
+            userCardCode.length > 200,
     error: !(userCardCode.includes('_jsx') || userCardCode.includes('<'))
       ? 'UserCard component needs JSX implementation'
-      : !userCardCode.includes('user.')
-      ? 'UserCard should display user properties'
-      : 'UserCard component implementation is incomplete',
+      : !userCardCode.includes('user.name') || !userCardCode.includes('user.email')
+      ? 'UserCard should display user.name and user.email'
+      : !userCardCode.includes('onClick')
+      ? 'UserCard should handle click events'
+      : !userCardCode.includes('useCallback')
+      ? 'UserCard should use useCallback for event handlers'
+      : userCardCode.includes('TODO')
+      ? 'UserCard still contains TODO comments - needs implementation'
+      : 'UserCard component needs more substantial implementation',
     executionTime: 1,
   });
 
@@ -88,13 +112,15 @@ export function runTests(compiledCode: string): TestResult[] {
   tests.push({
     name: 'OptimizedUserCard uses React.memo with custom comparison',
     passed: compiledCode.includes('OptimizedUserCard') && 
-            compiledCode.includes('memo(') &&
-            compiledCode.includes('UserCard'),
+            compiledCode.includes('memo(UserCard,') &&
+            (compiledCode.includes('prevProps') && compiledCode.includes('nextProps')),
     error: !compiledCode.includes('OptimizedUserCard')
       ? 'OptimizedUserCard component not found'
-      : !compiledCode.includes('memo(')
-      ? 'OptimizedUserCard should use React.memo'
-      : 'OptimizedUserCard should wrap UserCard with memo',
+      : !compiledCode.includes('memo(UserCard,')
+      ? 'OptimizedUserCard should use React.memo with UserCard and custom comparison'
+      : !(compiledCode.includes('prevProps') && compiledCode.includes('nextProps'))
+      ? 'OptimizedUserCard should have custom comparison function with prevProps and nextProps'
+      : 'OptimizedUserCard needs custom comparison function implementation',
     executionTime: 1,
   });
 
@@ -103,13 +129,23 @@ export function runTests(compiledCode: string): TestResult[] {
   tests.push({
     name: 'ExpensiveList uses useMemo for expensive operations',
     passed: expensiveListCode.includes('useMemo') && 
-            (expensiveListCode.includes('filter') || expensiveListCode.includes('sort')) &&
-            expensiveListCode.includes('processedItems'),
+            expensiveListCode.includes('filter') &&
+            expensiveListCode.includes('sort') &&
+            expensiveListCode.includes('processedItems') &&
+            expensiveListCode.includes('expensiveCalculation') &&
+            !expensiveListCode.includes('TODO') &&
+            expensiveListCode.length > 300,
     error: !expensiveListCode.includes('useMemo')
       ? 'ExpensiveList should use useMemo for optimization'
-      : !(expensiveListCode.includes('filter') || expensiveListCode.includes('sort'))
-      ? 'ExpensiveList should filter and sort items'
-      : 'ExpensiveList needs processedItems with useMemo',
+      : !expensiveListCode.includes('filter')
+      ? 'ExpensiveList should filter items based on threshold'
+      : !expensiveListCode.includes('sort')
+      ? 'ExpensiveList should sort items by direction'
+      : !expensiveListCode.includes('expensiveCalculation')
+      ? 'ExpensiveList should call expensiveCalculation on items'
+      : expensiveListCode.includes('TODO')
+      ? 'ExpensiveList still contains TODO comments - needs implementation'
+      : 'ExpensiveList needs more substantial implementation with filtering, sorting, and expensive calculations',
     executionTime: 1,
   });
 
@@ -118,27 +154,49 @@ export function runTests(compiledCode: string): TestResult[] {
   tests.push({
     name: 'MemoizedForm uses useCallback for stable handlers',
     passed: memoizedFormCode.includes('useCallback') && 
-            (memoizedFormCode.includes('handleFieldChange') || memoizedFormCode.includes('handleSubmit')) &&
-            memoizedFormCode.includes('formData'),
+            memoizedFormCode.includes('handleFieldChange') &&
+            memoizedFormCode.includes('handleSubmit') &&
+            memoizedFormCode.includes('setFormData') &&
+            memoizedFormCode.includes('validation') &&
+            !memoizedFormCode.includes('TODO') &&
+            memoizedFormCode.length > 400,
     error: !memoizedFormCode.includes('useCallback')
       ? 'MemoizedForm should use useCallback for handlers'
-      : !(memoizedFormCode.includes('handleFieldChange') || memoizedFormCode.includes('handleSubmit'))
-      ? 'MemoizedForm should have optimized event handlers'
-      : 'MemoizedForm needs form data state management',
+      : !memoizedFormCode.includes('handleFieldChange')
+      ? 'MemoizedForm should implement handleFieldChange with useCallback'
+      : !memoizedFormCode.includes('handleSubmit')
+      ? 'MemoizedForm should implement handleSubmit with useCallback'
+      : !memoizedFormCode.includes('setFormData')
+      ? 'MemoizedForm should manage form state with setFormData'
+      : !memoizedFormCode.includes('validation')
+      ? 'MemoizedForm should implement field validation'
+      : memoizedFormCode.includes('TODO')
+      ? 'MemoizedForm still contains TODO comments - needs implementation'
+      : 'MemoizedForm needs substantial implementation with handlers and validation',
     executionTime: 1,
   });
 
   // Test 7: FieldComponent with React.memo
+  const fieldComponentCode = extractCode(compiledCode, 'FieldComponent');
   tests.push({
     name: 'FieldComponent optimized with React.memo',
-    passed: compiledCode.includes('FieldComponent') && 
-            compiledCode.includes('memo(') &&
-            (compiledCode.includes('field') || compiledCode.includes('onChange')),
-    error: !compiledCode.includes('FieldComponent')
-      ? 'FieldComponent not found'
-      : !compiledCode.includes('memo(')
+    passed: compiledCode.includes('memo(function FieldComponent') &&
+            fieldComponentCode.includes('field.label') &&
+            fieldComponentCode.includes('onChange') &&
+            fieldComponentCode.includes('useCallback') &&
+            !fieldComponentCode.includes('TODO') &&
+            fieldComponentCode.length > 150,
+    error: !compiledCode.includes('memo(function FieldComponent')
       ? 'FieldComponent should be wrapped with React.memo'
-      : 'FieldComponent should handle field props and events',
+      : !fieldComponentCode.includes('field.label')
+      ? 'FieldComponent should display field.label'
+      : !fieldComponentCode.includes('onChange')
+      ? 'FieldComponent should handle onChange events'
+      : !fieldComponentCode.includes('useCallback')
+      ? 'FieldComponent should use useCallback for event handlers'
+      : fieldComponentCode.includes('TODO')
+      ? 'FieldComponent still contains TODO comments - needs implementation'
+      : 'FieldComponent needs more substantial implementation',
     executionTime: 1,
   });
 

@@ -41,30 +41,48 @@ export function runTests(compiledCode: string): TestResult[] {
   }
 
   // Test 1: useBundlePerformance hook implementation
+  const useBundlePerfCode = extractCode(compiledCode, 'useBundlePerformance');
   tests.push({
     name: 'useBundlePerformance hook tracks bundle metrics',
-    passed: compiledCode.includes('useBundlePerformance') && 
-            compiledCode.includes('useRef') &&
-            (compiledCode.includes('loadedChunks') || compiledCode.includes('chunkSizes') || compiledCode.includes('loadingTimes')),
-    error: !compiledCode.includes('useBundlePerformance') 
-      ? 'useBundlePerformance hook not found'
-      : !compiledCode.includes('useRef')
+    passed: useBundlePerfCode.includes('useRef') && 
+            useBundlePerfCode.includes('loadedChunks') &&
+            useBundlePerfCode.includes('chunkSizes') &&
+            useBundlePerfCode.includes('loadingTimes') &&
+            useBundlePerfCode.includes('PerformanceObserver') &&
+            useBundlePerfCode.includes('trackDynamicImport') &&
+            !useBundlePerfCode.includes('TODO') &&
+            useBundlePerfCode.length > 300,
+    error: !useBundlePerfCode.includes('useRef')
       ? 'useBundlePerformance should use useRef for metrics storage'
-      : 'useBundlePerformance should track chunk loading metrics',
+      : !useBundlePerfCode.includes('loadedChunks')
+      ? 'useBundlePerformance should track loadedChunks'
+      : !useBundlePerfCode.includes('PerformanceObserver')
+      ? 'useBundlePerformance should use PerformanceObserver to monitor resource loading'
+      : !useBundlePerfCode.includes('trackDynamicImport')
+      ? 'useBundlePerformance should provide trackDynamicImport function'
+      : useBundlePerfCode.includes('TODO')
+      ? 'useBundlePerformance still contains TODO comments - needs implementation'
+      : 'useBundlePerformance needs substantial implementation with performance monitoring',
     executionTime: 1,
   });
 
   // Test 2: React.lazy implementation for HeavyFeatureComponent
   tests.push({
     name: 'HeavyFeatureComponent uses React.lazy for code splitting',
-    passed: compiledCode.includes('React.lazy') && 
-            compiledCode.includes('HeavyFeatureComponent') &&
-            (compiledCode.includes('import(') || compiledCode.includes('Promise')),
-    error: !compiledCode.includes('React.lazy')
+    passed: compiledCode.includes('HeavyFeatureComponent = React.lazy') && 
+            compiledCode.includes('setTimeout') &&
+            compiledCode.includes('console.log') &&
+            compiledCode.includes('Promise.resolve') &&
+            !compiledCode.match(/HeavyFeatureComponent.*TODO/),
+    error: !compiledCode.includes('HeavyFeatureComponent = React.lazy')
       ? 'HeavyFeatureComponent should use React.lazy'
-      : !compiledCode.includes('HeavyFeatureComponent')
-      ? 'HeavyFeatureComponent not found'
-      : 'React.lazy should use dynamic import or Promise',
+      : !compiledCode.includes('setTimeout')
+      ? 'HeavyFeatureComponent should simulate loading time with setTimeout'
+      : !compiledCode.includes('console.log')
+      ? 'HeavyFeatureComponent should log loading progress'
+      : !compiledCode.includes('Promise.resolve')
+      ? 'HeavyFeatureComponent should return Promise.resolve with component'
+      : 'HeavyFeatureComponent still contains TODO comments in lazy loading implementation',
     executionTime: 1,
   });
 
@@ -72,14 +90,28 @@ export function runTests(compiledCode: string): TestResult[] {
   const dynamicImportCode = extractCode(compiledCode, 'DynamicImportExample');
   tests.push({
     name: 'DynamicImportExample handles dynamic feature loading',
-    passed: dynamicImportCode.includes('feature') && 
-            (dynamicImportCode.includes('loadChartsModule') || dynamicImportCode.includes('loadEditorModule') || dynamicImportCode.includes('loadAnalyticsModule')) &&
-            (dynamicImportCode.includes('useState') || dynamicImportCode.includes('useEffect')),
-    error: !dynamicImportCode.includes('feature')
-      ? 'DynamicImportExample should handle feature prop'
-      : !(dynamicImportCode.includes('loadChartsModule') || dynamicImportCode.includes('loadEditorModule') || dynamicImportCode.includes('loadAnalyticsModule'))
-      ? 'DynamicImportExample should have feature loading methods'
-      : 'DynamicImportExample needs state management for loading',
+    passed: dynamicImportCode.includes('loadChartsModule') && 
+            dynamicImportCode.includes('loadEditorModule') &&
+            dynamicImportCode.includes('loadAnalyticsModule') &&
+            dynamicImportCode.includes('useState') &&
+            dynamicImportCode.includes('useEffect') &&
+            dynamicImportCode.includes('setLoading') &&
+            dynamicImportCode.includes('setTimeout') &&
+            !dynamicImportCode.includes('TODO') &&
+            dynamicImportCode.length > 500,
+    error: !dynamicImportCode.includes('loadChartsModule')
+      ? 'DynamicImportExample should implement loadChartsModule'
+      : !dynamicImportCode.includes('useState')
+      ? 'DynamicImportExample should use useState for loading state'
+      : !dynamicImportCode.includes('useEffect')
+      ? 'DynamicImportExample should use useEffect to handle feature changes'
+      : !dynamicImportCode.includes('setLoading')
+      ? 'DynamicImportExample should manage loading state'
+      : !dynamicImportCode.includes('setTimeout')
+      ? 'DynamicImportExample should simulate loading with setTimeout'
+      : dynamicImportCode.includes('TODO')
+      ? 'DynamicImportExample still contains TODO comments - needs implementation'
+      : 'DynamicImportExample needs substantial implementation with all three feature modules',
     executionTime: 1,
   });
 
@@ -103,29 +135,48 @@ export function runTests(compiledCode: string): TestResult[] {
     name: 'ChunkedDataGrid implements progressive data loading',
     passed: chunkedGridCode.includes('chunkSize') && 
             chunkedGridCode.includes('loadedChunks') &&
-            (chunkedGridCode.includes('slice') || chunkedGridCode.includes('filter')) &&
-            chunkedGridCode.includes('useState'),
+            chunkedGridCode.includes('slice') &&
+            chunkedGridCode.includes('loadNextChunk') &&
+            chunkedGridCode.includes('useState') &&
+            chunkedGridCode.includes('hasMoreData') &&
+            !chunkedGridCode.includes('TODO') &&
+            chunkedGridCode.length > 400,
     error: !chunkedGridCode.includes('chunkSize')
       ? 'ChunkedDataGrid should use chunkSize prop'
       : !chunkedGridCode.includes('loadedChunks')
-      ? 'ChunkedDataGrid should track loaded chunks'
-      : !(chunkedGridCode.includes('slice') || chunkedGridCode.includes('filter'))
-      ? 'ChunkedDataGrid should progressively slice/filter data'
-      : 'ChunkedDataGrid needs state management',
+      ? 'ChunkedDataGrid should track loaded chunks with state'
+      : !chunkedGridCode.includes('slice')
+      ? 'ChunkedDataGrid should slice data progressively'
+      : !chunkedGridCode.includes('loadNextChunk')
+      ? 'ChunkedDataGrid should implement loadNextChunk function'
+      : !chunkedGridCode.includes('hasMoreData')
+      ? 'ChunkedDataGrid should track if more data is available'
+      : chunkedGridCode.includes('TODO')
+      ? 'ChunkedDataGrid still contains TODO comments - needs implementation'
+      : 'ChunkedDataGrid needs substantial implementation with progressive loading logic',
     executionTime: 1,
   });
 
   // Test 6: Intersection Observer for progressive loading
   tests.push({
     name: 'ChunkedDataGrid uses Intersection Observer for auto-loading',
-    passed: compiledCode.includes('IntersectionObserver') && 
-            (compiledCode.includes('useRef') || compiledCode.includes('observerRef')) &&
-            compiledCode.includes('useEffect'),
-    error: !compiledCode.includes('IntersectionObserver')
-      ? 'Should use IntersectionObserver for progressive loading'
-      : !(compiledCode.includes('useRef') || compiledCode.includes('observerRef'))
-      ? 'Should use useRef to manage observer reference'
-      : 'Should use useEffect to setup/cleanup observer',
+    passed: chunkedGridCode.includes('IntersectionObserver') && 
+            chunkedGridCode.includes('observerRef') &&
+            chunkedGridCode.includes('useEffect') &&
+            chunkedGridCode.includes('observe') &&
+            chunkedGridCode.includes('disconnect') &&
+            chunkedGridCode.includes('isIntersecting'),
+    error: !chunkedGridCode.includes('IntersectionObserver')
+      ? 'ChunkedDataGrid should use IntersectionObserver for progressive loading'
+      : !chunkedGridCode.includes('observerRef')
+      ? 'ChunkedDataGrid should use useRef to manage observer reference'
+      : !chunkedGridCode.includes('useEffect')
+      ? 'ChunkedDataGrid should use useEffect to setup/cleanup observer'
+      : !chunkedGridCode.includes('observe')
+      ? 'ChunkedDataGrid should call observe() on the trigger element'
+      : !chunkedGridCode.includes('isIntersecting')
+      ? 'ChunkedDataGrid should check isIntersecting in observer callback'
+      : 'ChunkedDataGrid should properly setup and cleanup IntersectionObserver',
     executionTime: 1,
   });
 
