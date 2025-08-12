@@ -1,8 +1,7 @@
 // Redux with Discriminated Union Patterns
 // Master Redux architecture using discriminated unions for type-safe, scalable state management
 
-import React from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useDispatch, useSelector } from 'react-redux';
 import { configureStore, createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
 
 // Learning objectives:
