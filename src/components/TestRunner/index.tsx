@@ -36,7 +36,7 @@ interface TestRunnerProps {
 export function TestRunner({ exercise, onStatusChange }: TestRunnerProps) {
   const [result, setResult] = useState<ExerciseResult | null>(null);
   const [isRunning, setIsRunning] = useState(false);
-  const [autoRun, setAutoRun] = useState(true);
+  const [autoRun, setAutoRun] = useState(false);
   const [exerciseRunner] = useState(() => new ExerciseRunner());
   const [fileWatcher] = useState(() => new FileWatcher());
 
@@ -80,9 +80,13 @@ export function TestRunner({ exercise, onStatusChange }: TestRunnerProps) {
   }, [exercise, exerciseRunner, onStatusChange]);
 
   useEffect(() => {
-    // Initial run
-    runExercise();
+    // Only run initially if auto-run is enabled
+    if (autoRun) {
+      runExercise();
+    }
+  }, [exercise, runExercise, autoRun]);
 
+  useEffect(() => {
     // Set up file watcher if auto-run is enabled
     if (autoRun) {
       const handleFileChange = (filePath: string, content: string) => {
@@ -95,8 +99,11 @@ export function TestRunner({ exercise, onStatusChange }: TestRunnerProps) {
       return () => {
         fileWatcher.unwatchExercise(exercise, handleFileChange);
       };
+    } else {
+      // Ensure we clean up any existing watchers when auto-run is disabled
+      fileWatcher.stopWatching();
     }
-  }, [exercise, autoRun, runExercise]);
+  }, [exercise, autoRun, runExercise, fileWatcher]);
 
   useEffect(() => {
     fileWatcher.startWatching();

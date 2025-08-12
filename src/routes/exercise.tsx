@@ -42,7 +42,7 @@ export function ExercisePage() {
     if (exercise && progress.status === 'not_started') {
       updateExerciseProgress(exercise.id, { status: 'in_progress', startTime: new Date() });
     }
-  }, [exercise, progress.status]);
+  }, [exercise, progress.status, updateExerciseProgress]);
 
   if (!exercise) {
     return (
