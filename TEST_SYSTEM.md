@@ -265,6 +265,54 @@ If you have existing tests in `tests.ts` format:
 2. Add console.log in tests to inspect compiled code
 3. Verify test expectations match compiled output format
 
+## Exercise Section Template Integration
+
+The modular test system is designed to work seamlessly with the standardized exercise structure. See `EXERCISE_SECTION_TEMPLATE.md` for complete structure guidelines.
+
+### Template Compliance
+
+For exercises following the template standard:
+
+1. **Test File Location**: `src/exercises/[category]/[exercise-id]/test.ts`
+2. **Export Format**: Must export `runTests(compiledCode: string): TestResult[]`
+3. **Helper Usage**: Leverage `test-utils.ts` helpers for consistency
+4. **Error Messages**: Provide clear, actionable feedback for failures
+
+### Quick Test Creation
+
+Using the template structure, creating tests is streamlined:
+
+```typescript
+import { createComponentTest, createHookTest } from '@/lib/test-utils';
+
+export function runTests(compiledCode: string): TestResult[] {
+  const tests: TestResult[] = [];
+
+  // Component tests using helpers
+  tests.push(createComponentTest('MyComponent', compiledCode, {
+    requiredHooks: ['useState'],
+    requiredElements: ['button']
+  }));
+
+  // Hook tests using helpers  
+  tests.push(createHookTest('useMyHook', compiledCode, {
+    requiredHooks: ['useState'],
+    requiredReturns: ['data', 'loading']
+  }));
+
+  return tests;
+}
+```
+
+### Template Generator Integration
+
+The exercise creation workflow includes automated test generation:
+- Test scaffolding based on declared components/hooks
+- Standard patterns for common test cases
+- Integration with the modular loading system
+
+For complete exercise creation guidelines, see `EXERCISE_CREATION_GUIDE.md`.
+
 ## Future Enhancements
 
 - [ ] Test result caching for faster re-runs
@@ -272,3 +320,5 @@ If you have existing tests in `tests.ts` format:
 - [ ] Test coverage reporting
 - [ ] Parallel test execution
 - [ ] Visual test result diff viewer
+- [ ] Automated test generation from exercise templates
+- [ ] Integration with exercise creation CLI tools
