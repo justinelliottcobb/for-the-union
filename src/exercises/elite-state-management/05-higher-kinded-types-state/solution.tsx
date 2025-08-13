@@ -84,21 +84,21 @@ const State = {
     runState: (s: S) => [value, s],
   }),
   
-  get: <S>(): State<S, S> => ({
+  get: <S,>(): State<S, S,> => ({
     _URI: 'State' as const,
     _A: undefined as any,
     _B: undefined as any,
     runState: (s: S) => [s, s],
   }),
   
-  put: <S>(newState: S): State<S, void> => ({
+  put: <S,>(newState: S): State<S, void> => ({
     _URI: 'State' as const,
     _A: undefined as any,
     _B: undefined as any,
     runState: () => [undefined as any, newState],
   }),
   
-  modify: <S>(f: (s: S) => S): State<S, void> => ({
+  modify: <S,>(f: (s: S) => S): State<S, void> => ({
     _URI: 'State' as const,
     _A: undefined as any,
     _B: undefined as any,
@@ -133,7 +133,7 @@ interface Lens<S, A,> {
 }
 
 const Lens = {
-  fromProp: <S, K extends keyof S>(key: K): Lens<S, S[K]> => ({
+  fromProp: <S, K extends keyof S,>(key: K): Lens<S, S[K]> => ({
     get: (s) => s[key],
     set: (value) => (s) => ({ ...s, [key]: value }),
   }),
@@ -217,7 +217,7 @@ const IO = {
 };
 
 // Custom hooks using HKT patterns
-function useStateMonad<S>(initialState: S) {
+function useStateMonad<S,>(initialState: S) {
   const [state, setState] = useState(initialState);
   
   const runState = useCallback(<A,>(stateComputation: State<S, A,>): A => {
