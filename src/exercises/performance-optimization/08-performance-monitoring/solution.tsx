@@ -71,7 +71,7 @@ function usePerformanceMonitor() {
       const lcpObserver = new PerformanceObserver((list) => {
         const entries = list.getEntries();
         const lastEntry = entries[entries.length - 1];
-        addMetric('LCP', lastEntry.startTime, 'core-vitals', 2500);
+        addMetric('LCP', lastEntry.startTime, 'core-vitals', 2500, [2500, 4000]);
       });
       lcpObserver.observe({ entryTypes: ['largest-contentful-paint'] });
       observersRef.current.push(lcpObserver);
