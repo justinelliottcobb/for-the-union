@@ -5,6 +5,7 @@ import { reactHooksCategory } from '@exercises/react-hooks/config';
 import { eliteStateManagementCategory } from '@exercises/elite-state-management/config';
 import { advancedTypeScriptPatternsCategory } from '@exercises/advanced-typescript-patterns/config';
 import { graphqlCategory } from '@exercises/graphql/config';
+import { performanceOptimizationCategory } from '@exercises/performance-optimization/config';
 
 // Import all exercise categories
 const EXERCISE_CATEGORIES: ExerciseCategory[] = [
@@ -13,6 +14,7 @@ const EXERCISE_CATEGORIES: ExerciseCategory[] = [
   eliteStateManagementCategory,
   advancedTypeScriptPatternsCategory,
   graphqlCategory,
+  performanceOptimizationCategory,
 ].sort((a, b) => a.order - b.order);
 
 export function useExercises() {
