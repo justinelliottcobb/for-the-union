@@ -400,13 +400,13 @@ export function runTests(compiledCode: string): TestResult[] {
   // Test 15: Browser compatibility and error handling
   tests.push({
     name: 'Components implement proper browser compatibility and error handling',
-    passed: compiledCode.includes('PerformanceObserver' in window') && 
+    passed: compiledCode.includes("'PerformanceObserver' in window") && 
             compiledCode.includes('catch') &&
             compiledCode.includes('try') &&
             compiledCode.includes('console.warn') &&
             compiledCode.includes('not supported') &&
             (compiledCode.includes('typeof') || compiledCode.includes('in window')),
-    error: !compiledCode.includes('PerformanceObserver' in window')
+    error: !compiledCode.includes("'PerformanceObserver' in window")
       ? 'Should check for PerformanceObserver support'
       : !compiledCode.includes('catch')
       ? 'Should implement error handling with try-catch blocks'
