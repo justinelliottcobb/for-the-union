@@ -15,11 +15,11 @@ interface HKT2 {
   readonly _B: unknown;
 }
 
-type Kind<F extends HKT, A> = F extends { readonly _A: any }
+type Kind<F extends HKT, A,> = F extends { readonly _A: any }
   ? (F & { readonly _A: A })
   : never;
 
-type Kind2<F extends HKT2, A, B> = F extends { readonly _A: any; readonly _B: any }
+type Kind2<F extends HKT2, A, B,> = F extends { readonly _A: any; readonly _B: any }
   ? (F & { readonly _A: A; readonly _B: B })
   : never;
 
@@ -28,24 +28,24 @@ interface EffectHKT extends HKT {
   readonly _URI: 'Effect';
 }
 
-interface Effect<A> extends Kind<EffectHKT, A> {
-  run: () => Promise<A>;
+interface Effect<A,> extends Kind<EffectHKT, A,> {
+  run: () => Promise<A,>;
 }
 
 const Effect = {
-  of: <A>(value: A): Effect<A> => ({
+  of: <A,>(value: A): Effect<A,> => ({
     _URI: 'Effect' as const,
     _A: undefined as any,
     run: () => Promise.resolve(value),
   }),
   
-  map: <A, B>(fa: Effect<A>, f: (a: A) => B): Effect<B> => ({
+  map: <A, B,>(fa: Effect<A,>, f: (a: A) => B): Effect<B,> => ({
     _URI: 'Effect' as const,
     _A: undefined as any,
     run: async () => f(await fa.run()),
   }),
   
-  chain: <A, B>(fa: Effect<A>, f: (a: A) => Effect<B>): Effect<B> => ({
+  chain: <A, B,>(fa: Effect<A,>, f: (a: A) => Effect<B,>): Effect<B,> => ({
     _URI: 'Effect' as const,
     _A: undefined as any,
     run: async () => {
@@ -54,13 +54,13 @@ const Effect = {
     },
   }),
   
-  fromPromise: <A>(promise: Promise<A>): Effect<A> => ({
+  fromPromise: <A,>(promise: Promise<A,>): Effect<A,> => ({
     _URI: 'Effect' as const,
     _A: undefined as any,
     run: () => promise,
   }),
   
-  delay: <A>(ms: number, value: A): Effect<A> => ({
+  delay: <A,>(ms: number, value: A): Effect<A,> => ({
     _URI: 'Effect' as const,
     _A: undefined as any,
     run: () => new Promise(resolve => setTimeout(() => resolve(value), ms)),
@@ -72,40 +72,40 @@ interface StateHKT extends HKT2 {
   readonly _URI: 'State';
 }
 
-interface State<S, A> extends Kind2<StateHKT, S, A> {
+interface State<S, A,> extends Kind2<StateHKT, S, A,> {
   runState: (state: S) => [A, S];
 }
 
 const State = {
-  of: <S, A>(value: A): State<S, A> => ({
+  of: <S, A,>(value: A): State<S, A,> => ({
     _URI: 'State' as const,
     _A: undefined as any,
     _B: undefined as any,
     runState: (s: S) => [value, s],
   }),
   
-  get: <S>(): State<S, S> => ({
+  get: <S,>(): State<S, S,> => ({
     _URI: 'State' as const,
     _A: undefined as any,
     _B: undefined as any,
     runState: (s: S) => [s, s],
   }),
   
-  put: <S>(newState: S): State<S, void> => ({
+  put: <S,>(newState: S): State<S, void> => ({
     _URI: 'State' as const,
     _A: undefined as any,
     _B: undefined as any,
     runState: () => [undefined as any, newState],
   }),
   
-  modify: <S>(f: (s: S) => S): State<S, void> => ({
+  modify: <S,>(f: (s: S) => S): State<S, void> => ({
     _URI: 'State' as const,
     _A: undefined as any,
     _B: undefined as any,
     runState: (s: S) => [undefined as any, f(s)],
   }),
   
-  map: <S, A, B>(sa: State<S, A>, f: (a: A) => B): State<S, B> => ({
+  map: <S, A, B,>(sa: State<S, A,>, f: (a: A) => B): State<S, B,> => ({
     _URI: 'State' as const,
     _A: undefined as any,
     _B: undefined as any,
@@ -115,7 +115,7 @@ const State = {
     },
   }),
   
-  chain: <S, A, B>(sa: State<S, A>, f: (a: A) => State<S, B>): State<S, B> => ({
+  chain: <S, A, B,>(sa: State<S, A,>, f: (a: A) => State<S, B,>): State<S, B,> => ({
     _URI: 'State' as const,
     _A: undefined as any,
     _B: undefined as any,
@@ -127,28 +127,28 @@ const State = {
 };
 
 // Lens implementation
-interface Lens<S, A> {
+interface Lens<S, A,> {
   get: (s: S) => A;
   set: (a: A) => (s: S) => S;
 }
 
 const Lens = {
-  fromProp: <S, K extends keyof S>(key: K): Lens<S, S[K]> => ({
+  fromProp: <S, K extends keyof S,>(key: K): Lens<S, S[K]> => ({
     get: (s) => s[key],
     set: (value) => (s) => ({ ...s, [key]: value }),
   }),
   
-  compose: <A, B, C>(ab: Lens<A, B>, bc: Lens<B, C>): Lens<A, C> => ({
+  compose: <A, B, C,>(ab: Lens<A, B,>, bc: Lens<B, C,>): Lens<A, C,> => ({
     get: (a) => bc.get(ab.get(a)),
     set: (c) => (a) => ab.set(bc.set(c)(ab.get(a)))(a),
   }),
   
-  over: <S, A>(lens: Lens<S, A>, f: (a: A) => A): (s: S) => S => 
+  over: <S, A,>(lens: Lens<S, A,>, f: (a: A) => A): (s: S) => S => 
     (s) => lens.set(f(lens.get(s)))(s),
   
-  view: <S, A>(lens: Lens<S, A>): (s: S) => A => lens.get,
+  view: <S, A,>(lens: Lens<S, A,>): (s: S) => A => lens.get,
   
-  set: <S, A>(lens: Lens<S, A>, value: A): (s: S) => S => lens.set(value),
+  set: <S, A,>(lens: Lens<S, A,>, value: A): (s: S) => S => lens.set(value),
 };
 
 // Validation with applicative functors
@@ -156,19 +156,19 @@ interface ValidationHKT extends HKT {
   readonly _URI: 'Validation';
 }
 
-type Validation<A> = 
+type Validation<A,> = 
   | { tag: 'Success'; value: A }
   | { tag: 'Failure'; errors: string[] };
 
 const Validation = {
-  success: <A>(value: A): Validation<A> => ({ tag: 'Success', value }),
+  success: <A,>(value: A): Validation<A,> => ({ tag: 'Success', value }),
   
   failure: (errors: string[]): Validation<never> => ({ tag: 'Failure', errors }),
   
-  map: <A, B>(va: Validation<A>, f: (a: A) => B): Validation<B> => 
+  map: <A, B,>(va: Validation<A,>, f: (a: A) => B): Validation<B,> => 
     va.tag === 'Success' ? { tag: 'Success', value: f(va.value) } : va,
   
-  ap: <A, B>(vf: Validation<(a: A) => B>, va: Validation<A>): Validation<B> => {
+  ap: <A, B,>(vf: Validation<(a: A) => B,>, va: Validation<A,>): Validation<B,> => {
     if (vf.tag === 'Failure' && va.tag === 'Failure') {
       return { tag: 'Failure', errors: [...vf.errors, ...va.errors] };
     }
@@ -177,7 +177,7 @@ const Validation = {
     return { tag: 'Success', value: vf.value(va.value) };
   },
   
-  chain: <A, B>(va: Validation<A>, f: (a: A) => Validation<B>): Validation<B> =>
+  chain: <A, B,>(va: Validation<A,>, f: (a: A) => Validation<B,>): Validation<B,> =>
     va.tag === 'Success' ? f(va.value) : va,
 };
 
@@ -186,30 +186,30 @@ interface IOHKT extends HKT {
   readonly _URI: 'IO';
 }
 
-interface IO<A> extends Kind<IOHKT, A> {
+interface IO<A,> extends Kind<IOHKT, A,> {
   run: () => A;
 }
 
 const IO = {
-  of: <A>(value: A): IO<A> => ({
+  of: <A,>(value: A): IO<A,> => ({
     _URI: 'IO' as const,
     _A: undefined as any,
     run: () => value,
   }),
   
-  map: <A, B>(ioa: IO<A>, f: (a: A) => B): IO<B> => ({
+  map: <A, B,>(ioa: IO<A,>, f: (a: A) => B): IO<B,> => ({
     _URI: 'IO' as const,
     _A: undefined as any,
     run: () => f(ioa.run()),
   }),
   
-  chain: <A, B>(ioa: IO<A>, f: (a: A) => IO<B>): IO<B> => ({
+  chain: <A, B,>(ioa: IO<A,>, f: (a: A) => IO<B,>): IO<B,> => ({
     _URI: 'IO' as const,
     _A: undefined as any,
     run: () => f(ioa.run()).run(),
   }),
   
-  fromThunk: <A>(thunk: () => A): IO<A> => ({
+  fromThunk: <A,>(thunk: () => A): IO<A,> => ({
     _URI: 'IO' as const,
     _A: undefined as any,
     run: thunk,
@@ -217,10 +217,10 @@ const IO = {
 };
 
 // Custom hooks using HKT patterns
-function useStateMonad<S>(initialState: S) {
+function useStateMonad<S,>(initialState: S) {
   const [state, setState] = useState(initialState);
   
-  const runState = useCallback(<A>(stateComputation: State<S, A>): A => {
+  const runState = useCallback(<A,>(stateComputation: State<S, A,>): A => {
     const [result, newState] = stateComputation.runState(state);
     setState(newState);
     return result;
@@ -232,7 +232,7 @@ function useStateMonad<S>(initialState: S) {
 function useEffectMonad() {
   const [results, setResults] = useState<any[]>([]);
   
-  const runEffect = useCallback(async <A>(effect: Effect<A>): Promise<A> => {
+  const runEffect = useCallback(async <A,>(effect: Effect<A,>): Promise<A,> => {
     const result = await effect.run();
     setResults(prev => [...prev, result]);
     return result;
@@ -241,10 +241,10 @@ function useEffectMonad() {
   return { results, runEffect };
 }
 
-function useLens<S, A>(
+function useLens<S, A,>(
   state: S,
   setState: (s: S) => void,
-  lens: Lens<S, A>
+  lens: Lens<S, A,>
 ): [A, (a: A) => void, (f: (a: A) => A) => void] {
   const value = lens.get(state);
   
@@ -259,10 +259,10 @@ function useLens<S, A>(
   return [value, setValue, modifyValue];
 }
 
-function useValidation<T>(
-  validators: Array<(value: T) => Validation<T>>
+function useValidation<T,>(
+  validators: Array<(value: T) => Validation<T,>>
 ) {
-  const validate = useCallback((value: T): Validation<T> => {
+  const validate = useCallback((value: T): Validation<T,> => {
     return validators.reduce(
       (acc, validator) => {
         const result = validator(value);
