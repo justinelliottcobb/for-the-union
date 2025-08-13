@@ -181,7 +181,7 @@ function useConcurrentFeatures(config: ConcurrentConfig = {}) {
     // Handle concurrent work limits
   }, []);
 
-  const deferValue = useCallback(<T>(value: T): T => {
+  const deferValue = useCallback(<T,>(value: T): T => {
     // TODO: Use useDeferredValue for non-urgent updates
     // Return deferred value for better performance
     return useDeferredValue(value);

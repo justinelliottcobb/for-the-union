@@ -6,6 +6,7 @@ import { eliteStateManagementCategory } from '@exercises/elite-state-management/
 import { advancedTypeScriptPatternsCategory } from '@exercises/advanced-typescript-patterns/config';
 import { graphqlCategory } from '@exercises/graphql/config';
 import { performanceOptimizationCategory } from '@exercises/performance-optimization/config';
+import { componentArchitectureDesignPatternsCategory } from '@exercises/component-architecture-design-patterns/config';
 
 // Import all exercise categories
 const EXERCISE_CATEGORIES: ExerciseCategory[] = [
@@ -15,6 +16,7 @@ const EXERCISE_CATEGORIES: ExerciseCategory[] = [
   advancedTypeScriptPatternsCategory,
   graphqlCategory,
   performanceOptimizationCategory,
+  componentArchitectureDesignPatternsCategory,
 ].sort((a, b) => a.order - b.order);
 
 export function useExercises() {
