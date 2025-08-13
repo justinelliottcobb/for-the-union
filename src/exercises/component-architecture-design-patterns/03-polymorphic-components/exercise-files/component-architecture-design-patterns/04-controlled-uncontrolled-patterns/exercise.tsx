@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useRef, useEffect, useImperativeHandle, forwardRef, useMemo } from 'react';
+import React, { useState, useCallback, useRef, useEffect, useImperativeHandle, forwardRef } from 'react';
 
 // Controlled vs Uncontrolled Component Patterns
 // Learn when to use each pattern and how to implement hybrid approaches

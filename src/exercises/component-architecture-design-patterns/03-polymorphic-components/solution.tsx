@@ -15,7 +15,7 @@ type PolymorphicComponentProp<
   Omit<React.ComponentPropsWithoutRef<C>, PropsToOmit<C, Props>>;
 
 // Polymorphic ref type for forwarded refs
-type PolymorphicRef<C extends ElementType> = ComponentRef<C>;
+type PolymorphicRef<C extends ElementType> = React.ComponentRef<C>;
 
 // Polymorphic component prop type with ref
 type PolymorphicComponentPropWithRef<
@@ -126,7 +126,7 @@ function BoxComponent<C extends ElementType = 'div'>(
     className, 
     ...rest 
   }: BoxProps<C>,
-  ref?: PolymorphicRef<C>
+  ref?: React.ForwardedRef<any>
 ) {
   const Component = as || 'div';
   
@@ -204,7 +204,10 @@ function BoxComponent<C extends ElementType = 'div'>(
   const getBorderClass = (value?: BoxOwnProps['border']) => {
     if (value === undefined) return '';
     if (value === true) return 'border';
-    return `border ${getColorClass('border', value)}`;
+    if (typeof value === 'string') {
+      return `border ${getColorClass('border', value)}`;
+    }
+    return '';
   };
 
   // Combine all classes
@@ -252,7 +255,7 @@ function BoxComponent<C extends ElementType = 'div'>(
 
 // Create polymorphic Box with forwardRef
 const Box = forwardRef(BoxComponent) as <C extends ElementType = 'div'>(
-  props: BoxProps<C>
+  props: BoxProps<C> & { ref?: React.Ref<any> }
 ) => ReactElement | null;
 
 // Button polymorphic component implementation
@@ -283,7 +286,7 @@ function ButtonComponent<C extends ElementType = 'button'>(
     className,
     ...rest 
   }: ButtonProps<C>,
-  ref?: PolymorphicRef<C>
+  ref?: React.ForwardedRef<any>
 ) {
   const Component = as || 'button';
 
@@ -382,7 +385,7 @@ function ButtonComponent<C extends ElementType = 'button'>(
 
 // Create polymorphic Button with forwardRef
 const Button = forwardRef(ButtonComponent) as <C extends ElementType = 'button'>(
-  props: ButtonProps<C>
+  props: ButtonProps<C> & { ref?: React.Ref<any> }
 ) => ReactElement | null;
 
 // Generic List polymorphic component implementation
@@ -414,7 +417,7 @@ function ListComponent<C extends ElementType = 'ul', T = any>(
     children,
     ...rest
   }: ListProps<C, T>,
-  ref?: PolymorphicRef<C>
+  ref?: React.ForwardedRef<any>
 ) {
   const Component = as || 'ul';
 
@@ -512,7 +515,7 @@ function ListComponent<C extends ElementType = 'ul', T = any>(
 
 // Create polymorphic List with forwardRef
 const List = forwardRef(ListComponent) as <C extends ElementType = 'ul', T = any>(
-  props: ListProps<C, T>
+  props: ListProps<C, T> & { ref?: React.Ref<any> }
 ) => ReactElement | null;
 
 // Advanced polymorphic patterns
@@ -535,7 +538,7 @@ function createPolymorphicLink<RouterLinkComponent extends ElementType>(
 
   function LinkComponent<C extends ElementType = 'a'>(
     { as, href, to, external, download, children, ...rest }: LinkProps<C>,
-    ref?: PolymorphicRef<C>
+    ref?: React.ForwardedRef<any>
   ) {
     // External link or download - use anchor tag
     if (external || href?.startsWith('http') || download) {
@@ -574,7 +577,7 @@ function createPolymorphicLink<RouterLinkComponent extends ElementType>(
   }
 
   return forwardRef(LinkComponent) as <C extends ElementType = 'a'>(
-    props: LinkProps<C>
+    props: LinkProps<C> & { ref?: React.Ref<any> }
   ) => ReactElement | null;
 }
 

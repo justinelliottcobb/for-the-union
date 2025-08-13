@@ -1,4 +1,4 @@
-import React, { forwardRef, ElementType, ComponentPropsWithoutRef, ReactNode, HTMLAttributes } from 'react';
+import React, { forwardRef, ElementType, ComponentPropsWithoutRef, ReactNode, ReactElement, useState } from 'react';
 
 // Polymorphic component types and utilities
 type AsProp<C extends ElementType> = {
@@ -15,7 +15,7 @@ type PolymorphicComponentProp<
   Omit<React.ComponentPropsWithoutRef<C>, PropsToOmit<C, Props>>;
 
 // TODO: Implement PolymorphicRef type for forwarded refs
-type PolymorphicRef<C extends ElementType> = ComponentRef<C>;
+type PolymorphicRef<C extends ElementType> = React.ComponentRef<C>;
 
 // TODO: Implement PolymorphicComponentPropWithRef type
 type PolymorphicComponentPropWithRef<
