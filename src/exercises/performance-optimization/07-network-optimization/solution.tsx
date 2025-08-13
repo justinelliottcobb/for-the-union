@@ -61,6 +61,10 @@ function useRequestBatcher() {
 
       if (existingRequest) {
         // Return the existing promise instead of creating new request
+        // TBD: 
+        // Request deduplication logic has a flaw. Reassigning existingRequest.resolve and 
+        // existingRequest.reject will overwrite the original callbacks, potentially causing 
+        // the original request to never resolve. Should maintain an array of callbacks for each request.
         existingRequest.resolve = (data) => {
           resolve(data);
           existingRequest.resolve(data);
