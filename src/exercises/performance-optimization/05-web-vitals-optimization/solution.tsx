@@ -758,7 +758,7 @@ function LayoutStabilizer({ onCLSImprovement }: LayoutStabilizerProps) {
         </div>
         
         <div className="mt-3 text-xs text-gray-500">
-          <p>• Good: ≤ 0.1 • Needs Improvement: ≤ 0.25 • Poor: > 0.25</p>
+          <p>• Good: ≤ 0.1 • Needs Improvement: ≤ 0.25 • Poor: &gt; 0.25</p>
           <p>• Layout reservation {enableLayoutReserve ? 'helps prevent' : 'is disabled, may cause'} layout shifts</p>
         </div>
       </div>
