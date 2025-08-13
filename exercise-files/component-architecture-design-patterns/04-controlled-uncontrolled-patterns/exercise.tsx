@@ -201,6 +201,13 @@ const FlexibleInput = forwardRef<FlexibleInputHandle, FlexibleInputProps>(({
   // Determine if we should show validation feedback
   const shouldShowValidation = showValidation && hasBlurred && validationError;
   
+  const inputClassName = [
+    'w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors',
+    shouldShowValidation ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 hover:border-gray-400',
+    clearButton && currentValue ? 'pr-10' : '',
+    className || ''
+  ].filter(Boolean).join(' ');
+
   return (
     <div className="relative">
       <div className="relative">
@@ -210,12 +217,7 @@ const FlexibleInput = forwardRef<FlexibleInputHandle, FlexibleInputProps>(({
           value={currentValue}
           onChange={handleChange}
           onBlur={handleBlur}
-          className={`
-            w-full px-3 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors
-            ${shouldShowValidation ? 'border-red-500 focus:ring-red-500' : 'border-gray-300 hover:border-gray-400'}
-            ${clearButton && currentValue ? 'pr-10' : ''}
-            ${className || ''}
-          `.trim()}
+          className={inputClassName}
         />
         
         {clearButton && currentValue && (
@@ -242,7 +244,7 @@ const FlexibleInput = forwardRef<FlexibleInputHandle, FlexibleInputProps>(({
 
 FlexibleInput.displayName = 'FlexibleInput';
 
-// SmartForm component with intelligent field management
+// TODO: Implement SmartForm component with intelligent field management
 interface FormField {
   name: string;
   label: string;
@@ -340,11 +342,11 @@ function SmartForm({
     }
   }, [fields, currentValues, currentErrors, mode, controlledOnChange, onFieldChange]);
   
-  // Validation helpers
+  // TODO: Implement validation helpers
   const validateField = useCallback((field: FormField, value: string): string | null => {
     // Required validation
     if (field.required && !value.trim()) {
-      return `${field.label} is required`;
+      return field.label + ' is required';
     }
     
     // Type-based validation
@@ -367,7 +369,7 @@ function SmartForm({
       try {
         return field.validator(value);
       } catch (error) {
-        console.warn(`Validation error for field ${field.name}:`, error);
+        console.warn('Validation error for field ' + field.name + ':', error);
         return 'Validation error occurred';
       }
     }
@@ -468,7 +470,7 @@ function SmartForm({
           <div className="w-full bg-gray-200 rounded-full h-2">
             <div 
               className="bg-blue-500 h-2 rounded-full transition-all duration-300"
-              style={{ width: `${progress}%` }}
+              style={{ width: progress + '%' }}
             />
           </div>
         </div>
@@ -557,7 +559,7 @@ function SmartForm({
   );
 }
 
-// StateManager for complex hybrid patterns
+// TODO: Implement StateManager for complex hybrid patterns
 interface StateManagerProps<T> {
   children: (state: T, actions: StateActions<T>) => React.ReactNode;
   
@@ -767,7 +769,7 @@ function StateManager<T extends Record<string, any>>({
   return <>{children(currentState, actions)}</>;
 }
 
-// Demo data and examples
+// TODO: Implement demo data and examples
 interface User {
   name: string;
   email: string;
@@ -790,7 +792,7 @@ const initialUser: User = {
   }
 };
 
-// Demo component showcasing controlled/uncontrolled patterns
+// TODO: Implement demo component showcasing controlled/uncontrolled patterns
 export default function ControlledUncontrolledDemo() {
   const [selectedPattern, setSelectedPattern] = useState<'flexible' | 'form' | 'state-manager' | 'decision-tree'>('flexible');
   
@@ -818,712 +820,11 @@ export default function ControlledUncontrolledDemo() {
           </p>
         </div>
 
-        {/* Pattern selection */}
-        <div className="flex justify-center flex-wrap gap-4">
-          {[
-            { key: 'flexible', label: 'Flexible Input' },
-            { key: 'form', label: 'Smart Form' },
-            { key: 'state-manager', label: 'State Manager' },
-            { key: 'decision-tree', label: 'Decision Tree' },
-          ].map(({ key, label }) => (
-            <button
-              key={key}
-              onClick={() => setSelectedPattern(key as any)}
-              className={`px-6 py-3 rounded-lg font-medium transition-colors ${
-                selectedPattern === key
-                  ? 'bg-blue-500 text-white shadow-lg'
-                  : 'bg-white text-gray-700 hover:bg-gray-100 border shadow-sm'
-              }`}
-            >
-              {label}
-            </button>
-          ))}
-        </div>
-
-        {/* Pattern content */}
-        <div className="bg-white rounded-lg shadow-lg overflow-hidden">
-          <div className="p-6">
-            {selectedPattern === 'flexible' && (
-              <div className="space-y-8">
-                <h2 className="text-2xl font-semibold">FlexibleInput Component</h2>
-                
-                <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                  <div className="space-y-6">
-                    <h3 className="text-lg font-medium text-green-700">✅ Controlled Mode</h3>
-                    <p className="text-sm text-gray-600">
-                      Parent component manages the value state. Every keystroke updates the parent state.
-                    </p>
-                    
-                    <div className="space-y-4">
-                      <FlexibleInput
-                        value={controlledInputValue}
-                        onChange={(value) => setControlledInputValue(value)}
-                        placeholder="Type something..."
-                        validator={(value) => value.length < 3 ? 'Must be at least 3 characters' : null}
-                        clearButton
-                        className="border-green-300 focus:border-green-500 focus:ring-green-500"
-                      />
-                      
-                      <div className="p-3 bg-green-50 rounded text-sm border border-green-200">
-                        <p className="font-medium text-green-800">Parent State:</p>
-                        <p className="text-green-700 font-mono mt-1">"{controlledInputValue}"</p>
-                        <p className="text-green-600 text-xs mt-1">
-                          Length: {controlledInputValue.length} characters
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-6">
-                    <h3 className="text-lg font-medium text-blue-700">⚡ Uncontrolled Mode</h3>
-                    <p className="text-sm text-gray-600">
-                      Component manages its own state internally. Parent only receives notifications.
-                    </p>
-                    
-                    <div className="space-y-4">
-                      <FlexibleInput
-                        defaultValue="Initial value"
-                        placeholder="Uncontrolled input..."
-                        validator={(value) => value.includes('@') ? null : 'Must contain @ symbol'}
-                        clearButton
-                        onStateChange={(state) => console.log('Uncontrolled state changed:', state)}
-                        className="border-blue-300 focus:border-blue-500 focus:ring-blue-500"
-                      />
-                      
-                      <div className="p-3 bg-blue-50 rounded text-sm border border-blue-200">
-                        <p className="font-medium text-blue-800">Internal State:</p>
-                        <p className="text-blue-700">Managed by the component itself</p>
-                        <p className="text-blue-600 text-xs mt-1">
-                          Check browser console for state changes
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="space-y-6">
-                  <h3 className="text-lg font-medium text-purple-700">🔧 Imperative API Demo</h3>
-                  <p className="text-sm text-gray-600">
-                    Use refs to programmatically control the component
-                  </p>
-                  
-                  <div className="flex gap-6 items-start">
-                    <div className="flex-1">
-                      <FlexibleInput
-                        ref={imperativeInputRef}
-                        defaultValue="Test imperative API"
-                        placeholder="Imperative API demo..."
-                        validator={(value) => value.length > 10 ? null : 'Must be longer than 10 characters'}
-                        clearButton
-                        className="border-purple-300 focus:border-purple-500 focus:ring-purple-500"
-                      />
-                    </div>
-                    
-                    <div className="flex flex-col gap-2">
-                      <button
-                        onClick={() => imperativeInputRef.current?.focus()}
-                        className="px-4 py-2 text-sm bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors"
-                      >
-                        Focus
-                      </button>
-                      <button
-                        onClick={() => imperativeInputRef.current?.clear()}
-                        className="px-4 py-2 text-sm bg-red-500 text-white rounded hover:bg-red-600 transition-colors"
-                      >
-                        Clear
-                      </button>
-                      <button
-                        onClick={() => {
-                          const isValid = imperativeInputRef.current?.validate();
-                          const state = imperativeInputRef.current?.getValidationState();
-                          alert(`Validation Result:\nValid: ${isValid}\nError: ${state?.error || 'None'}`);
-                        }}
-                        className="px-4 py-2 text-sm bg-green-500 text-white rounded hover:bg-green-600 transition-colors"
-                      >
-                        Validate
-                      </button>
-                      <button
-                        onClick={() => {
-                          imperativeInputRef.current?.setValue('New value set programmatically');
-                        }}
-                        className="px-4 py-2 text-sm bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-                      >
-                        Set Value
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {selectedPattern === 'form' && (
-              <div className="space-y-8">
-                <h2 className="text-2xl font-semibold">SmartForm Component</h2>
-                
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-8">
-                  <div className="space-y-6">
-                    <h3 className="text-lg font-medium text-purple-700">🔄 Hybrid Mode (Recommended)</h3>
-                    <p className="text-sm text-gray-600">
-                      Form manages state internally but provides external hooks for monitoring and control.
-                    </p>
-                    
-                    <SmartForm
-                      fields={[
-                        {
-                          name: 'name',
-                          label: 'Full Name',
-                          required: true,
-                          placeholder: 'Enter your full name',
-                          validator: (value) => {
-                            if (value.length < 2) return 'Name must be at least 2 characters';
-                            if (!/^[a-zA-Z\s]+$/.test(value)) return 'Name can only contain letters and spaces';
-                            return null;
-                          }
-                        },
-                        {
-                          name: 'email',
-                          label: 'Email Address',
-                          type: 'email',
-                          required: true,
-                          placeholder: 'your.email@example.com'
-                        },
-                        {
-                          name: 'phone',
-                          label: 'Phone Number',
-                          placeholder: '+1 (555) 123-4567',
-                          validator: (value) => {
-                            if (!value) return null;
-                            const phoneRegex = /^\+?[\d\s\-\(\)]+$/;
-                            return phoneRegex.test(value) ? null : 'Please enter a valid phone number';
-                          }
-                        },
-                        {
-                          name: 'age',
-                          label: 'Age',
-                          type: 'number',
-                          required: true,
-                          validator: (value) => {
-                            const age = parseInt(value);
-                            if (isNaN(age)) return 'Please enter a valid age';
-                            if (age < 13) return 'Must be at least 13 years old';
-                            if (age > 120) return 'Please enter a realistic age';
-                            return null;
-                          }
-                        }
-                      ]}
-                      onSubmit={(data) => {
-                        alert('Hybrid Form submitted!\n\n' + JSON.stringify(data, null, 2));
-                      }}
-                      onFieldChange={(name, value, isValid) => {
-                        console.log(`Field ${name}: "${value}" (${isValid ? 'valid' : 'invalid'})`);
-                      }}
-                    />
-                  </div>
-                  
-                  <div className="space-y-6">
-                    <h3 className="text-lg font-medium text-green-700">✅ Controlled Mode</h3>
-                    <p className="text-sm text-gray-600">
-                      Parent component fully controls all form state and validation.
-                    </p>
-                    
-                    <SmartForm
-                      mode="controlled"
-                      values={formValues}
-                      errors={formErrors}
-                      onChange={(values, errors) => {
-                        setFormValues(values);
-                        setFormErrors(errors);
-                      }}
-                      fields={[
-                        {
-                          name: 'username',
-                          label: 'Username',
-                          required: true,
-                          placeholder: 'Choose a username',
-                          validator: (value) => {
-                            if (value.length < 3) return 'Username must be at least 3 characters';
-                            if (!/^[a-zA-Z0-9_]+$/.test(value)) return 'Username can only contain letters, numbers, and underscores';
-                            if (value.toLowerCase().includes('admin')) return 'Username cannot contain "admin"';
-                            return null;
-                          }
-                        },
-                        {
-                          name: 'password',
-                          label: 'Password',
-                          type: 'password',
-                          required: true,
-                          placeholder: 'Create a strong password',
-                          validator: (value) => {
-                            if (value.length < 8) return 'Password must be at least 8 characters';
-                            if (!/(?=.*[a-z])(?=.*[A-Z])(?=.*\d)/.test(value)) {
-                              return 'Password must contain uppercase, lowercase, and number';
-                            }
-                            if (!/(?=.*[!@#$%^&*])/.test(value)) {
-                              return 'Password must contain at least one special character';
-                            }
-                            return null;
-                          }
-                        },
-                        {
-                          name: 'confirmPassword',
-                          label: 'Confirm Password',
-                          type: 'password',
-                          required: true,
-                          placeholder: 'Confirm your password',
-                          validator: (value) => {
-                            const password = formValues.password;
-                            if (password && value !== password) return 'Passwords do not match';
-                            return null;
-                          }
-                        }
-                      ]}
-                      onSubmit={(data) => {
-                        alert('Controlled form submitted!\n\n' + JSON.stringify(data, null, 2));
-                      }}
-                    />
-                    
-                    <div className="p-4 bg-gray-50 rounded-lg border">
-                      <p className="font-medium text-gray-800 mb-2">External State Monitor:</p>
-                      <div className="space-y-2">
-                        <div>
-                          <p className="text-sm text-gray-600">Values:</p>
-                          <pre className="text-xs bg-white p-2 rounded border overflow-auto">
-                            {JSON.stringify(formValues, null, 2)}
-                          </pre>
-                        </div>
-                        <div>
-                          <p className="text-sm text-gray-600">Errors:</p>
-                          <pre className="text-xs bg-white p-2 rounded border overflow-auto">
-                            {JSON.stringify(formErrors, null, 2)}
-                          </pre>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            )}
-
-            {selectedPattern === 'state-manager' && (
-              <div className="space-y-8">
-                <h2 className="text-2xl font-semibold">StateManager Component</h2>
-                <p className="text-gray-600">
-                  Advanced state management with persistence, validation, and hybrid control patterns.
-                </p>
-                
-                <StateManager
-                  initialState={initialUser}
-                  controlled={{ name: controlledUserName }} // Partially controlled
-                  persistKey="demo-user-profile"
-                  validator={(state) => {
-                    const errors: Record<string, string> = {};
-                    if (!state.name.trim()) errors.name = 'Name is required';
-                    if (!state.email.includes('@')) errors.email = 'Invalid email format';
-                    if (state.age < 0 || state.age > 120) errors.age = 'Age must be between 0 and 120';
-                    if (!['en', 'es', 'fr', 'de'].includes(state.preferences.language)) {
-                      errors.language = 'Unsupported language';
-                    }
-                    return errors;
-                  }}
-                  debug={true}
-                  onChange={(state) => console.log('StateManager onChange:', state)}
-                >
-                  {(state, actions) => (
-                    <div className="space-y-8">
-                      <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
-                        <div className="space-y-6">
-                          <h3 className="text-lg font-medium">User Profile</h3>
-                          
-                          <div className="space-y-4">
-                            <div>
-                              <label className="block text-sm font-medium text-gray-700 mb-1">
-                                Name (Controlled Externally) <span className="text-blue-500">*</span>
-                              </label>
-                              <div className="flex gap-2">
-                                <input
-                                  type="text"
-                                  value={controlledUserName}
-                                  onChange={(e) => setControlledUserName(e.target.value)}
-                                  className="flex-1 px-3 py-2 border border-blue-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                  placeholder="Enter name..."
-                                />
-                                <span className="px-2 py-2 text-sm bg-blue-100 text-blue-800 rounded">
-                                  External Control
-                                </span>
-                              </div>
-                            </div>
-                            
-                            <FlexibleInput
-                              value={state.email}
-                              onChange={(value) => actions.setState({ email: value })}
-                              placeholder="Enter your email..."
-                              type="email"
-                              validator={(value) => {
-                                if (!value) return 'Email is required';
-                                if (!value.includes('@')) return 'Invalid email format';
-                                return null;
-                              }}
-                              clearButton
-                            />
-                            
-                            <FlexibleInput
-                              value={state.age.toString()}
-                              onChange={(value) => actions.setState({ age: parseInt(value) || 0 })}
-                              placeholder="Enter your age..."
-                              type="number"
-                              validator={(value) => {
-                                const age = parseInt(value);
-                                if (isNaN(age) || age < 0 || age > 120) return 'Age must be between 0 and 120';
-                                return null;
-                              }}
-                            />
-                          </div>
-                          
-                          <div className="space-y-4">
-                            <h4 className="font-medium">Preferences</h4>
-                            
-                            <div className="space-y-3">
-                              <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-2">Theme</label>
-                                <div className="space-y-2">
-                                  <label className="flex items-center space-x-2">
-                                    <input
-                                      type="radio"
-                                      name="theme"
-                                      checked={state.preferences.theme === 'light'}
-                                      onChange={() => actions.setState({
-                                        preferences: { ...state.preferences, theme: 'light' }
-                                      })}
-                                      className="text-blue-500"
-                                    />
-                                    <span>☀️ Light theme</span>
-                                  </label>
-                                  
-                                  <label className="flex items-center space-x-2">
-                                    <input
-                                      type="radio"
-                                      name="theme"
-                                      checked={state.preferences.theme === 'dark'}
-                                      onChange={() => actions.setState({
-                                        preferences: { ...state.preferences, theme: 'dark' }
-                                      })}
-                                      className="text-blue-500"
-                                    />
-                                    <span>🌙 Dark theme</span>
-                                  </label>
-                                </div>
-                              </div>
-                              
-                              <label className="flex items-center space-x-2">
-                                <input
-                                  type="checkbox"
-                                  checked={state.preferences.notifications}
-                                  onChange={(e) => actions.setState({
-                                    preferences: { ...state.preferences, notifications: e.target.checked }
-                                  })}
-                                  className="text-blue-500"
-                                />
-                                <span>🔔 Enable notifications</span>
-                              </label>
-                              
-                              <div>
-                                <label className="block text-sm font-medium text-gray-700 mb-1">
-                                  Language
-                                </label>
-                                <select
-                                  value={state.preferences.language}
-                                  onChange={(e) => actions.setState({
-                                    preferences: { ...state.preferences, language: e.target.value }
-                                  })}
-                                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-                                >
-                                  <option value="en">🇺🇸 English</option>
-                                  <option value="es">🇪🇸 Spanish</option>
-                                  <option value="fr">🇫🇷 French</option>
-                                  <option value="de">🇩🇪 German</option>
-                                </select>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                        
-                        <div className="space-y-6">
-                          <h3 className="text-lg font-medium">State Management</h3>
-                          
-                          <div className="space-y-4">
-                            <div className="grid grid-cols-2 gap-3">
-                              <button
-                                onClick={() => {
-                                  const validation = actions.validate();
-                                  const message = validation.isValid 
-                                    ? '✅ All fields are valid!' 
-                                    : `❌ Validation errors:\n${Object.entries(validation.errors).map(([k, v]) => `${k}: ${v}`).join('\n')}`;
-                                  alert(message);
-                                }}
-                                className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors text-sm"
-                              >
-                                Validate State
-                              </button>
-                              
-                              <button
-                                onClick={() => {
-                                  const confirmed = confirm('Are you sure you want to reset all data?');
-                                  if (confirmed) {
-                                    actions.resetState();
-                                  }
-                                }}
-                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors text-sm"
-                              >
-                                Reset State
-                              </button>
-                            </div>
-                            
-                            <div className="grid grid-cols-2 gap-3">
-                              <button
-                                onClick={() => {
-                                  const currentState = actions.getState();
-                                  navigator.clipboard.writeText(JSON.stringify(currentState, null, 2));
-                                  alert('State copied to clipboard!');
-                                }}
-                                className="px-4 py-2 bg-green-500 text-white rounded hover:bg-green-600 transition-colors text-sm"
-                              >
-                                Copy State
-                              </button>
-                              
-                              <button
-                                onClick={() => {
-                                  actions.setState({
-                                    email: `user${Math.floor(Math.random() * 1000)}@example.com`,
-                                    age: Math.floor(Math.random() * 50) + 20,
-                                    preferences: {
-                                      ...state.preferences,
-                                      theme: Math.random() > 0.5 ? 'light' : 'dark',
-                                      notifications: Math.random() > 0.5
-                                    }
-                                  });
-                                }}
-                                className="px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-600 transition-colors text-sm"
-                              >
-                                Randomize
-                              </button>
-                            </div>
-                          </div>
-                          
-                          <div className="p-4 bg-gray-50 rounded border">
-                            <p className="text-sm font-medium text-gray-800 mb-3">Current State:</p>
-                            <div className="space-y-2">
-                              <div>
-                                <span className="text-xs text-gray-600">Controlled fields:</span>
-                                <div className="text-xs bg-blue-50 p-2 rounded border">
-                                  {Object.keys({ name: controlledUserName }).map(key => (
-                                    <div key={key}>
-                                      <strong>{key}:</strong> {actions.isControlled(key as any) ? 'Yes' : 'No'}
-                                    </div>
-                                  ))}
-                                </div>
-                              </div>
-                              <div>
-                                <span className="text-xs text-gray-600">Full state:</span>
-                                <pre className="text-xs bg-white p-3 rounded border overflow-auto max-h-48">
-                                  {JSON.stringify(state, null, 2)}
-                                </pre>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  )}
-                </StateManager>
-              </div>
-            )}
-
-            {selectedPattern === 'decision-tree' && (
-              <div className="space-y-8">
-                <h2 className="text-2xl font-semibold">Decision Tree: When to Use Each Pattern</h2>
-                
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                  <div className="p-6 border-2 border-green-200 bg-green-50 rounded-lg">
-                    <h3 className="text-lg font-semibold text-green-800 mb-4">✅ Use Controlled</h3>
-                    <ul className="text-sm text-green-700 space-y-2">
-                      <li>• Real-time form validation needed</li>
-                      <li>• Cross-field dependencies exist</li>
-                      <li>• Complex business logic required</li>
-                      <li>• External state management (Redux/Zustand)</li>
-                      <li>• Multi-step forms with navigation</li>
-                      <li>• Field synchronization across components</li>
-                      <li>• Undo/redo functionality</li>
-                      <li>• Server-side validation integration</li>
-                      <li>• Strict data flow requirements</li>
-                      <li>• Testing requires predictable state</li>
-                    </ul>
-                  </div>
-                  
-                  <div className="p-6 border-2 border-blue-200 bg-blue-50 rounded-lg">
-                    <h3 className="text-lg font-semibold text-blue-800 mb-4">⚡ Use Uncontrolled</h3>
-                    <ul className="text-sm text-blue-700 space-y-2">
-                      <li>• Simple forms with minimal validation</li>
-                      <li>• Performance is critical concern</li>
-                      <li>• File inputs and DOM refs needed</li>
-                      <li>• Third-party library integration</li>
-                      <li>• Legacy codebase migration</li>
-                      <li>• Quick prototypes and demos</li>
-                      <li>• Submit-only validation sufficient</li>
-                      <li>• Minimize React re-renders</li>
-                      <li>• Native HTML behavior preferred</li>
-                      <li>• Simple contact/search forms</li>
-                    </ul>
-                  </div>
-                  
-                  <div className="p-6 border-2 border-purple-200 bg-purple-50 rounded-lg">
-                    <h3 className="text-lg font-semibold text-purple-800 mb-4">🔄 Use Hybrid</h3>
-                    <ul className="text-sm text-purple-700 space-y-2">
-                      <li>• Building reusable component libraries</li>
-                      <li>• Need flexible API for different use cases</li>
-                      <li>• Progressive enhancement approach</li>
-                      <li>• Optional external control required</li>
-                      <li>• Smooth migration paths needed</li>
-                      <li>• Optimize developer experience</li>
-                      <li>• Requirements change over time</li>
-                      <li>• Enterprise component systems</li>
-                      <li>• Support multiple teams/preferences</li>
-                      <li>• Future-proof component design</li>
-                    </ul>
-                  </div>
-                </div>
-                
-                <div className="mt-8">
-                  <h3 className="text-lg font-semibold mb-6">Interactive Decision Flow Chart</h3>
-                  
-                  <div className="bg-white p-8 border rounded-lg shadow-sm">
-                    <div className="text-center space-y-6">
-                      <div className="p-4 bg-gray-100 rounded-lg inline-block max-w-md">
-                        <p className="font-medium">
-                          🤔 Do you need real-time field validation or cross-field synchronization?
-                        </p>
-                      </div>
-                      
-                      <div className="flex justify-center gap-16">
-                        <div className="text-center">
-                          <div className="p-3 bg-green-100 text-green-800 rounded-lg font-medium">
-                            ✅ YES
-                          </div>
-                          <div className="my-3 text-2xl">↓</div>
-                          <div className="p-4 bg-green-500 text-white rounded-lg shadow-lg">
-                            <strong>Use Controlled</strong>
-                            <p className="text-sm mt-1 opacity-90">
-                              Parent manages state
-                            </p>
-                          </div>
-                        </div>
-                        
-                        <div className="text-center">
-                          <div className="p-3 bg-blue-100 text-blue-800 rounded-lg font-medium">
-                            ❌ NO
-                          </div>
-                          <div className="my-3 text-2xl">↓</div>
-                          <div className="p-4 bg-gray-100 rounded-lg border-2 border-gray-300">
-                            <p className="font-medium text-sm">
-                              🛠️ Are you building a reusable component?
-                            </p>
-                          </div>
-                          <div className="mt-4 flex gap-8">
-                            <div className="text-center">
-                              <div className="p-2 bg-purple-100 text-purple-800 rounded text-sm font-medium">
-                                ✅ YES
-                              </div>
-                              <div className="my-2 text-lg">↓</div>
-                              <div className="p-3 bg-purple-500 text-white rounded-lg shadow-lg">
-                                <strong className="text-sm">Hybrid</strong>
-                                <p className="text-xs mt-1 opacity-90">
-                                  Flexible API
-                                </p>
-                              </div>
-                            </div>
-                            <div className="text-center">
-                              <div className="p-2 bg-blue-100 text-blue-800 rounded text-sm font-medium">
-                                ❌ NO
-                              </div>
-                              <div className="my-2 text-lg">↓</div>
-                              <div className="p-3 bg-blue-500 text-white rounded-lg shadow-lg">
-                                <strong className="text-sm">Uncontrolled</strong>
-                                <p className="text-xs mt-1 opacity-90">
-                                  Internal state
-                                </p>
-                              </div>
-                            </div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-                
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="p-6 bg-yellow-50 border border-yellow-200 rounded-lg">
-                    <h4 className="font-medium text-yellow-800 mb-3">💡 Pro Tips</h4>
-                    <ul className="text-sm text-yellow-700 space-y-2">
-                      <li>• Start with uncontrolled for simplicity</li>
-                      <li>• Upgrade to controlled when complexity grows</li>
-                      <li>• Hybrid components provide best DX</li>
-                      <li>• Use refs for imperative APIs</li>
-                      <li>• Consider performance implications</li>
-                      <li>• Document your choice clearly</li>
-                    </ul>
-                  </div>
-                  
-                  <div className="p-6 bg-red-50 border border-red-200 rounded-lg">
-                    <h4 className="font-medium text-red-800 mb-3">⚠️ Common Pitfalls</h4>
-                    <ul className="text-sm text-red-700 space-y-2">
-                      <li>• Mixing controlled/uncontrolled without purpose</li>
-                      <li>• Overusing controlled for simple forms</li>
-                      <li>• Forgetting to handle edge cases</li>
-                      <li>• Not considering migration paths</li>
-                      <li>• Ignoring performance implications</li>
-                      <li>• Poor error handling in hybrid mode</li>
-                    </ul>
-                  </div>
-                </div>
-              </div>
-            )}
-          </div>
-        </div>
-
-        {/* Pattern summary */}
-        <div className="bg-indigo-50 p-6 rounded-lg border border-indigo-200">
-          <h3 className="text-lg font-semibold text-indigo-800 mb-4">Component State Management Patterns Summary</h3>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            <div>
-              <h4 className="font-medium text-indigo-700 mb-3">✅ Controlled Components</h4>
-              <ul className="text-sm text-indigo-600 space-y-1">
-                <li>• Parent owns and manages state</li>
-                <li>• Props drive component value</li>
-                <li>• Predictable, testable data flow</li>
-                <li>• External validation and processing</li>
-                <li>• Real-time synchronization possible</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-medium text-indigo-700 mb-3">⚡ Uncontrolled Components</h4>
-              <ul className="text-sm text-indigo-600 space-y-1">
-                <li>• Component manages internal state</li>
-                <li>• Default values for initialization</li>
-                <li>• Better performance (fewer renders)</li>
-                <li>• Simpler implementation pattern</li>
-                <li>• Closer to native HTML behavior</li>
-              </ul>
-            </div>
-            <div>
-              <h4 className="font-medium text-indigo-700 mb-3">🔄 Hybrid Approach</h4>
-              <ul className="text-sm text-indigo-600 space-y-1">
-                <li>• Combines benefits of both patterns</li>
-                <li>• Flexible, adaptable API design</li>
-                <li>• Progressive enhancement support</li>
-                <li>• Enterprise-ready architecture</li>
-                <li>• Best developer experience</li>
-              </ul>
-            </div>
-          </div>
+        <div className="bg-white rounded-lg shadow-lg p-6">
+          <p className="text-gray-600">
+            TODO: Implement comprehensive examples showcasing flexible input, smart form, state manager, 
+            and decision tree patterns for controlled vs uncontrolled component architectures.
+          </p>
         </div>
       </div>
     </div>
