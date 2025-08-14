@@ -236,7 +236,7 @@ export const fullStackIntegrationCategory: ExerciseCategory = {
       estimatedTime: 90,
       filePath: './exercise-files/full-stack-integration/08-real-time-collaboration/exercise.tsx',
       solutionPath: './src/exercises/full-stack-integration/08-real-time-collaboration/solution.tsx',
-      testsPath: './src/exercises/full-stack-integration/08-real-time-collaboration/test.ts',
+      testsPath: './src/exercises/full-stack-integration/08-real-time-collaboration/test.tsx',
       instructionsPath: './src/exercises/full-stack-integration/08-real-time-collaboration/instructions.md',
     },
     {
