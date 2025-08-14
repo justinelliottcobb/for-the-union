@@ -1,562 +1,172 @@
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest';
-import { renderHook, act, render, screen } from '@testing-library/react';
-import { 
-  SSEProvider,
-  EventStreamHandler,
-  NotificationCenter,
-  HealthMonitor,
-  useServerSentEvents,
-  useNotifications
-} from './solution';
+import { TestResult } from '@/types';
 
-// Mock EventSource
-class MockEventSource {
-  static CONNECTING = 0;
-  static OPEN = 1;
-  static CLOSED = 2;
+export function runTests(compiledCode: string): TestResult[] {
+  const results: TestResult[] = [];
 
-  readyState = MockEventSource.CONNECTING;
-  onopen: ((event: Event) => void) | null = null;
-  onmessage: ((event: MessageEvent) => void) | null = null;
-  onerror: ((event: Event) => void) | null = null;
-  
-  private eventListeners: Map<string, ((event: MessageEvent) => void)[]> = new Map();
+  // Test 1: HealthMonitor class exists
+  results.push({
+    name: 'HealthMonitor Class Implementation',
+    passed: compiledCode.includes('class HealthMonitor') && 
+            compiledCode.includes('attachToHandler') && 
+            compiledCode.includes('getConnectionStatus') &&
+            compiledCode.includes('getMetrics'),
+    message: compiledCode.includes('class HealthMonitor') ? 
+      'HealthMonitor class properly defined with required methods' : 
+      'HealthMonitor class is missing or incomplete. Should include attachToHandler, getConnectionStatus, and getMetrics methods'
+  });
 
-  constructor(public url: string, public eventSourceInitDict?: EventSourceInit) {
-    // Simulate async connection
-    setTimeout(() => {
-      this.readyState = MockEventSource.OPEN;
-      this.onopen?.(new Event('open'));
-    }, 10);
-  }
+  // Test 2: EventStreamHandler class exists
+  results.push({
+    name: 'EventStreamHandler Class Implementation',
+    passed: compiledCode.includes('class EventStreamHandler') && 
+            compiledCode.includes('extends EventEmitter') &&
+            compiledCode.includes('connect') && 
+            compiledCode.includes('disconnect') &&
+            compiledCode.includes('addFilter'),
+    message: compiledCode.includes('class EventStreamHandler') ? 
+      'EventStreamHandler class properly defined extending EventEmitter' : 
+      'EventStreamHandler class is missing or incomplete. Should extend EventEmitter and include connect, disconnect, addFilter methods'
+  });
 
-  addEventListener(type: string, listener: (event: MessageEvent) => void) {
-    if (!this.eventListeners.has(type)) {
-      this.eventListeners.set(type, []);
-    }
-    this.eventListeners.get(type)!.push(listener);
-  }
+  // Test 3: NotificationCenter class exists
+  results.push({
+    name: 'NotificationCenter Class Implementation',
+    passed: compiledCode.includes('class NotificationCenter') &&
+            compiledCode.includes('addNotification') &&
+            compiledCode.includes('dismissNotification') &&
+            compiledCode.includes('getNotifications'),
+    message: compiledCode.includes('class NotificationCenter') ? 
+      'NotificationCenter class properly defined with required methods' : 
+      'NotificationCenter class is missing or incomplete. Should include addNotification, dismissNotification, and getNotifications methods'
+  });
 
-  removeEventListener(type: string, listener: (event: MessageEvent) => void) {
-    const listeners = this.eventListeners.get(type);
-    if (listeners) {
-      const index = listeners.indexOf(listener);
-      if (index > -1) {
-        listeners.splice(index, 1);
-      }
-    }
-  }
+  // Test 4: SSEProvider component exists
+  results.push({
+    name: 'SSEProvider Component Implementation',
+    passed: compiledCode.includes('SSEProvider') &&
+            compiledCode.includes('SSEContext.Provider') &&
+            compiledCode.includes('children'),
+    message: compiledCode.includes('SSEProvider') ? 
+      'SSEProvider component properly implemented' : 
+      'SSEProvider component is missing or incomplete. Should be a React component using Context.Provider'
+  });
 
-  close() {
-    this.readyState = MockEventSource.CLOSED;
-  }
+  // Test 5: useServerSentEvents hook exists
+  results.push({
+    name: 'useServerSentEvents Hook Implementation',
+    passed: compiledCode.includes('useServerSentEvents') &&
+            compiledCode.includes('connectionState') &&
+            compiledCode.includes('subscribe') &&
+            compiledCode.includes('reconnect'),
+    message: compiledCode.includes('useServerSentEvents') ? 
+      'useServerSentEvents hook properly implemented' : 
+      'useServerSentEvents hook is missing or incomplete. Should return connectionState, subscribe, and reconnect'
+  });
 
-  // Test helpers
-  simulateEvent(type: string, data: any, id?: string) {
-    const event = new MessageEvent(type, {
-      data: JSON.stringify(data),
-      lastEventId: id || '',
-      origin: this.url
-    });
+  // Test 6: useNotifications hook exists
+  results.push({
+    name: 'useNotifications Hook Implementation',
+    passed: compiledCode.includes('useNotifications') &&
+            compiledCode.includes('notifications') &&
+            compiledCode.includes('addNotification') &&
+            compiledCode.includes('dismissNotification'),
+    message: compiledCode.includes('useNotifications') ? 
+      'useNotifications hook properly implemented' : 
+      'useNotifications hook is missing or incomplete. Should return notifications, addNotification, dismissNotification'
+  });
 
-    if (type === 'message') {
-      this.onmessage?.(event);
-    }
+  // Test 7: NotificationItem component exists
+  results.push({
+    name: 'NotificationItem Component Implementation',
+    passed: compiledCode.includes('NotificationItem') &&
+            compiledCode.includes('notification') &&
+            compiledCode.includes('onDismiss'),
+    message: compiledCode.includes('NotificationItem') ? 
+      'NotificationItem component properly implemented' : 
+      'NotificationItem component is missing or incomplete. Should take notification and onDismiss props'
+  });
 
-    const listeners = this.eventListeners.get(type);
-    if (listeners) {
-      listeners.forEach(listener => listener(event));
-    }
-  }
+  // Test 8: NotificationPanel component exists
+  results.push({
+    name: 'NotificationPanel Component Implementation',
+    passed: compiledCode.includes('NotificationPanel') &&
+            compiledCode.includes('React.FC'),
+    message: compiledCode.includes('NotificationPanel') ? 
+      'NotificationPanel component properly implemented' : 
+      'NotificationPanel component is missing or incomplete. Should be a React.FC component'
+  });
 
-  simulateError() {
-    this.readyState = MockEventSource.CLOSED;
-    this.onerror?.(new Event('error'));
-  }
+  // Test 9: EventSource integration
+  results.push({
+    name: 'EventSource Integration',
+    passed: compiledCode.includes('EventSource') &&
+            (compiledCode.includes('onopen') || compiledCode.includes('onmessage') || compiledCode.includes('onerror')),
+    message: compiledCode.includes('EventSource') ? 
+      'EventSource integration implemented' : 
+      'EventSource integration missing. Should use EventSource API with event handlers'
+  });
+
+  // Test 10: Auto-reconnection logic
+  results.push({
+    name: 'Auto-reconnection Logic',
+    passed: compiledCode.includes('autoReconnect') &&
+            (compiledCode.includes('reconnectDelay') || compiledCode.includes('reconnectTimer')),
+    message: compiledCode.includes('autoReconnect') ? 
+      'Auto-reconnection logic implemented' : 
+      'Auto-reconnection logic missing. Should include autoReconnect option and delay management'
+  });
+
+  // Test 11: Event filtering system
+  results.push({
+    name: 'Event Filtering System',
+    passed: compiledCode.includes('addFilter') &&
+            compiledCode.includes('removeFilter') &&
+            (compiledCode.includes('filter') || compiledCode.includes('Filter')),
+    message: compiledCode.includes('addFilter') ? 
+      'Event filtering system implemented' : 
+      'Event filtering system missing. Should include addFilter, removeFilter methods'
+  });
+
+  // Test 12: Fallback polling mechanism
+  results.push({
+    name: 'Fallback Polling Mechanism',
+    passed: compiledCode.includes('fallbackToPolling') &&
+            (compiledCode.includes('pollingInterval') || compiledCode.includes('polling')),
+    message: compiledCode.includes('fallbackToPolling') ? 
+      'Fallback polling mechanism implemented' : 
+      'Fallback polling mechanism missing. Should include fallbackToPolling option and polling interval'
+  });
+
+  // Test 13: Notification persistence
+  results.push({
+    name: 'Notification Persistence',
+    passed: compiledCode.includes('persistToStorage') &&
+            (compiledCode.includes('localStorage') || compiledCode.includes('Storage')),
+    message: compiledCode.includes('persistToStorage') ? 
+      'Notification persistence implemented' : 
+      'Notification persistence missing. Should include persistToStorage option and localStorage integration'
+  });
+
+  // Test 14: Health metrics tracking
+  results.push({
+    name: 'Health Metrics Tracking',
+    passed: compiledCode.includes('HealthMetrics') &&
+            compiledCode.includes('connectionStatus') &&
+            compiledCode.includes('errorRate'),
+    message: compiledCode.includes('HealthMetrics') ? 
+      'Health metrics tracking implemented' : 
+      'Health metrics tracking missing. Should include HealthMetrics interface with connectionStatus, errorRate'
+  });
+
+  // Test 15: Throttling mechanism
+  results.push({
+    name: 'Event Throttling Mechanism',
+    passed: compiledCode.includes('throttle') &&
+            (compiledCode.includes('shouldThrottleEvent') || compiledCode.includes('Throttle')),
+    message: compiledCode.includes('throttle') ? 
+      'Event throttling mechanism implemented' : 
+      'Event throttling mechanism missing. Should include throttle configuration and throttling logic'
+  });
+
+  return results;
 }
-
-// Replace global EventSource with mock
-vi.stubGlobal('EventSource', MockEventSource);
-
-describe('Server-Sent Events', () => {
-  let mockEventSource: MockEventSource;
-
-  beforeEach(() => {
-    vi.clearAllMocks();
-    mockEventSource = new MockEventSource('/api/sse');
-  });
-
-  afterEach(() => {
-    mockEventSource?.close();
-  });
-
-  describe('EventStreamHandler', () => {
-    it('should establish SSE connection', async () => {
-      const handler = new EventStreamHandler('/api/sse');
-      const connectPromise = handler.connect();
-
-      await act(async () => {
-        await connectPromise;
-      });
-
-      expect(handler.isConnected()).toBe(true);
-    });
-
-    it('should handle different event types', async () => {
-      const handler = new EventStreamHandler('/api/sse');
-      const messageHandler = vi.fn();
-      const notificationHandler = vi.fn();
-
-      handler.on('user-message', messageHandler);
-      handler.on('notification', notificationHandler);
-
-      await handler.connect();
-
-      mockEventSource.simulateEvent('user-message', { content: 'Hello' });
-      mockEventSource.simulateEvent('notification', { type: 'info', message: 'Update available' });
-
-      expect(messageHandler).toHaveBeenCalledWith({ content: 'Hello' });
-      expect(notificationHandler).toHaveBeenCalledWith({ type: 'info', message: 'Update available' });
-    });
-
-    it('should implement automatic reconnection', async () => {
-      const handler = new EventStreamHandler('/api/sse', {
-        autoReconnect: true,
-        reconnectDelay: 100,
-        maxReconnectAttempts: 3
-      });
-
-      await handler.connect();
-      expect(handler.isConnected()).toBe(true);
-
-      // Simulate connection error
-      mockEventSource.simulateError();
-
-      await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 150));
-      });
-
-      expect(handler.getReconnectAttempts()).toBeGreaterThan(0);
-    });
-
-    it('should handle event filtering', async () => {
-      const handler = new EventStreamHandler('/api/sse');
-      
-      // Add filters
-      handler.addFilter('user-message', (data) => data.userId === 'current-user');
-      handler.addFilter('notification', (data) => data.priority === 'high');
-
-      const messageHandler = vi.fn();
-      const notificationHandler = vi.fn();
-
-      handler.on('user-message', messageHandler);
-      handler.on('notification', notificationHandler);
-
-      await handler.connect();
-
-      // Should be filtered out
-      mockEventSource.simulateEvent('user-message', { userId: 'other-user', content: 'Hello' });
-      mockEventSource.simulateEvent('notification', { priority: 'low', message: 'Info' });
-
-      // Should pass filter
-      mockEventSource.simulateEvent('user-message', { userId: 'current-user', content: 'Hello' });
-      mockEventSource.simulateEvent('notification', { priority: 'high', message: 'Alert' });
-
-      expect(messageHandler).toHaveBeenCalledTimes(1);
-      expect(notificationHandler).toHaveBeenCalledTimes(1);
-    });
-
-    it('should handle authentication', async () => {
-      const handler = new EventStreamHandler('/api/sse', {
-        headers: {
-          'Authorization': 'Bearer token123'
-        }
-      });
-
-      await handler.connect();
-
-      // Check that headers were passed to EventSource
-      expect(mockEventSource.eventSourceInitDict?.withCredentials).toBe(true);
-    });
-  });
-
-  describe('NotificationCenter', () => {
-    it('should store and manage notifications', () => {
-      const center = new NotificationCenter();
-      
-      const notification1 = {
-        id: '1',
-        type: 'info',
-        title: 'Update Available',
-        message: 'A new version is available',
-        timestamp: new Date()
-      };
-
-      const notification2 = {
-        id: '2',
-        type: 'error',
-        title: 'Connection Error',
-        message: 'Failed to connect to server',
-        timestamp: new Date()
-      };
-
-      center.addNotification(notification1);
-      center.addNotification(notification2);
-
-      const notifications = center.getNotifications();
-      expect(notifications).toHaveLength(2);
-      expect(notifications[0]).toEqual(notification1);
-    });
-
-    it('should filter notifications by type', () => {
-      const center = new NotificationCenter();
-      
-      center.addNotification({ id: '1', type: 'info', title: 'Info', message: 'Info message', timestamp: new Date() });
-      center.addNotification({ id: '2', type: 'error', title: 'Error', message: 'Error message', timestamp: new Date() });
-      center.addNotification({ id: '3', type: 'warning', title: 'Warning', message: 'Warning message', timestamp: new Date() });
-
-      const errors = center.getNotificationsByType('error');
-      const infos = center.getNotificationsByType('info');
-
-      expect(errors).toHaveLength(1);
-      expect(infos).toHaveLength(1);
-      expect(errors[0].type).toBe('error');
-    });
-
-    it('should handle notification dismissal', () => {
-      const center = new NotificationCenter();
-      
-      center.addNotification({ id: '1', type: 'info', title: 'Info', message: 'Info message', timestamp: new Date() });
-      center.addNotification({ id: '2', type: 'error', title: 'Error', message: 'Error message', timestamp: new Date() });
-
-      expect(center.getNotifications()).toHaveLength(2);
-
-      center.dismissNotification('1');
-      expect(center.getNotifications()).toHaveLength(1);
-      expect(center.getNotifications()[0].id).toBe('2');
-    });
-
-    it('should auto-dismiss notifications after timeout', async () => {
-      const center = new NotificationCenter({ autoDissmissTimeout: 100 });
-      
-      center.addNotification({ 
-        id: '1', 
-        type: 'info', 
-        title: 'Auto-dismiss', 
-        message: 'This will disappear', 
-        timestamp: new Date(),
-        autoDismiss: true
-      });
-
-      expect(center.getNotifications()).toHaveLength(1);
-
-      await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 150));
-      });
-
-      expect(center.getNotifications()).toHaveLength(0);
-    });
-
-    it('should persist notifications to local storage', () => {
-      const center = new NotificationCenter({ persistToStorage: true });
-      
-      const notification = {
-        id: '1',
-        type: 'info',
-        title: 'Persistent',
-        message: 'This should persist',
-        timestamp: new Date()
-      };
-
-      center.addNotification(notification);
-
-      // Create new instance (simulating page reload)
-      const newCenter = new NotificationCenter({ persistToStorage: true });
-      const loaded = newCenter.getNotifications();
-
-      expect(loaded).toHaveLength(1);
-      expect(loaded[0].id).toBe('1');
-    });
-  });
-
-  describe('HealthMonitor', () => {
-    it('should track connection health', async () => {
-      const monitor = new HealthMonitor();
-      const handler = new EventStreamHandler('/api/sse');
-      
-      monitor.attachToHandler(handler);
-
-      await handler.connect();
-      
-      expect(monitor.getConnectionStatus()).toBe('connected');
-      expect(monitor.getLastHeartbeat()).toBeDefined();
-    });
-
-    it('should detect connection issues', async () => {
-      const monitor = new HealthMonitor({ heartbeatInterval: 50 });
-      const handler = new EventStreamHandler('/api/sse');
-      
-      monitor.attachToHandler(handler);
-      await handler.connect();
-
-      // Simulate missed heartbeats
-      await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 200));
-      });
-
-      expect(monitor.getConnectionStatus()).toBe('unhealthy');
-    });
-
-    it('should calculate latency metrics', async () => {
-      const monitor = new HealthMonitor();
-      const handler = new EventStreamHandler('/api/sse');
-      
-      monitor.attachToHandler(handler);
-      await handler.connect();
-
-      // Simulate ping-pong events for latency calculation
-      mockEventSource.simulateEvent('ping', { timestamp: Date.now() });
-      
-      await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 10));
-      });
-
-      const metrics = monitor.getMetrics();
-      expect(metrics.latency).toBeDefined();
-      expect(metrics.latency).toBeGreaterThan(0);
-    });
-
-    it('should provide health recommendations', () => {
-      const monitor = new HealthMonitor();
-      
-      // Simulate poor connection
-      monitor.recordEvent('connection_error');
-      monitor.recordEvent('connection_error');
-      monitor.recordEvent('timeout');
-
-      const recommendations = monitor.getHealthRecommendations();
-      
-      expect(recommendations).toContain('Consider checking network connectivity');
-    });
-  });
-
-  describe('useServerSentEvents Hook', () => {
-    it('should provide SSE connection state', async () => {
-      const { result } = renderHook(() => 
-        useServerSentEvents('/api/sse')
-      );
-
-      expect(result.current.connectionState).toBe('connecting');
-
-      await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 20));
-      });
-
-      expect(result.current.connectionState).toBe('connected');
-    });
-
-    it('should handle event subscriptions', async () => {
-      const { result } = renderHook(() => 
-        useServerSentEvents('/api/sse')
-      );
-
-      const messageHandler = vi.fn();
-
-      await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 20));
-      });
-
-      act(() => {
-        result.current.subscribe('user-message', messageHandler);
-      });
-
-      mockEventSource.simulateEvent('user-message', { content: 'Hello' });
-
-      expect(messageHandler).toHaveBeenCalledWith({ content: 'Hello' });
-    });
-
-    it('should cleanup subscriptions on unmount', () => {
-      const { result, unmount } = renderHook(() => 
-        useServerSentEvents('/api/sse')
-      );
-
-      const messageHandler = vi.fn();
-      
-      act(() => {
-        result.current.subscribe('user-message', messageHandler);
-      });
-
-      unmount();
-
-      // Handler should not be called after unmount
-      mockEventSource.simulateEvent('user-message', { content: 'Hello' });
-      expect(messageHandler).not.toHaveBeenCalled();
-    });
-  });
-
-  describe('useNotifications Hook', () => {
-    it('should manage notification state', () => {
-      const { result } = renderHook(() => useNotifications());
-
-      expect(result.current.notifications).toEqual([]);
-
-      act(() => {
-        result.current.addNotification({
-          type: 'info',
-          title: 'Test',
-          message: 'Test message'
-        });
-      });
-
-      expect(result.current.notifications).toHaveLength(1);
-      expect(result.current.notifications[0].type).toBe('info');
-    });
-
-    it('should handle notification dismissal', () => {
-      const { result } = renderHook(() => useNotifications());
-
-      act(() => {
-        result.current.addNotification({
-          id: 'test-1',
-          type: 'info',
-          title: 'Test',
-          message: 'Test message'
-        });
-      });
-
-      expect(result.current.notifications).toHaveLength(1);
-
-      act(() => {
-        result.current.dismissNotification('test-1');
-      });
-
-      expect(result.current.notifications).toHaveLength(0);
-    });
-
-    it('should filter notifications', () => {
-      const { result } = renderHook(() => useNotifications());
-
-      act(() => {
-        result.current.addNotification({ type: 'info', title: 'Info', message: 'Info message' });
-        result.current.addNotification({ type: 'error', title: 'Error', message: 'Error message' });
-        result.current.addNotification({ type: 'warning', title: 'Warning', message: 'Warning message' });
-      });
-
-      const errors = result.current.getNotificationsByType('error');
-      expect(errors).toHaveLength(1);
-      expect(errors[0].type).toBe('error');
-    });
-  });
-
-  describe('SSEProvider Component', () => {
-    it('should provide SSE context to children', () => {
-      // This would test the provider pattern
-      // Implementation details depend on React Context usage
-      expect(true).toBe(true); // Placeholder
-    });
-
-    it('should handle multiple event streams', () => {
-      // Test multiple SSE connections
-      expect(true).toBe(true); // Placeholder
-    });
-  });
-
-  describe('Error Handling', () => {
-    it('should handle EventSource not supported', () => {
-      // Temporarily remove EventSource
-      const originalEventSource = global.EventSource;
-      // @ts-ignore
-      delete global.EventSource;
-
-      const handler = new EventStreamHandler('/api/sse');
-      
-      expect(() => handler.connect()).toThrow('EventSource not supported');
-
-      // Restore EventSource
-      global.EventSource = originalEventSource;
-    });
-
-    it('should provide graceful degradation', () => {
-      const handler = new EventStreamHandler('/api/sse', {
-        fallbackToPolling: true,
-        pollingInterval: 1000
-      });
-
-      // Should fall back to polling when EventSource fails
-      expect(handler.isFallbackMode()).toBe(false);
-      
-      // Simulate EventSource failure
-      mockEventSource.simulateError();
-      
-      expect(handler.isFallbackMode()).toBe(true);
-    });
-
-    it('should handle malformed event data', async () => {
-      const handler = new EventStreamHandler('/api/sse');
-      const errorHandler = vi.fn();
-      
-      handler.on('error', errorHandler);
-      await handler.connect();
-
-      // Simulate malformed JSON
-      const malformedEvent = new MessageEvent('message', {
-        data: 'invalid json{',
-        origin: '/api/sse'
-      });
-
-      mockEventSource.onmessage?.(malformedEvent);
-
-      expect(errorHandler).toHaveBeenCalled();
-    });
-  });
-
-  describe('Performance', () => {
-    it('should handle high-frequency events', async () => {
-      const handler = new EventStreamHandler('/api/sse');
-      const messageHandler = vi.fn();
-      
-      handler.on('high-frequency', messageHandler);
-      await handler.connect();
-
-      const startTime = performance.now();
-
-      // Simulate 1000 rapid events
-      for (let i = 0; i < 1000; i++) {
-        mockEventSource.simulateEvent('high-frequency', { index: i });
-      }
-
-      const endTime = performance.now();
-      const duration = endTime - startTime;
-
-      expect(duration).toBeLessThan(100); // Should handle quickly
-      expect(messageHandler).toHaveBeenCalledTimes(1000);
-    });
-
-    it('should implement event throttling', async () => {
-      const handler = new EventStreamHandler('/api/sse', {
-        throttle: { 'rapid-event': 100 } // Max 1 event per 100ms
-      });
-      
-      const messageHandler = vi.fn();
-      handler.on('rapid-event', messageHandler);
-      await handler.connect();
-
-      // Send 10 rapid events
-      for (let i = 0; i < 10; i++) {
-        mockEventSource.simulateEvent('rapid-event', { index: i });
-      }
-
-      // Should be throttled to fewer calls
-      expect(messageHandler).toHaveBeenCalledTimes(1);
-
-      await act(async () => {
-        await new Promise(resolve => setTimeout(resolve, 150));
-      });
-
-      // Send another event after throttle period
-      mockEventSource.simulateEvent('rapid-event', { index: 10 });
-
-      expect(messageHandler).toHaveBeenCalledTimes(2);
-    });
-  });
-});

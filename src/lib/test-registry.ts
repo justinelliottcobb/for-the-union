@@ -16,17 +16,19 @@ export async function loadExerciseTests(
   exerciseId: string
 ): Promise<TestRunner | null> {
   try {
-    // Try to dynamically import the test file
-    const testModule = await import(`@/exercises/${category}/${exerciseId}/test.ts`);
+    // Try different test file extensions
+    const extensions = ['test.ts', 'test.tsx', 'tests.ts'];
     
-    if (testModule.runTests && typeof testModule.runTests === 'function') {
-      return testModule.runTests;
-    }
-    
-    // Fallback: try tests.ts for legacy exercises
-    const legacyTestModule = await import(`@/exercises/${category}/${exerciseId}/tests.ts`);
-    if (legacyTestModule.runTests && typeof legacyTestModule.runTests === 'function') {
-      return legacyTestModule.runTests;
+    for (const ext of extensions) {
+      try {
+        const testModule = await import(`@/exercises/${category}/${exerciseId}/${ext}`);
+        if (testModule.runTests && typeof testModule.runTests === 'function') {
+          return testModule.runTests;
+        }
+      } catch (importError) {
+        // Continue to next extension
+        continue;
+      }
     }
     
     return null;
