@@ -80,7 +80,9 @@ export async function initializeTestRegistry(): Promise<void> {
     'advanced-typescript-patterns',
     'elite-state-management',
     'graphql',
-    'performance-optimization'
+    'performance-optimization',
+    'component-architecture-design-patterns',
+    'full-stack-integration'
   ];
   
   for (const category of categories) {
