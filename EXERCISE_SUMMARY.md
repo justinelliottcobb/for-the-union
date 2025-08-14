@@ -427,7 +427,7 @@ This project provides **82 comprehensive exercises** across **8 specialized sect
 
 ---
 
-## 🌐 Section 8: Full-Stack Integration (6 exercises - 480 min)
+## 🌐 Section 8: Full-Stack Integration (9 exercises - 720 min)
 
 ### 🎯 Core Concepts
 - **API Client Architecture**: Structured HTTP client design
@@ -436,6 +436,7 @@ This project provides **82 comprehensive exercises** across **8 specialized sect
 - **Authentication Flows**: JWT and OAuth security patterns
 - **Authorization & RBAC**: Permission-based access control
 - **Security Patterns**: Frontend security best practices
+- **Real-time Communication**: WebSocket, SSE, and collaboration patterns
 
 ### 🛠️ Technologies & Tools
 - Axios with interceptors
@@ -446,6 +447,9 @@ This project provides **82 comprehensive exercises** across **8 specialized sect
 - DOMPurify for XSS prevention
 - SecureLS for encrypted storage
 - Content Security Policy (CSP)
+- WebSocket API and Socket.IO client
+- Server-Sent Events (EventSource)
+- Yjs and operational transforms for collaboration
 
 ### 📋 Key Patterns Covered
 1. **API Client Architecture** (60 min, ⭐⭐⭐)
@@ -478,12 +482,30 @@ This project provides **82 comprehensive exercises** across **8 specialized sect
    - CSP implementation
    - OWASP compliance
 
+7. **WebSocket Integration** (75 min, ⭐⭐⭐⭐)
+   - WebSocket lifecycle management
+   - Connection recovery and auto-reconnection
+   - Message queuing and buffering
+
+8. **Real-time Collaboration** (90 min, ⭐⭐⭐⭐⭐)
+   - Operational transforms and CRDTs
+   - Conflict resolution mechanisms
+   - Presence awareness and cursor synchronization
+
+9. **Server-Sent Events** (75 min, ⭐⭐⭐⭐)
+   - EventSource API implementation
+   - Real-time notifications and monitoring
+   - Graceful degradation patterns
+
 ### 💡 Real-World Applications
 - Enterprise application security
 - Multi-tenant SaaS platforms
 - Financial and healthcare applications
 - Large-scale user management
 - Compliance and audit systems
+- Real-time collaborative platforms
+- Live monitoring dashboards
+- Multi-user gaming and social applications
 
 ---
 
@@ -501,8 +523,8 @@ This project provides **82 comprehensive exercises** across **8 specialized sect
 
 ### 🥇 **Staff Engineering Path** (Senior to Staff)
 7. GraphQL Integration → Full-Stack Integration
-8. **Total Time**: ~30 hours
-9. **Focus**: End-to-end application architecture
+8. **Total Time**: ~34 hours
+9. **Focus**: End-to-end application architecture and real-time systems
 
 ---
 
