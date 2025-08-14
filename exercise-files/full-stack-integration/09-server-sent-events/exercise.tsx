@@ -328,8 +328,8 @@ export const NotificationItem: React.FC<{
   );
 };
 
-// TODO: Implement NotificationCenter component
-export const NotificationCenter: React.FC = () => {
+// TODO: Implement NotificationPanel component
+export const NotificationPanel: React.FC = () => {
   // TODO: Use useNotifications hook
   // TODO: Set up filtering state
   // TODO: Implement filtered notifications
@@ -410,7 +410,7 @@ export const SSEDemo: React.FC = () => {
             </button>
           </div>
           
-          <NotificationCenter />
+          <NotificationPanel />
         </div>
 
         <div style={{ marginTop: '20px', padding: '16px', backgroundColor: '#f8f9fa', borderRadius: '8px' }}>

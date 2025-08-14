@@ -877,8 +877,8 @@ export const NotificationItem: React.FC<{
   );
 };
 
-// Notification Center Component
-export const NotificationCenter: React.FC = () => {
+// Notification Panel Component
+export const NotificationPanel: React.FC = () => {
   const { notifications, unreadCount, dismissNotification, markAsRead, clearAll } = useNotifications();
   const [filter, setFilter] = useState<string>('all');
 
@@ -1015,7 +1015,7 @@ export const SSEDemo: React.FC = () => {
             </button>
           </div>
           
-          <NotificationCenter />
+          <NotificationPanel />
         </div>
       </div>
     </SSEProvider>
