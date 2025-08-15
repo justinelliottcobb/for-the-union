@@ -3,62 +3,90 @@ import { TestResult } from '@/types';
 export function runTests(compiledCode: string): TestResult[] {
   const results: TestResult[] = [];
 
-  // Test 1: ReconnectLogic class exists
+  // Test 1: ReconnectLogic class implementation
   results.push({
     name: 'ReconnectLogic Class Implementation',
     passed: compiledCode.includes('class ReconnectLogic') && 
-            compiledCode.includes('getNextDelay') && 
-            compiledCode.includes('shouldRetry'),
-    message: compiledCode.includes('class ReconnectLogic') ? 
-      'ReconnectLogic class properly defined with required methods' : 
-      'ReconnectLogic class is missing or incomplete. Should include getNextDelay and shouldRetry methods'
+            !compiledCode.includes('// TODO: Implement exponential backoff calculation') &&
+            !compiledCode.includes('return 1000; // Placeholder') &&
+            (compiledCode.includes('Math.pow') || compiledCode.includes('**')) &&
+            compiledCode.includes('backoffMultiplier'),
+    error: (!compiledCode.includes('class ReconnectLogic')) ? 
+      'ReconnectLogic class is missing' :
+      (compiledCode.includes('// TODO: Implement exponential backoff calculation') || compiledCode.includes('return 1000; // Placeholder')) ?
+      'ReconnectLogic getNextDelay method needs actual exponential backoff implementation' :
+      'ReconnectLogic missing exponential backoff logic with backoffMultiplier',
+    executionTime: 1
   });
 
-  // Test 2: MessageHandler class exists  
+  // Test 2: MessageHandler class implementation  
   results.push({
     name: 'MessageHandler Class Implementation',
     passed: compiledCode.includes('class MessageHandler') && 
-            compiledCode.includes('send') && 
-            compiledCode.includes('getQueuedMessages') &&
-            compiledCode.includes('setConnection'),
-    message: compiledCode.includes('class MessageHandler') ? 
-      'MessageHandler class properly defined with required methods' : 
-      'MessageHandler class is missing or incomplete. Should include send, getQueuedMessages, and setConnection methods'
+            !compiledCode.includes('// TODO: Implement message queuing logic') &&
+            !compiledCode.includes('// TODO: Send queued messages when connection is available') &&
+            compiledCode.includes('messageQueue') &&
+            compiledCode.includes('push') &&
+            compiledCode.includes('splice'),
+    error: (!compiledCode.includes('class MessageHandler')) ? 
+      'MessageHandler class is missing' :
+      (compiledCode.includes('// TODO: Implement message queuing logic') || compiledCode.includes('// TODO: Send queued messages when connection is available')) ?
+      'MessageHandler needs actual message queuing implementation' :
+      'MessageHandler missing queue management with push/splice operations',
+    executionTime: 1
   });
 
-  // Test 3: ConnectionManager class exists
+  // Test 3: ConnectionManager class implementation
   results.push({
     name: 'ConnectionManager Class Implementation', 
     passed: compiledCode.includes('class ConnectionManager') &&
             compiledCode.includes('extends EventEmitter') &&
-            compiledCode.includes('connect') &&
-            compiledCode.includes('disconnect') &&
-            compiledCode.includes('isConnected'),
-    message: compiledCode.includes('class ConnectionManager') ? 
-      'ConnectionManager class properly defined extending EventEmitter' : 
-      'ConnectionManager class is missing or incomplete. Should extend EventEmitter and include connect, disconnect, isConnected methods'
+            !compiledCode.includes('// TODO: Create WebSocket connection') &&
+            !compiledCode.includes('// TODO: Implement connection logic') &&
+            compiledCode.includes('new WebSocket') &&
+            compiledCode.includes('WebSocket.OPEN'),
+    error: (!compiledCode.includes('class ConnectionManager')) ? 
+      'ConnectionManager class is missing' :
+      (!compiledCode.includes('extends EventEmitter')) ?
+      'ConnectionManager should extend EventEmitter' :
+      (compiledCode.includes('// TODO: Create WebSocket connection') || compiledCode.includes('// TODO: Implement connection logic')) ?
+      'ConnectionManager needs actual WebSocket connection implementation' :
+      'ConnectionManager missing WebSocket instantiation and state checking',
+    executionTime: 1
   });
 
-  // Test 4: WebSocketProvider component exists
+  // Test 4: WebSocketProvider component implementation
   results.push({
     name: 'WebSocketProvider Component Implementation',
     passed: compiledCode.includes('WebSocketProvider') &&
             compiledCode.includes('WebSocketContext.Provider') &&
-            compiledCode.includes('children'),
-    message: compiledCode.includes('WebSocketProvider') ? 
-      'WebSocketProvider component properly implemented' : 
-      'WebSocketProvider component is missing or incomplete. Should be a React component using Context.Provider'
+            !compiledCode.includes('// TODO: Implement WebSocketProvider') &&
+            !compiledCode.includes('// TODO: Initialize context state') &&
+            compiledCode.includes('useState') &&
+            compiledCode.includes('new Map'),
+    error: (!compiledCode.includes('WebSocketProvider')) ? 
+      'WebSocketProvider component is missing' :
+      (compiledCode.includes('// TODO: Implement WebSocketProvider') || compiledCode.includes('// TODO: Initialize context state')) ?
+      'WebSocketProvider needs actual state management implementation' :
+      'WebSocketProvider missing state initialization with useState and Map',
+    executionTime: 1
   });
 
-  // Test 5: useWebSocket hook exists
+  // Test 5: useWebSocket hook implementation
   results.push({
     name: 'useWebSocket Hook Implementation',
     passed: compiledCode.includes('useWebSocket') &&
-            compiledCode.includes('connectionState') &&
-            compiledCode.includes('sendMessage'),
-    message: compiledCode.includes('useWebSocket') ? 
-      'useWebSocket hook properly implemented' : 
-      'useWebSocket hook is missing or incomplete. Should return connectionState and sendMessage'
+            !compiledCode.includes('// TODO: Implement useWebSocket hook') &&
+            !compiledCode.includes('// TODO: Get context and connection manager') &&
+            compiledCode.includes('useContext') &&
+            compiledCode.includes('WebSocketContext') &&
+            compiledCode.includes('useEffect'),
+    error: (!compiledCode.includes('useWebSocket')) ? 
+      'useWebSocket hook is missing' :
+      (compiledCode.includes('// TODO: Implement useWebSocket hook') || compiledCode.includes('// TODO: Get context and connection manager')) ?
+      'useWebSocket hook needs actual implementation with context and effects' :
+      'useWebSocket hook missing useContext and useEffect implementation',
+    executionTime: 1
   });
 
   // Test 6: ConnectionStatus component exists
@@ -67,9 +95,10 @@ export function runTests(compiledCode: string): TestResult[] {
     passed: compiledCode.includes('ConnectionStatus') &&
             compiledCode.includes('React.FC') &&
             compiledCode.includes('url'),
-    message: compiledCode.includes('ConnectionStatus') ? 
-      'ConnectionStatus component properly implemented' : 
-      'ConnectionStatus component is missing or incomplete. Should be a React.FC that takes url prop'
+    error: compiledCode.includes('ConnectionStatus') ? 
+      undefined : 
+      'ConnectionStatus component is missing or incomplete. Should be a React.FC that takes url prop',
+    executionTime: 1
   });
 
   // Test 7: ChatComponent exists
@@ -78,9 +107,10 @@ export function runTests(compiledCode: string): TestResult[] {
     passed: compiledCode.includes('ChatComponent') &&
             compiledCode.includes('userId') &&
             compiledCode.includes('url'),
-    message: compiledCode.includes('ChatComponent') ? 
-      'ChatComponent properly implemented' : 
-      'ChatComponent is missing or incomplete. Should take userId and url props'
+    error: compiledCode.includes('ChatComponent') ? 
+      undefined : 
+      'ChatComponent is missing or incomplete. Should take userId and url props',
+    executionTime: 1
   });
 
   // Test 8: Exponential backoff implementation
@@ -90,9 +120,10 @@ export function runTests(compiledCode: string): TestResult[] {
             compiledCode.includes('Math.pow') ||
             compiledCode.includes('**') || 
             compiledCode.includes('exponential'),
-    message: compiledCode.includes('backoffMultiplier') ? 
-      'Exponential backoff logic implemented' : 
-      'Exponential backoff logic missing. Should use backoffMultiplier and exponential calculation'
+    error: compiledCode.includes('backoffMultiplier') ? 
+      undefined : 
+      'Exponential backoff logic missing. Should use backoffMultiplier and exponential calculation',
+    executionTime: 1
   });
 
   // Test 9: Message queuing implementation
@@ -101,9 +132,10 @@ export function runTests(compiledCode: string): TestResult[] {
     passed: compiledCode.includes('messageQueue') ||
             compiledCode.includes('queue') &&
             compiledCode.includes('replay'),
-    message: compiledCode.includes('messageQueue') || compiledCode.includes('queue') ? 
-      'Message queuing system implemented' : 
-      'Message queuing system missing. Should queue messages when disconnected and replay on reconnection'
+    error: compiledCode.includes('messageQueue') || compiledCode.includes('queue') ? 
+      undefined : 
+      'Message queuing system missing. Should queue messages when disconnected and replay on reconnection',
+    executionTime: 1
   });
 
   // Test 10: Auto-reconnection logic
@@ -111,9 +143,10 @@ export function runTests(compiledCode: string): TestResult[] {
     name: 'Auto-reconnection Implementation',
     passed: compiledCode.includes('autoReconnect') &&
             (compiledCode.includes('setTimeout') || compiledCode.includes('reconnectTimer')),
-    message: compiledCode.includes('autoReconnect') ? 
-      'Auto-reconnection logic implemented' : 
-      'Auto-reconnection logic missing. Should include autoReconnect option and timer-based reconnection'
+    error: compiledCode.includes('autoReconnect') ? 
+      undefined : 
+      'Auto-reconnection logic missing. Should include autoReconnect option and timer-based reconnection',
+    executionTime: 1
   });
 
   return results;

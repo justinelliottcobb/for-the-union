@@ -33,6 +33,19 @@ export async function ensureTestRegistryInitialized(): Promise<void> {
         console.log(`   • ${category}: ${count} tests`);
       });
       
+      // Debug: Check specifically for our new exercises
+      const { getTestRunner } = await import('./test-registry');
+      const newExercises = [
+        '07-websocket-integration',
+        '08-real-time-collaboration', 
+        '09-server-sent-events'
+      ];
+      
+      for (const exerciseId of newExercises) {
+        const testRunner = await getTestRunner('full-stack-integration', exerciseId);
+        console.log(`🔍 Test runner for full-stack-integration/${exerciseId}:`, testRunner ? '✅ Found' : '❌ Not found');
+      }
+      
       isInitialized = true;
     } catch (error) {
       console.error('❌ Failed to initialize test registry:', error);
