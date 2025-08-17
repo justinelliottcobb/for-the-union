@@ -8,7 +8,7 @@ export const discriminatedUnionsCategory: ExerciseCategory = {
   order: 1,
   exercises: [
     {
-      id: 'traffic-light',
+      id: '01-traffic-light',
       title: 'Traffic Light States',
       description: 'Model traffic light states using discriminated unions',
       category: 'discriminated-unions',
@@ -31,12 +31,12 @@ export const discriminatedUnionsCategory: ExerciseCategory = {
       instructionsPath: './src/exercises/discriminated-unions/01-traffic-light/instructions.md',
     },
     {
-      id: 'shapes',
+      id: '02-shapes',
       title: 'Geometric Shapes',
       description: 'Calculate areas for different shapes using discriminated unions',
       category: 'discriminated-unions',
       difficulty: 3,
-      prerequisites: ['traffic-light'],
+      prerequisites: ['01-traffic-light'],
       learningObjectives: [
         'Apply discriminated unions to real-world modeling',
         'Implement functions that work with union types',

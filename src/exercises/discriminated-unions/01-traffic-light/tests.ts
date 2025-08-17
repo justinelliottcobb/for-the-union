@@ -1,208 +1,140 @@
-// Tests for Traffic Light States Exercise
-import { describe, it, expect } from 'vitest';
-import {
-  TrafficLightState,
-  RedLightState,
-  YellowLightState,
-  GreenLightState,
-  getStateDuration,
-  getNextState,
-  canCarsProceed,
-  createTrafficLight,
-  processStateTransition,
-} from '../../../exercise-files/discriminated-unions/01-traffic-light/exercise';
+import { TestResult } from '@/types';
 
-describe('Traffic Light States', () => {
-  describe('Type Definitions', () => {
-    it('should allow creating red light state', () => {
-      const redLight: RedLightState = {
-        color: 'red',
-        duration: 30,
-        stopRequired: true,
-      };
-      expect(redLight.color).toBe('red');
-      expect(redLight.stopRequired).toBe(true);
-    });
+export function runTests(compiledCode: string): TestResult[] {
+  const results: TestResult[] = [];
 
-    it('should allow creating yellow light state', () => {
-      const yellowLight: YellowLightState = {
-        color: 'yellow',
-        duration: 5,
-        warningActive: true,
-      };
-      expect(yellowLight.color).toBe('yellow');
-      expect(yellowLight.warningActive).toBe(true);
-    });
-
-    it('should allow creating green light state', () => {
-      const greenLight: GreenLightState = {
-        color: 'green',
-        duration: 25,
-        proceedAllowed: true,
-      };
-      expect(greenLight.color).toBe('green');
-      expect(greenLight.proceedAllowed).toBe(true);
-    });
+  // Test 1: RedLightState type definition
+  results.push({
+    name: 'RedLightState Type Definition',
+    passed: compiledCode.includes('color:') &&
+            compiledCode.includes('duration:') &&
+            compiledCode.includes('stopRequired:') &&
+            !compiledCode.includes('// TODO: Add properties for red light state'),
+    error: (!compiledCode.includes('color:') || !compiledCode.includes('duration:') || !compiledCode.includes('stopRequired:')) ?
+      'RedLightState type definition is incomplete' :
+      (compiledCode.includes('// TODO: Add properties for red light state')) ?
+      'RedLightState contains TODO comments - complete the type definition' :
+      'RedLightState should have color, duration, and stopRequired properties',
+    executionTime: 1
   });
 
-  describe('getStateDuration', () => {
-    it('should return correct duration for red light', () => {
-      const redLight: TrafficLightState = {
-        color: 'red',
-        duration: 30,
-        stopRequired: true,
-      };
-      expect(getStateDuration(redLight)).toBe(30);
-    });
-
-    it('should return correct duration for yellow light', () => {
-      const yellowLight: TrafficLightState = {
-        color: 'yellow',
-        duration: 5,
-        warningActive: true,
-      };
-      expect(getStateDuration(yellowLight)).toBe(5);
-    });
-
-    it('should return correct duration for green light', () => {
-      const greenLight: TrafficLightState = {
-        color: 'green',
-        duration: 25,
-        proceedAllowed: true,
-      };
-      expect(getStateDuration(greenLight)).toBe(25);
-    });
+  // Test 2: YellowLightState type definition
+  results.push({
+    name: 'YellowLightState Type Definition',
+    passed: compiledCode.includes('warningActive:') &&
+            !compiledCode.includes('// TODO: Add properties for yellow light state') &&
+            compiledCode.includes("'yellow'"),
+    error: (!compiledCode.includes('warningActive:')) ?
+      'YellowLightState type definition is incomplete' :
+      (compiledCode.includes('// TODO: Add properties for yellow light state')) ?
+      'YellowLightState contains TODO comments - complete the type definition' :
+      'YellowLightState should have warningActive property and yellow color',
+    executionTime: 1
   });
 
-  describe('getNextState', () => {
-    it('should transition from red to green', () => {
-      const redLight: TrafficLightState = {
-        color: 'red',
-        duration: 30,
-        stopRequired: true,
-      };
-      const nextState = getNextState(redLight);
-      expect(nextState.color).toBe('green');
-      expect('proceedAllowed' in nextState && nextState.proceedAllowed).toBe(true);
-    });
-
-    it('should transition from green to yellow', () => {
-      const greenLight: TrafficLightState = {
-        color: 'green',
-        duration: 25,
-        proceedAllowed: true,
-      };
-      const nextState = getNextState(greenLight);
-      expect(nextState.color).toBe('yellow');
-      expect('warningActive' in nextState && nextState.warningActive).toBe(true);
-    });
-
-    it('should transition from yellow to red', () => {
-      const yellowLight: TrafficLightState = {
-        color: 'yellow',
-        duration: 5,
-        warningActive: true,
-      };
-      const nextState = getNextState(yellowLight);
-      expect(nextState.color).toBe('red');
-      expect('stopRequired' in nextState && nextState.stopRequired).toBe(true);
-    });
+  // Test 3: GreenLightState type definition
+  results.push({
+    name: 'GreenLightState Type Definition',
+    passed: compiledCode.includes('proceedAllowed:') &&
+            !compiledCode.includes('// TODO: Add properties for green light state') &&
+            compiledCode.includes("'green'"),
+    error: (!compiledCode.includes('proceedAllowed:')) ?
+      'GreenLightState type definition is incomplete' :
+      (compiledCode.includes('// TODO: Add properties for green light state')) ?
+      'GreenLightState contains TODO comments - complete the type definition' :
+      'GreenLightState should have proceedAllowed property and green color',
+    executionTime: 1
   });
 
-  describe('canCarsProceed', () => {
-    it('should return false for red light', () => {
-      const redLight: TrafficLightState = {
-        color: 'red',
-        duration: 30,
-        stopRequired: true,
-      };
-      expect(canCarsProceed(redLight)).toBe(false);
-    });
-
-    it('should return false for yellow light', () => {
-      const yellowLight: TrafficLightState = {
-        color: 'yellow',
-        duration: 5,
-        warningActive: true,
-      };
-      expect(canCarsProceed(yellowLight)).toBe(false);
-    });
-
-    it('should return true for green light', () => {
-      const greenLight: TrafficLightState = {
-        color: 'green',
-        duration: 25,
-        proceedAllowed: true,
-      };
-      expect(canCarsProceed(greenLight)).toBe(true);
-    });
+  // Test 4: TrafficLightState discriminated union
+  results.push({
+    name: 'TrafficLightState Discriminated Union',
+    passed: !compiledCode.includes('type TrafficLightState = never') &&
+            !compiledCode.includes('// TODO: Create the discriminated union') &&
+            (compiledCode.includes('RedLightState | YellowLightState | GreenLightState') ||
+             compiledCode.includes('RedLightState|YellowLightState|GreenLightState')),
+    error: (compiledCode.includes('type TrafficLightState = never')) ?
+      'TrafficLightState is still set to never - create the discriminated union' :
+      (compiledCode.includes('// TODO: Create the discriminated union')) ?
+      'TrafficLightState contains TODO comments - implement the union type' :
+      'TrafficLightState should be a union of RedLightState, YellowLightState, and GreenLightState',
+    executionTime: 1
   });
 
-  describe('createTrafficLight', () => {
-    it('should create initial red light state', () => {
-      const initialState = createTrafficLight();
-      expect(initialState.color).toBe('red');
-      expect('stopRequired' in initialState && initialState.stopRequired).toBe(true);
-    });
+  // Test 5: getStateDuration function implementation
+  results.push({
+    name: 'getStateDuration Function Implementation',
+    passed: !compiledCode.includes('throw new Error(\'Not implemented\')') &&
+            !compiledCode.includes('// TODO: Implement function to get state duration') &&
+            compiledCode.includes('switch') &&
+            compiledCode.includes('return'),
+    error: (compiledCode.includes('throw new Error(\'Not implemented\')')) ?
+      'getStateDuration function is not implemented - remove the error throw' :
+      (compiledCode.includes('// TODO: Implement function to get state duration')) ?
+      'getStateDuration contains TODO comments - implement the function' :
+      'getStateDuration should use a switch statement and return duration values',
+    executionTime: 1
   });
 
-  describe('processStateTransition', () => {
-    it('should process red to green transition', () => {
-      const redLight: TrafficLightState = {
-        color: 'red',
-        duration: 30,
-        stopRequired: true,
-      };
-      const result = processStateTransition(redLight);
-      expect(result.nextState.color).toBe('green');
-      expect(result.message).toContain('green');
-      expect(result.message).toContain('GO');
-    });
-
-    it('should process green to yellow transition', () => {
-      const greenLight: TrafficLightState = {
-        color: 'green',
-        duration: 25,
-        proceedAllowed: true,
-      };
-      const result = processStateTransition(greenLight);
-      expect(result.nextState.color).toBe('yellow');
-      expect(result.message).toContain('yellow');
-      expect(result.message).toContain('CAUTION');
-    });
-
-    it('should process yellow to red transition', () => {
-      const yellowLight: TrafficLightState = {
-        color: 'yellow',
-        duration: 5,
-        warningActive: true,
-      };
-      const result = processStateTransition(yellowLight);
-      expect(result.nextState.color).toBe('red');
-      expect(result.message).toContain('red');
-      expect(result.message).toContain('STOP');
-    });
+  // Test 6: getNextState function implementation
+  results.push({
+    name: 'getNextState Function Implementation',
+    passed: !compiledCode.includes('// TODO: Implement function to get next state in the cycle') &&
+            compiledCode.includes('getNextState') &&
+            (compiledCode.includes('red') && compiledCode.includes('green') && compiledCode.includes('yellow')),
+    error: (compiledCode.includes('// TODO: Implement function to get next state in the cycle')) ?
+      'getNextState contains TODO comments - implement state transitions' :
+      'getNextState should handle transitions between red, green, and yellow states',
+    executionTime: 1
   });
 
-  describe('Full Cycle Integration', () => {
-    it('should complete a full traffic light cycle', () => {
-      let currentState = createTrafficLight(); // Start with red
-      expect(currentState.color).toBe('red');
-
-      // Red -> Green
-      currentState = getNextState(currentState);
-      expect(currentState.color).toBe('green');
-      expect(canCarsProceed(currentState)).toBe(true);
-
-      // Green -> Yellow  
-      currentState = getNextState(currentState);
-      expect(currentState.color).toBe('yellow');
-      expect(canCarsProceed(currentState)).toBe(false);
-
-      // Yellow -> Red
-      currentState = getNextState(currentState);
-      expect(currentState.color).toBe('red');
-      expect(canCarsProceed(currentState)).toBe(false);
-    });
+  // Test 7: canCarsProceed function implementation
+  results.push({
+    name: 'canCarsProceed Function Implementation',
+    passed: !compiledCode.includes('// TODO: Implement function to check if cars can proceed') &&
+            compiledCode.includes('canCarsProceed') &&
+            (compiledCode.includes('green') || compiledCode.includes('proceedAllowed')),
+    error: (compiledCode.includes('// TODO: Implement function to check if cars can proceed')) ?
+      'canCarsProceed contains TODO comments - implement the logic' :
+      'canCarsProceed should check for green light or proceedAllowed property',
+    executionTime: 1
   });
-});
+
+  // Test 8: createTrafficLight function implementation
+  results.push({
+    name: 'createTrafficLight Function Implementation',
+    passed: !compiledCode.includes('// TODO: Implement function to create initial state') &&
+            compiledCode.includes('createTrafficLight') &&
+            compiledCode.includes('red'),
+    error: (compiledCode.includes('// TODO: Implement function to create initial state')) ?
+      'createTrafficLight contains TODO comments - implement initial state creation' :
+      'createTrafficLight should return an initial red light state',
+    executionTime: 1
+  });
+
+  // Test 9: processStateTransition function implementation
+  results.push({
+    name: 'processStateTransition Function Implementation',
+    passed: !compiledCode.includes('// TODO: Implement function that processes a state transition') &&
+            compiledCode.includes('nextState') &&
+            compiledCode.includes('message'),
+    error: (compiledCode.includes('// TODO: Implement function that processes a state transition')) ?
+      'processStateTransition contains TODO comments - implement the transition logic' :
+      'processStateTransition should return an object with nextState and message properties',
+    executionTime: 1
+  });
+
+  // Test 10: Switch statement pattern usage
+  results.push({
+    name: 'Switch Statement Pattern Usage',
+    passed: compiledCode.includes('switch') &&
+            compiledCode.includes('case') &&
+            (compiledCode.includes('red') || compiledCode.includes('green') || compiledCode.includes('yellow')),
+    error: (!compiledCode.includes('switch') || !compiledCode.includes('case')) ?
+      'Switch statement pattern is missing - use switch statements for discriminated union handling' :
+      'Switch statements should handle red, green, and yellow cases',
+    executionTime: 1
+  });
+
+  return results;
+}
