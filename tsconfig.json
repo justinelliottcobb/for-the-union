@@ -26,7 +26,8 @@
       "@/*": ["*"],
       "@components/*": ["components/*"],
       "@exercises/*": ["exercises/*"],
-      "@lib/*": ["lib/*"]
+      "@lib/*": ["lib/*"],
+      "react": [ "./node_modules/@types/react" ]
     }
   },
   "include": ["src", "exercise-files"]

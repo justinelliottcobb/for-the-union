@@ -107,23 +107,8 @@ export class ExerciseRunner {
   }
 
   private async runTests(exercise: Exercise, compiledCode: string): Promise<TestResult[]> {
-    if (!exercise.testsPath) {
-      // If no tests are defined, return basic implementation checks
-      return await this.runBasicImplementationTests(exercise, compiledCode);
-    }
-
-    try {
-      // TODO: Load and run actual test files when they exist
-      // For now, fall back to basic implementation checks
-      return await this.runBasicImplementationTests(exercise, compiledCode);
-    } catch (error) {
-      return [{
-        name: 'Test execution',
-        passed: false,
-        error: error instanceof Error ? error.message : 'Unknown test error',
-        executionTime: 0,
-      }];
-    }
+    // Always run basic implementation tests (includes modular test system)
+    return await this.runBasicImplementationTests(exercise, compiledCode);
   }
 
   private async runBasicImplementationTests(exercise: Exercise, compiledCode: string): Promise<TestResult[]> {

@@ -7,6 +7,7 @@ import { advancedTypeScriptPatternsCategory } from '@exercises/advanced-typescri
 import { graphqlCategory } from '@exercises/graphql/config';
 import { performanceOptimizationCategory } from '@exercises/performance-optimization/config';
 import { componentArchitectureDesignPatternsCategory } from '@exercises/component-architecture-design-patterns/config';
+import { fullStackIntegrationCategory } from '@exercises/full-stack-integration/config';
 
 // Import all exercise categories
 const EXERCISE_CATEGORIES: ExerciseCategory[] = [
@@ -17,6 +18,7 @@ const EXERCISE_CATEGORIES: ExerciseCategory[] = [
   graphqlCategory,
   performanceOptimizationCategory,
   componentArchitectureDesignPatternsCategory,
+  fullStackIntegrationCategory,
 ].sort((a, b) => a.order - b.order);
 
 export function useExercises() {

@@ -16,17 +16,27 @@ export async function loadExerciseTests(
   exerciseId: string
 ): Promise<TestRunner | null> {
   try {
-    // Try to dynamically import the test file
-    const testModule = await import(`@/exercises/${category}/${exerciseId}/test.ts`);
+    // Try different test file extensions with explicit paths for Vite
+    const testPaths = [
+      `../exercises/${category}/${exerciseId}/test.tsx`,
+      `../exercises/${category}/${exerciseId}/test.ts`,
+      `../exercises/${category}/${exerciseId}/tests.ts`
+    ];
     
-    if (testModule.runTests && typeof testModule.runTests === 'function') {
-      return testModule.runTests;
-    }
-    
-    // Fallback: try tests.ts for legacy exercises
-    const legacyTestModule = await import(`@/exercises/${category}/${exerciseId}/tests.ts`);
-    if (legacyTestModule.runTests && typeof legacyTestModule.runTests === 'function') {
-      return legacyTestModule.runTests;
+    for (const testPath of testPaths) {
+      try {
+        console.log(`Attempting to load: ${testPath}`);
+        // Use /* @vite-ignore */ to suppress Vite warnings for dynamic imports
+        const testModule = await import(/* @vite-ignore */ testPath);
+        console.log(`Successfully loaded test module for ${category}/${exerciseId}, has runTests:`, typeof testModule.runTests);
+        if (testModule.runTests && typeof testModule.runTests === 'function') {
+          return testModule.runTests;
+        }
+      } catch (importError) {
+        console.log(`Failed to import ${testPath} for ${category}/${exerciseId}:`, importError);
+        // Continue to next path
+        continue;
+      }
     }
     
     return null;
@@ -80,13 +90,15 @@ export async function initializeTestRegistry(): Promise<void> {
     'advanced-typescript-patterns',
     'elite-state-management',
     'graphql',
-    'performance-optimization'
+    'performance-optimization',
+    'component-architecture-design-patterns',
+    'full-stack-integration'
   ];
   
   for (const category of categories) {
     try {
       // Get category config to find all exercises
-      const configModule = await import(`@/exercises/${category}/config.ts`);
+      const configModule = await import(/* @vite-ignore */ `../exercises/${category}/config.ts`);
       const config = Object.values(configModule)[0] as any; // Get the exported category config
       
       if (config?.exercises) {
