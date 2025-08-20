@@ -2026,21 +2026,8 @@ export default LoadTestingSimulation;
 
 // ===== EXPORTS FOR EXTERNAL USE =====
 
-export {
-  useLoadTesting,
-  useUserSimulation,
-  useDataVolumeSimulation,
-  useWebSocketLoadSimulation,
-  RealTimeUpdates,
-  ConcurrentUsers,
-  HighVolumeData,
-  WebSocketLoad,
-  CustomLoadGenerator,
-  generateArtilleryConfig,
-  generateK6Script,
-  generatePlaywrightLoadTest,
-};
-
+// Components and hooks are exported individually above
+// Types exported separately
 export type {
   LoadTestMetrics,
   UserJourney,
