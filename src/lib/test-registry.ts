@@ -92,7 +92,8 @@ export async function initializeTestRegistry(): Promise<void> {
     'graphql',
     'performance-optimization',
     'component-architecture-design-patterns',
-    'full-stack-integration'
+    'full-stack-integration',
+    'testing-strategies'
   ];
   
   for (const category of categories) {

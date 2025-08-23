@@ -8,6 +8,7 @@ import { graphqlCategory } from '@exercises/graphql/config';
 import { performanceOptimizationCategory } from '@exercises/performance-optimization/config';
 import { componentArchitectureDesignPatternsCategory } from '@exercises/component-architecture-design-patterns/config';
 import { fullStackIntegrationCategory } from '@exercises/full-stack-integration/config';
+import { testingStrategiesCategory } from '@exercises/testing-strategies/config';
 
 // Import all exercise categories
 const EXERCISE_CATEGORIES: ExerciseCategory[] = [
@@ -19,6 +20,7 @@ const EXERCISE_CATEGORIES: ExerciseCategory[] = [
   performanceOptimizationCategory,
   componentArchitectureDesignPatternsCategory,
   fullStackIntegrationCategory,
+  testingStrategiesCategory,
 ].sort((a, b) => a.order - b.order);
 
 export function useExercises() {
