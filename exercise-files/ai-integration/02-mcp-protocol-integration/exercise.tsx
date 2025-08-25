@@ -263,7 +263,7 @@ const useContextManager = () => {
   
   return {
     context: {
-      sessionId: `session_${Date.now()}`,
+      sessionId: "session_" + Date.now(),
       conversationHistory: [],
       toolState: new Map(),
       globalContext: {

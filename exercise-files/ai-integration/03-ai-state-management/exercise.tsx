@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Button, Card, Text, Group, Stack, Badge, Progress, Alert, Tabs, TextInput, Select, Textarea, NumberInput, JsonInput, Code, ScrollArea, Divider, ActionIcon, Modal, Table, ThemeIcon, Timeline, Slider, Switch } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { IconMessage, IconBrain, IconDatabase, IconOptimize, IconTimeline, IconSettings, IconTrash, IconDownload, IconUpload, IconSearch, IconFilter, IconChartLine, IconMemory } from '@tabler/icons-react';
+import { IconMessage, IconBrain, IconDatabase, IconSettings, IconTrash, IconDownload, IconUpload, IconSearch, IconFilter, IconChartLine } from '@tabler/icons-react';
 
 // ===== AI STATE MANAGEMENT TYPES =====
 
@@ -304,6 +304,61 @@ interface TimelineEvent {
   type: string;
   description: string;
   significance: number;
+}
+
+interface Concept {
+  id: string;
+  name: string;
+  definition: string;
+  examples: string[];
+  relatedConcepts: string[];
+}
+
+interface ConceptRelationship {
+  source: string;
+  target: string;
+  type: 'is-a' | 'part-of' | 'related-to' | 'opposite-of';
+  strength: number;
+}
+
+interface Category {
+  id: string;
+  name: string;
+  description: string;
+  concepts: string[];
+  parent?: string;
+}
+
+interface Procedure {
+  id: string;
+  name: string;
+  steps: string[];
+  conditions: string[];
+  outcomes: string[];
+}
+
+interface Skill {
+  id: string;
+  name: string;
+  level: number;
+  procedures: string[];
+  applications: string[];
+}
+
+interface Workflow {
+  id: string;
+  name: string;
+  steps: WorkflowStep[];
+  triggers: string[];
+  outcomes: string[];
+}
+
+interface WorkflowStep {
+  id: string;
+  action: string;
+  inputs: string[];
+  outputs: string[];
+  conditions?: string[];
 }
 
 // TODO: Implement useConversationStateManager hook
