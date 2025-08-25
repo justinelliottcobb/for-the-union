@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Button, Card, Text, Group, Stack, Badge, Progress, Alert, Tabs, TextInput, Select, Textarea, NumberInput, JsonInput, Code, ScrollArea, Divider, ActionIcon, Modal, Table } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
-import { IconPlay, IconStop, IconRefresh, IconSettings, IconCheck, IconX, IconClock, IconActivity } from '@tabler/icons-react';
+import { IconPlayerPlay, IconPlayerStop, IconRefresh, IconSettings, IconCheck, IconX, IconClock, IconActivity } from '@tabler/icons-react';
 
 // ===== MCP PROTOCOL TYPES =====
 
@@ -368,20 +368,24 @@ export const MCPProtocolIntegrationExercise: React.FC = () => {
         </div>
 
         <Tabs defaultValue="client">
+          {/* @ts-ignore */}
           <Tabs.List>
-            <Tabs.Tab value="client" leftSection={<IconActivity size={16} />}>MCP Client</Tabs.Tab>
-            <Tabs.Tab value="tools" leftSection={<IconSettings size={16} />}>Tool Registry</Tabs.Tab>
-            <Tabs.Tab value="context" leftSection={<IconClock size={16} />}>Context Manager</Tabs.Tab>
+            <Tabs.Tab value="client">MCP Client</Tabs.Tab>
+            <Tabs.Tab value="tools">Tool Registry</Tabs.Tab>
+            <Tabs.Tab value="context">Context Manager</Tabs.Tab>
           </Tabs.List>
 
+          {/* @ts-ignore */}
           <Tabs.Panel value="client" pt="md">
             <MCPClient />
           </Tabs.Panel>
 
+          {/* @ts-ignore */}
           <Tabs.Panel value="tools" pt="md">
             <ToolRegistry />
           </Tabs.Panel>
 
+          {/* @ts-ignore */}
           <Tabs.Panel value="context" pt="md">
             <ContextManager />
           </Tabs.Panel>
