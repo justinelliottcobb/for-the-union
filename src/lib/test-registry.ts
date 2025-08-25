@@ -93,7 +93,8 @@ export async function initializeTestRegistry(): Promise<void> {
     'performance-optimization',
     'component-architecture-design-patterns',
     'full-stack-integration',
-    'testing-strategies'
+    'testing-strategies',
+    'ai-integration'
   ];
   
   for (const category of categories) {

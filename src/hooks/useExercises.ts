@@ -9,6 +9,7 @@ import { performanceOptimizationCategory } from '@exercises/performance-optimiza
 import { componentArchitectureDesignPatternsCategory } from '@exercises/component-architecture-design-patterns/config';
 import { fullStackIntegrationCategory } from '@exercises/full-stack-integration/config';
 import { testingStrategiesCategory } from '@exercises/testing-strategies/config';
+import { aiIntegrationCategory } from '@exercises/ai-integration/config';
 
 // Import all exercise categories
 const EXERCISE_CATEGORIES: ExerciseCategory[] = [
@@ -21,6 +22,7 @@ const EXERCISE_CATEGORIES: ExerciseCategory[] = [
   componentArchitectureDesignPatternsCategory,
   fullStackIntegrationCategory,
   testingStrategiesCategory,
+  aiIntegrationCategory,
 ].sort((a, b) => a.order - b.order);
 
 export function useExercises() {
