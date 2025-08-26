@@ -423,7 +423,7 @@ export const MultimodalAIHandlingExercise: React.FC = () => {
   const handleUpload = (files: File[]) => {
     notifications.show({
       title: 'Files Uploaded',
-      message: `${files.length} files uploaded successfully`,
+      message: files.length + ' files uploaded successfully',
       color: 'green'
     });
   };
@@ -442,7 +442,7 @@ export const MultimodalAIHandlingExercise: React.FC = () => {
   const handleExport = (content: MultimodalContent[], format: string) => {
     notifications.show({
       title: 'Export Started',
-      message: `Exporting ${content.length} items as ${format.toUpperCase()}`,
+      message: 'Exporting ' + content.length + ' items as ' + format.toUpperCase(),
       color: 'blue'
     });
   };
@@ -450,7 +450,7 @@ export const MultimodalAIHandlingExercise: React.FC = () => {
   const handleShare = (content: MultimodalContent) => {
     notifications.show({
       title: 'Share Link Generated',
-      message: `Share link created for ${content.metadata.filename}`,
+      message: 'Share link created for ' + content.metadata.filename,
       color: 'blue'
     });
   };

@@ -573,11 +573,7 @@ export const ToolCallingIntegrationExercise: React.FC = () => {
                   input sanitization, and comprehensive error reporting.
                 </Alert>
                 <Code block>
-                  {`const result = validateParameters(
-  { operation: 'add', a: 5, b: 3 },
-  calculatorSchema.parameters
-);
-// Returns: { valid: true, data: {...}, errors: [], warnings: [] }`}
+                  {"const result = validateParameters(\n  { operation: 'add', a: 5, b: 3 },\n  calculatorSchema.parameters\n);\n// Returns: { valid: true, data: {...}, errors: [], warnings: [] }"}
                 </Code>
               </Stack>
             </Card>

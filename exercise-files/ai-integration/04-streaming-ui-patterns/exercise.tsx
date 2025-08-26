@@ -324,56 +324,11 @@ export const StreamingUIPatternsExercise: React.FC = () => {
   const [selectedDemo, setSelectedDemo] = useState<string>('markdown');
   
   const sampleContent = {
-    markdown: `# Streaming Markdown Demo
+    markdown: "# Streaming Markdown Demo\n\nThis is a **demonstration** of real-time markdown streaming with syntax highlighting and progressive rendering.\n\n## Features\n\n- Real-time parsing\n- Syntax highlighting\n- Progressive rendering\n- User controls\n\n### Code Example\n\n```javascript\nfunction streamingDemo() {\n  console.log('Streaming in progress...');\n  return 'Amazing results!';\n}\n```\n\n### List Example\n\n- ✅ Streaming markdown\n- ✅ Typewriter effects\n- ✅ Progress tracking\n- ✅ User interruption\n\n[Visit our docs](https://example.com) for more information.\n\n> This content is being streamed in real-time with configurable speed and natural animation patterns.",
 
-This is a **demonstration** of real-time markdown streaming with syntax highlighting and progressive rendering.
+    typewriter: "Welcome to the Advanced Streaming UI Patterns exercise!\n\nThis typewriter effect demonstrates natural typing patterns with:\n• Variable character timing\n• Punctuation pauses\n• Random speed variations\n• Realistic typing rhythm\n\nPerfect for creating engaging AI interfaces that feel human and responsive.",
 
-## Features
-
-- Real-time parsing
-- Syntax highlighting  
-- Progressive rendering
-- User controls
-
-### Code Example
-
-\`\`\`javascript
-function streamingDemo() {
-  console.log("Streaming in progress...");
-  return "Amazing results!";
-}
-\`\`\`
-
-### List Example
-
-- ✅ Streaming markdown
-- ✅ Typewriter effects
-- ✅ Progress tracking
-- ✅ User interruption
-
-[Visit our docs](https://example.com) for more information.
-
-> This content is being streamed in real-time with configurable speed and natural animation patterns.`,
-
-    typewriter: `Welcome to the Advanced Streaming UI Patterns exercise!
-
-This typewriter effect demonstrates natural typing patterns with:
-• Variable character timing
-• Punctuation pauses
-• Random speed variations
-• Realistic typing rhythm
-
-Perfect for creating engaging AI interfaces that feel human and responsive.`,
-
-    interruptible: `This is a long piece of content designed to demonstrate interruptible streaming capabilities. 
-
-You can start, pause, resume, cancel, and adjust the speed of this stream at any time. The system maintains state across interruptions and provides accurate progress tracking.
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-
-Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-
-The streaming system supports various rendering modes including character-by-character, word-by-word, and adaptive chunking based on content analysis and user preferences.`
+    interruptible: "This is a long piece of content designed to demonstrate interruptible streaming capabilities.\n\nYou can start, pause, resume, cancel, and adjust the speed of this stream at any time. The system maintains state across interruptions and provides accurate progress tracking.\n\nLorem ipsum dolor sit amet, consectetur adipiscing elit. Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.\n\nDuis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.\n\nThe streaming system supports various rendering modes including character-by-character, word-by-word, and adaptive chunking based on content analysis and user preferences."
   };
 
   return (
