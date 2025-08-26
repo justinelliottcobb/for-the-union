@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Button, Card, Text, Group, Stack, Badge, Progress, Alert, Tabs, TextInput, Select, Textarea, NumberInput, Code, ScrollArea, Divider, ActionIcon, Modal, Slider, Switch, Paper, Container, FileInput, Image, Grid, RingProgress, Table } from '@mantine/core';
-import { Dropzone, FileWithPath } from '@mantine/dropzone';
 import { notifications } from '@mantine/notifications';
 import { IconUpload, IconX, IconCheck, IconEye, IconDownload, IconAnalyze, IconPhoto, IconMusic, IconVideo, IconFileText, IconSearch, IconFilter, IconShare, IconRefresh } from '@tabler/icons-react';
 
@@ -330,7 +329,7 @@ const ContentUploader: React.FC<ContentUploaderProps> = ({
   maxSize = 100 * 1024 * 1024 // 100MB
 }) => {
   // TODO: Implement ContentUploader logic
-  // - Drag-and-drop upload with file validation and progress tracking
+  // - File upload interface with validation and progress tracking
   // - Multi-format support with type detection and validation
   // - Batch processing with queue management and priority handling
   // - Preview generation with thumbnail creation and metadata extraction
@@ -339,8 +338,28 @@ const ContentUploader: React.FC<ContentUploaderProps> = ({
   
   return (
     <Stack>
-      <Card>
-        <Text>TODO: Implement ContentUploader with drag-and-drop upload and validation</Text>
+      <Card withBorder style={{ minHeight: 220 }}>
+        <Group justify="center" gap="xl" style={{ minHeight: 180, alignItems: 'center' }}>
+          <IconUpload size={52} stroke={1.5} />
+          <div style={{ textAlign: 'center' }}>
+            <Text size="xl" mb="sm">
+              Upload Files for AI Analysis
+            </Text>
+            <Text size="sm" color="dimmed" mb="md">
+              TODO: Implement file upload with validation and processing queue
+            </Text>
+            <FileInput
+              placeholder="Choose files..."
+              multiple
+              accept={acceptedTypes.join(',')}
+              disabled
+              mb="sm"
+            />
+            <Text size="xs" color="dimmed">
+              Max file size: 100MB, Max files: {maxFiles}
+            </Text>
+          </div>
+        </Group>
       </Card>
     </Stack>
   );

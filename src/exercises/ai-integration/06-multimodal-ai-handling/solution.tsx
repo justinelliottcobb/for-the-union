@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
 import { Button, Card, Text, Group, Stack, Badge, Progress, Alert, Tabs, TextInput, Select, Textarea, NumberInput, Code, ScrollArea, Divider, ActionIcon, Modal, Slider, Switch, Paper, Container, FileInput, Image, Grid, RingProgress, Table } from '@mantine/core';
-import { Dropzone, FileWithPath } from '@mantine/dropzone';
 import { notifications } from '@mantine/notifications';
 import { IconUpload, IconX, IconCheck, IconEye, IconDownload, IconAnalyze, IconPhoto, IconMusic, IconVideo, IconFileText, IconSearch, IconFilter, IconShare, IconRefresh } from '@tabler/icons-react';
 
@@ -720,15 +719,25 @@ const ContentUploader: React.FC<ContentUploaderProps> = ({
   const [uploading, setUploading] = useState(false);
   const { addToQueue, processQueue, queue } = useMultimodalProcessor();
 
-  const handleDrop = useCallback((droppedFiles: FileWithPath[]) => {
-    const validFiles = droppedFiles.filter(file => file.size <= maxSize);
+  const handleFileChange = useCallback((event: React.ChangeEvent<HTMLInputElement>) => {
+    const selectedFiles = Array.from(event.target.files || []);
+    const validFiles = selectedFiles.filter(file => file.size <= maxSize);
     
-    if (validFiles.length !== droppedFiles.length) {
+    if (validFiles.length !== selectedFiles.length) {
       notifications.show({
         title: 'Some files rejected',
         message: 'Some files exceeded the size limit and were not uploaded',
         color: 'orange'
       });
+    }
+
+    if (validFiles.length + files.length > maxFiles) {
+      notifications.show({
+        title: 'Too many files',
+        message: 'Maximum ' + maxFiles + ' files allowed',
+        color: 'orange'
+      });
+      return;
     }
 
     setFiles(prev => [...prev, ...validFiles].slice(0, maxFiles));
@@ -747,7 +756,10 @@ const ContentUploader: React.FC<ContentUploaderProps> = ({
     if (onUpload) {
       onUpload(validFiles);
     }
-  }, [maxSize, maxFiles, onUpload, addToQueue]);
+
+    // Reset the input
+    event.target.value = '';
+  }, [maxSize, maxFiles, onUpload, addToQueue, files.length]);
 
   const removeFile = (index: number) => {
     setFiles(prev => prev.filter((_, i) => i !== index));
@@ -790,37 +802,32 @@ const ContentUploader: React.FC<ContentUploaderProps> = ({
 
   return (
     <Stack>
-      <Dropzone
-        onDrop={handleDrop}
-        accept={acceptedTypes.reduce((acc, type) => ({ ...acc, [type]: [] }), {})}
-        maxSize={maxSize}
-        multiple
-        disabled={uploading}
-      >
-        <Group justify="center" gap="xl" mih={220} style={{ pointerEvents: 'none' }}>
-          <Dropzone.Accept>
-            <IconUpload size={52} stroke={1.5} />
-          </Dropzone.Accept>
-          <Dropzone.Reject>
-            <IconX size={52} stroke={1.5} />
-          </Dropzone.Reject>
-          <Dropzone.Idle>
-            <IconUpload size={52} stroke={1.5} />
-          </Dropzone.Idle>
-
-          <div>
-            <Text size="xl" inline>
-              Drag files here or click to select
+      <Card withBorder style={{ minHeight: 220 }}>
+        <Group justify="center" gap="xl" style={{ minHeight: 180, alignItems: 'center' }}>
+          <IconUpload size={52} stroke={1.5} />
+          <div style={{ textAlign: 'center' }}>
+            <Text size="xl" mb="sm">
+              Upload Files for AI Analysis
             </Text>
-            <Text size="sm" color="dimmed" inline mt={7}>
-              Upload images, audio, video, or documents for AI analysis
+            <Text size="sm" color="dimmed" mb="md">
+              Select images, audio, video, or documents for processing
             </Text>
-            <Text size="xs" color="dimmed" mt="xs">
+            
+            <FileInput
+              placeholder="Choose files..."
+              multiple
+              accept={acceptedTypes.join(',')}
+              onChange={handleFileChange}
+              disabled={uploading}
+              mb="sm"
+            />
+            
+            <Text size="xs" color="dimmed">
               Max file size: {formatFileSize(maxSize)}, Max files: {maxFiles}
             </Text>
           </div>
         </Group>
-      </Dropzone>
+      </Card>
 
       {files.length > 0 && (
         <Card>
@@ -1082,7 +1089,7 @@ const MediaAnalyzer: React.FC<MediaAnalyzerProps> = ({
               onChange={(e) => setAnalysisConfig(prev => ({ ...prev, crossModalCorrelation: e.target.checked }))}
             />
           </Group>
-        </Card>
+        </Group>
 
         <Text size="sm" color="dimmed" mb="md">
           Select content to view detailed analysis results
