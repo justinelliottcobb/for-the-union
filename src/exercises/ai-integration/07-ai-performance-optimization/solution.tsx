@@ -203,6 +203,7 @@ interface BudgetStatus {
   remaining: number;
   burnRate: number;
   daysRemaining: number;
+  budgetStart: number;
   alerts: BudgetAlert[];
 }
 
@@ -960,6 +961,7 @@ const useCostTracker = () => {
       remaining: 1000,
       burnRate: 0,
       daysRemaining: 0,
+      budgetStart: Date.now(),
       alerts: []
     }
   });
@@ -994,8 +996,9 @@ const useCostTracker = () => {
         percentage: (b.cost / newTotal) * 100
       }));
 
-      // Avoid division by zero for burnRate and daysRemaining
-      const daysElapsed = Date.now() / (1000 * 60 * 60 * 24); // days since epoch
+      // Calculate daysElapsed since budget tracking started
+      const budgetStart = prev.budget.budgetStart || Date.now();
+      const daysElapsed = Math.max(1, (Date.now() - budgetStart) / (1000 * 60 * 60 * 24));
       const burnRate = daysElapsed > 0 ? newTotal / daysElapsed : 0; // Cost per day
       const daysRemaining =
         burnRate > 0
@@ -1007,7 +1010,8 @@ const useCostTracker = () => {
         spent: newTotal,
         remaining: prev.budget.limit - newTotal,
         burnRate,
-        daysRemaining
+        daysRemaining,
+        budgetStart
       };
 
       // Check for budget alerts
@@ -1062,17 +1066,26 @@ const useCostTracker = () => {
   };
 
   const updateBudgetLimit = (newLimit: number) => {
-    setCostData(prev => ({
-      ...prev,
-      budget: {
-        ...prev.budget,
-        limit: newLimit,
-        remaining: newLimit - prev.budget.spent,
-        daysRemaining: prev.budget.burnRate > 0 
-          ? Math.max(0, (newLimit - prev.budget.spent) / prev.budget.burnRate)
-          : 0
-      }
-    }));
+    setCostData(prev => {
+      // Calculate daysElapsed based on budget start time
+      const now = Date.now();
+      const budgetStart = prev.budget.budgetStart || now;
+      const daysElapsed = Math.max(1, (now - budgetStart) / (1000 * 60 * 60 * 24));
+      const newBurnRate = daysElapsed > 0 ? prev.budget.spent / daysElapsed : 0;
+      
+      return {
+        ...prev,
+        budget: {
+          ...prev.budget,
+          limit: newLimit,
+          remaining: newLimit - prev.budget.spent,
+          burnRate: newBurnRate,
+          daysRemaining: newBurnRate > 0
+            ? Math.max(0, (newLimit - prev.budget.spent) / newBurnRate)
+            : 0
+        }
+      };
+    });
   };
 
   const generateCostReport = () => {
