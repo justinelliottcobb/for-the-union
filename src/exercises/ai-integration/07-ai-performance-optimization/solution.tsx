@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
-import { createHash } from 'crypto';
 import { Button, Card, Text, Group, Stack, Badge, Progress, Alert, Tabs, TextInput, Select, Textarea, NumberInput, Code, ScrollArea, Divider, ActionIcon, Modal, Slider, Switch, Paper, Container, Grid, RingProgress, Table, Tooltip } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconRefresh, IconAnalyze, IconClock, IconCoin, IconTrendingUp, IconSettings, IconChartLine, IconTarget, IconBolt, IconDatabase, IconCpu, IconMemory } from '@tabler/icons-react';
@@ -575,7 +574,19 @@ const useResponseCache = () => {
       maxTokens: parameters.maxTokens
     };
     
-    const hash = createHash('sha256').update(JSON.stringify(normalized)).digest('hex').slice(0, 32);
+    // Simple browser-compatible hash function
+    const hashString = (str: string): string => {
+      let hash = 0;
+      if (str.length === 0) return hash.toString();
+      for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+      }
+      return Math.abs(hash).toString(36);
+    };
+    
+    const hash = hashString(JSON.stringify(normalized));
     return 'cache_' + hash;
   };
 
@@ -1513,7 +1524,6 @@ export const AIPerformanceOptimizationExercise: React.FC = () => {
         </div>
 
         <Tabs value={selectedDemo} onChange={setSelectedDemo}>
-          {/* @ts-ignore */}
           <Tabs.List>
             <Tabs.Tab value="batcher">Request Batcher</Tabs.Tab>
             <Tabs.Tab value="cache">Response Cache</Tabs.Tab>
@@ -1521,7 +1531,6 @@ export const AIPerformanceOptimizationExercise: React.FC = () => {
             <Tabs.Tab value="monitor">Performance Monitor</Tabs.Tab>
           </Tabs.List>
 
-          {/* @ts-ignore */}
           <Tabs.Panel value="batcher" pt="md">
             <Stack>
               <Card>
@@ -1605,7 +1614,6 @@ export const AIPerformanceOptimizationExercise: React.FC = () => {
             </Stack>
           </Tabs.Panel>
 
-          {/* @ts-ignore */}
           <Tabs.Panel value="cache" pt="md">
             <Stack>
               <Card>
@@ -1685,7 +1693,6 @@ export const AIPerformanceOptimizationExercise: React.FC = () => {
             </Stack>
           </Tabs.Panel>
 
-          {/* @ts-ignore */}
           <Tabs.Panel value="optimizer" pt="md">
             <Stack>
               <Card>
@@ -1755,7 +1762,6 @@ export const AIPerformanceOptimizationExercise: React.FC = () => {
             </Stack>
           </Tabs.Panel>
 
-          {/* @ts-ignore */}
           <Tabs.Panel value="monitor" pt="md">
             <PerformanceMonitor
               batcher={batcher}
