@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback, useRef, useMemo } from 'react';
+import { createHash } from 'crypto';
 import { Button, Card, Text, Group, Stack, Badge, Progress, Alert, Tabs, TextInput, Select, Textarea, NumberInput, Code, ScrollArea, Divider, ActionIcon, Modal, Slider, Switch, Paper, Container, Grid, RingProgress, Table, Tooltip } from '@mantine/core';
 import { notifications } from '@mantine/notifications';
 import { IconRefresh, IconAnalyze, IconClock, IconCoin, IconTrendingUp, IconSettings, IconChartLine, IconTarget, IconBolt, IconDatabase, IconCpu, IconMemory } from '@tabler/icons-react';
@@ -574,7 +575,8 @@ const useResponseCache = () => {
       maxTokens: parameters.maxTokens
     };
     
-    return 'cache_' + Buffer.from(JSON.stringify(normalized)).toString('base64').slice(0, 32);
+    const hash = createHash('sha256').update(JSON.stringify(normalized)).digest('hex').slice(0, 32);
+    return 'cache_' + hash;
   };
 
   const get = useCallback((prompt: string, parameters: RequestParameters): CachedResponse | null => {
@@ -981,12 +983,20 @@ const useCostTracker = () => {
         percentage: (b.cost / newTotal) * 100
       }));
 
+      // Avoid division by zero for burnRate and daysRemaining
+      const daysElapsed = Date.now() / (1000 * 60 * 60 * 24); // days since epoch
+      const burnRate = daysElapsed > 0 ? newTotal / daysElapsed : 0; // Cost per day
+      const daysRemaining =
+        burnRate > 0
+          ? Math.max(0, (prev.budget.limit - newTotal) / burnRate)
+          : 0;
+
       const newBudget = {
         ...prev.budget,
         spent: newTotal,
         remaining: prev.budget.limit - newTotal,
-        burnRate: newTotal / (Date.now() / (1000 * 60 * 60 * 24)), // Cost per day
-        daysRemaining: Math.max(0, (prev.budget.limit - newTotal) / (newTotal / (Date.now() / (1000 * 60 * 60 * 24))))
+        burnRate,
+        daysRemaining
       };
 
       // Check for budget alerts
@@ -1047,7 +1057,9 @@ const useCostTracker = () => {
         ...prev.budget,
         limit: newLimit,
         remaining: newLimit - prev.budget.spent,
-        daysRemaining: Math.max(0, (newLimit - prev.budget.spent) / prev.budget.burnRate)
+        daysRemaining: prev.budget.burnRate > 0 
+          ? Math.max(0, (newLimit - prev.budget.spent) / prev.budget.burnRate)
+          : 0
       }
     }));
   };
@@ -1500,7 +1512,7 @@ export const AIPerformanceOptimizationExercise: React.FC = () => {
           <p>Advanced performance optimization and cost management patterns for AI applications</p>
         </div>
 
-        <Tabs value={selectedDemo} onChange={setSelectedDemo || ''}>
+        <Tabs value={selectedDemo} onChange={setSelectedDemo}>
           {/* @ts-ignore */}
           <Tabs.List>
             <Tabs.Tab value="batcher">Request Batcher</Tabs.Tab>
