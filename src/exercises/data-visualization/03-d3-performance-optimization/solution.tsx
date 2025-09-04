@@ -518,8 +518,8 @@ export const useCanvasRenderer = (
   };
 };
 
-// Streaming Data Visualization Hook
-export const useStreamingDataViz = (
+// Enhanced Streaming Data Visualization Hook with Processing
+export const useEnhancedStreamingDataViz = (
   initialData: DataPoint[],
   config: StreamingConfig
 ) => {
@@ -712,7 +712,7 @@ const StreamingDataViz: React.FC<{
     streamMetrics,
     startStreaming,
     stopStreaming
-  } = useStreamingDataViz(initialData, config);
+  } = useEnhancedStreamingDataViz(initialData, config);
 
   return (
     <div style={{ position: 'relative' }}>
