@@ -90,6 +90,90 @@ export const dataVisualizationCategory: ExerciseCategory = {
       solutionPath: './src/exercises/data-visualization/03-d3-performance-optimization/solution.tsx',
       testsPath: './src/exercises/data-visualization/03-d3-performance-optimization/test.ts',
       instructionsPath: './src/exercises/data-visualization/03-d3-performance-optimization/instructions.md',
+    },
+    {
+      id: '04-chartjs-react-patterns',
+      title: 'Chart.js React Patterns',
+      description: 'Master Chart.js integration with React best practices, responsive design, interactive features, multi-chart coordination, and custom plugin development',
+      category: 'data-visualization',
+      difficulty: 4,
+      prerequisites: ['01-d3-react-integration'],
+      learningObjectives: [
+        'Master Chart.js integration with React lifecycle management and state synchronization',
+        'Implement responsive design with container observation and dynamic sizing',
+        'Design interactive features with custom tooltips, hover effects, and click handling',
+        'Create multi-chart systems with coordinated layouts and synchronized interactions',
+        'Build custom Chart.js plugins with React integration and performance optimization',
+        'Handle data updates efficiently with smooth animations and state preservation'
+      ],
+      hints: [
+        'Use useRef patterns to bridge Chart.js instances with React component lifecycle',
+        'Implement ResizeObserver for responsive chart behavior without performance issues',
+        'Leverage Chart.js plugin system for custom functionality and visual enhancements',
+        'Create provider patterns for centralized chart configuration and theme management',
+        'Use Chart.js animation callbacks to coordinate with React state updates'
+      ],
+      estimatedTime: 60,
+      filePath: './exercise-files/data-visualization/04-chartjs-react-patterns/exercise.tsx',
+      solutionPath: './src/exercises/data-visualization/04-chartjs-react-patterns/solution.tsx',
+      testsPath: './src/exercises/data-visualization/04-chartjs-react-patterns/test.ts',
+      instructionsPath: './src/exercises/data-visualization/04-chartjs-react-patterns/instructions.md',
+    },
+    {
+      id: '05-apexcharts-advanced-features',
+      title: 'ApexCharts Advanced Features',
+      description: 'Build sophisticated ApexCharts integrations with drilldown navigation, real-time streaming, synchronized multi-chart systems, and dense sparkline grids',
+      category: 'data-visualization',
+      difficulty: 4,
+      prerequisites: ['01-d3-react-integration', '04-chartjs-react-patterns'],
+      learningObjectives: [
+        'Master ApexCharts integration with React and advanced interactive patterns',
+        'Implement drilldown navigation with hierarchical data and breadcrumb tracking',
+        'Design real-time data streaming with WebSocket integration and buffer management',
+        'Create multi-chart coordination with synchronized interactions and shared state',
+        'Build sparkline grids with dense data visualization and interactive features',
+        'Handle advanced interactions with custom toolbars and annotation systems'
+      ],
+      hints: [
+        'Use ApexCharts event system to create coordinated interactions across multiple charts',
+        'Implement hierarchical data structures with efficient navigation and state management',
+        'Leverage WebSocket simulation for real-time data streaming with performance monitoring',
+        'Create provider patterns for chart synchronization and shared configuration',
+        'Use sparkline optimization techniques for rendering large numbers of micro-charts'
+      ],
+      estimatedTime: 75,
+      filePath: './exercise-files/data-visualization/05-apexcharts-advanced-features/exercise.tsx',
+      solutionPath: './src/exercises/data-visualization/05-apexcharts-advanced-features/solution.tsx',
+      testsPath: './src/exercises/data-visualization/05-apexcharts-advanced-features/test.ts',
+      instructionsPath: './src/exercises/data-visualization/05-apexcharts-advanced-features/instructions.md',
+    },
+    {
+      id: '06-highcharts-enterprise-patterns',
+      title: 'Highcharts Enterprise Patterns',
+      description: 'Build enterprise-grade visualizations with Highcharts Stock, Gantt charts, export systems, coordinated dashboards, and advanced enterprise features',
+      category: 'data-visualization',
+      difficulty: 5,
+      prerequisites: ['01-d3-react-integration', '04-chartjs-react-patterns', '05-apexcharts-advanced-features'],
+      learningObjectives: [
+        'Master Highcharts Stock for financial time-series with technical indicators and analysis',
+        'Implement Gantt charts for project management with task dependencies and resource allocation',
+        'Create enterprise export systems with custom branding, batch processing, and format flexibility',
+        'Design coordinated dashboards with synchronized interactions and real-time updates',
+        'Build advanced theming with brand compliance and accessibility support',
+        'Handle enterprise integration with security, performance, and scalability features'
+      ],
+      hints: [
+        'Use Highcharts Stock modules for advanced financial charting with OHLC data and indicators',
+        'Leverage Highcharts Gantt for project visualization with dependency management',
+        'Implement export customization with branding templates and high-quality output',
+        'Create chart synchronization patterns for coordinated dashboard interactions',
+        'Use Highcharts accessibility modules for enterprise compliance requirements'
+      ],
+      estimatedTime: 75,
+      filePath: './exercise-files/data-visualization/06-highcharts-enterprise-patterns/exercise.tsx',
+      solutionPath: './src/exercises/data-visualization/06-highcharts-enterprise-patterns/solution.tsx',
+      testsPath: './src/exercises/data-visualization/06-highcharts-enterprise-patterns/test.ts',
+      instructionsPath: './src/exercises/data-visualization/06-highcharts-enterprise-patterns/instructions.md',
     }
   ],
 };
