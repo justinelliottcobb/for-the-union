@@ -160,11 +160,11 @@ export const useCanvasRenderer = (
 // Data Generation Utilities
 const generateLargeDataset = (size: number): DataPoint[] => {
   return Array.from({ length: size }, (_, i) => ({
-    id: `point-${i}`,
+    id: 'point-' + i,
     x: Math.random() * 1000,
     y: Math.random() * 1000,
     value: Math.random() * 100,
-    category: `Category ${Math.floor(Math.random() * 10) + 1}`,
+    category: 'Category ' + (Math.floor(Math.random() * 10) + 1),
     timestamp: Date.now()
   }));
 };

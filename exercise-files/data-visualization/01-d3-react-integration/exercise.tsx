@@ -126,7 +126,7 @@ const generateDataset = (size: number): DataPoint[] => {
   const categories = ['Category A', 'Category B', 'Category C', 'Category D'];
   return Array.from({ length: size }, (_, i) => 
     generateDataPoint(
-      `point-${i}`, 
+      'point-' + i, 
       categories[Math.floor(Math.random() * categories.length)]
     )
   );
@@ -153,7 +153,7 @@ const D3ReactIntegrationExercise: React.FC = () => {
   const handleAddDataPoint = useCallback(() => {
     const categories = ['Category A', 'Category B', 'Category C', 'Category D'];
     const newPoint = generateDataPoint(
-      `point-${Date.now()}`,
+      'point-' + Date.now(),
       categories[Math.floor(Math.random() * categories.length)]
     );
     setDataset(prev => [...prev, newPoint]);

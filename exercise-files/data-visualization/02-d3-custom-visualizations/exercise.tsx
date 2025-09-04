@@ -147,11 +147,11 @@ export const useCustomAxis = (
 // Data Generation Utilities
 const generateNetworkData = () => {
   const nodes: GraphNode[] = Array.from({ length: 20 }, (_, i) => ({
-    id: `node-${i}`,
-    name: `Node ${i + 1}`,
+    id: 'node-' + i,
+    name: 'Node ' + (i + 1),
     group: Math.floor(i / 5).toString(),
     value: Math.random() * 100 + 10,
-    category: `Group ${Math.floor(i / 5) + 1}`
+    category: 'Group ' + (Math.floor(i / 5) + 1)
   }));
 
   const links: GraphLink[] = Array.from({ length: 30 }, (_, i) => ({
@@ -168,14 +168,14 @@ const generateHierarchicalData = (): HierarchicalData => ({
   category: 'root',
   metadata: { description: 'Root node', color: '#1f77b4', importance: 1 },
   children: Array.from({ length: 4 }, (_, i) => ({
-    name: `Category ${i + 1}`,
-    category: `cat-${i}`,
-    metadata: { description: `Category ${i + 1}`, color: d3.schemeSet2[i], importance: 0.8 },
+    name: 'Category ' + (i + 1),
+    category: 'cat-' + i,
+    metadata: { description: 'Category ' + (i + 1), color: d3.schemeSet2[i], importance: 0.8 },
     children: Array.from({ length: Math.floor(Math.random() * 6) + 3 }, (_, j) => ({
-      name: `Item ${i + 1}.${j + 1}`,
+      name: 'Item ' + (i + 1) + '.' + (j + 1),
       value: Math.random() * 100 + 10,
-      category: `item-${i}-${j}`,
-      metadata: { description: `Item ${j + 1}`, color: d3.schemeSet2[i], importance: 0.5 }
+      category: 'item-' + i + '-' + j,
+      metadata: { description: 'Item ' + (j + 1), color: d3.schemeSet2[i], importance: 0.5 }
     }))
   }))
 });
