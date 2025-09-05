@@ -174,6 +174,90 @@ export const dataVisualizationCategory: ExerciseCategory = {
       solutionPath: './src/exercises/data-visualization/06-highcharts-enterprise-patterns/solution.tsx',
       testsPath: './src/exercises/data-visualization/06-highcharts-enterprise-patterns/test.ts',
       instructionsPath: './src/exercises/data-visualization/06-highcharts-enterprise-patterns/instructions.md',
+    },
+    {
+      id: '07-responsive-chart-systems',
+      title: 'Responsive Chart Systems',
+      description: 'Build sophisticated responsive visualization systems with device-adaptive layouts, touch interactions, breakpoint management, and accessibility patterns',
+      category: 'data-visualization',
+      difficulty: 4,
+      prerequisites: ['01-d3-react-integration', '04-chartjs-react-patterns'],
+      learningObjectives: [
+        'Master responsive design patterns with CSS Grid, ResizeObserver, and media query integration',
+        'Implement device detection with capability assessment and adaptive UI optimization',
+        'Design touch interaction systems with gesture recognition and multi-touch support',
+        'Create breakpoint management with intelligent layout adaptation and component orchestration',
+        'Build orientation handling with automatic layout adjustment and state preservation',
+        'Handle accessibility integration with keyboard navigation and screen reader compatibility'
+      ],
+      hints: [
+        'Use ResizeObserver for efficient responsive behavior without performance penalties',
+        'Implement touch gesture recognition for pan, pinch, tap, and swipe interactions',
+        'Create breakpoint systems that adapt component behavior, not just styling',
+        'Use CSS Grid and Container Queries for advanced responsive layout patterns',
+        'Implement proper ARIA attributes and keyboard navigation for accessibility'
+      ],
+      estimatedTime: 75,
+      filePath: './exercise-files/data-visualization/07-responsive-chart-systems/exercise.tsx',
+      solutionPath: './src/exercises/data-visualization/07-responsive-chart-systems/solution.tsx',
+      testsPath: './src/exercises/data-visualization/07-responsive-chart-systems/test.ts',
+      instructionsPath: './src/exercises/data-visualization/07-responsive-chart-systems/instructions.md',
+    },
+    {
+      id: '08-real-time-data-visualization',
+      title: 'Real-Time Data Visualization',
+      description: 'Master sophisticated real-time data visualization systems with streaming data integration, buffer management, backpressure handling, and performance monitoring',
+      category: 'data-visualization',
+      difficulty: 5,
+      prerequisites: ['01-d3-react-integration', '03-d3-performance-optimization', '07-responsive-chart-systems'],
+      learningObjectives: [
+        'Master real-time data streaming with WebSocket integration and efficient data flow management',
+        'Implement advanced buffering strategies with circular buffers, compression, and memory optimization',
+        'Design performance monitoring with comprehensive bottleneck detection and optimization recommendations',
+        'Handle connection management with resilient connectivity, automatic recovery, and reconnection strategies',
+        'Create backpressure systems with adaptive sampling, rate limiting, and intelligent queue management',
+        'Build live chart updates with smooth rendering coordination and animation synchronization'
+      ],
+      hints: [
+        'Use circular buffers for efficient memory management with streaming data',
+        'Implement WebSocket reconnection logic with exponential backoff and fallback mechanisms',
+        'Create adaptive sampling strategies to handle high-frequency data streams',
+        'Use requestAnimationFrame for coordinated chart updates and smooth animations',
+        'Monitor performance metrics to detect bottlenecks and optimize data flow automatically'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/data-visualization/08-real-time-data-visualization/exercise.tsx',
+      solutionPath: './src/exercises/data-visualization/08-real-time-data-visualization/solution.tsx',
+      testsPath: './src/exercises/data-visualization/08-real-time-data-visualization/test.ts',
+      instructionsPath: './src/exercises/data-visualization/08-real-time-data-visualization/instructions.md',
+    },
+    {
+      id: '09-interactive-dashboard-architecture',
+      title: 'Interactive Dashboard Architecture',
+      description: 'Build complex interactive dashboard systems with modular architecture, state orchestration, advanced filtering, and cross-chart coordination patterns',
+      category: 'data-visualization',
+      difficulty: 5,
+      prerequisites: ['01-d3-react-integration', '07-responsive-chart-systems', '08-real-time-data-visualization'],
+      learningObjectives: [
+        'Master dashboard architecture with modular layout management and component orchestration',
+        'Implement state orchestration with comprehensive cross-component synchronization and data flow coordination',
+        'Design advanced filter management with cascading filters, temporal controls, and real-time updates',
+        'Create chart registry systems with dynamic plugin architecture and runtime configuration',
+        'Handle cross-chart interactions with brushing, selection, drill-down capabilities, and coordinated updates',
+        'Build responsive dashboard layouts with drag-and-drop positioning, resizing, and persistence features'
+      ],
+      hints: [
+        'Use React Context and useReducer for comprehensive dashboard state management',
+        'Implement plugin architecture for dynamic chart registration and configuration',
+        'Create filter systems with complex query building and cascading dependencies',
+        'Use performance monitoring to track dashboard metrics and optimize rendering',
+        'Implement drag-and-drop with collision detection and layout persistence'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/data-visualization/09-interactive-dashboard-architecture/exercise.tsx',
+      solutionPath: './src/exercises/data-visualization/09-interactive-dashboard-architecture/solution.tsx',
+      testsPath: './src/exercises/data-visualization/09-interactive-dashboard-architecture/test.ts',
+      instructionsPath: './src/exercises/data-visualization/09-interactive-dashboard-architecture/instructions.md',
     }
   ],
 };
