@@ -258,6 +258,90 @@ export const dataVisualizationCategory: ExerciseCategory = {
       solutionPath: './src/exercises/data-visualization/09-interactive-dashboard-architecture/solution.tsx',
       testsPath: './src/exercises/data-visualization/09-interactive-dashboard-architecture/test.ts',
       instructionsPath: './src/exercises/data-visualization/09-interactive-dashboard-architecture/instructions.md',
+    },
+    {
+      id: '10-chart-performance-optimization',
+      title: 'Chart Performance Optimization',
+      description: 'Master advanced performance optimization for data visualizations with comprehensive profiling, memory management, render optimization, and large dataset processing',
+      category: 'data-visualization',
+      difficulty: 5,
+      prerequisites: ['01-d3-react-integration', '03-d3-performance-optimization', '08-real-time-data-visualization'],
+      learningObjectives: [
+        'Master comprehensive performance profiling with render timing analysis and bottleneck detection',
+        'Implement advanced memory monitoring with garbage collection optimization and leak detection',
+        'Design render optimization with frame scheduling, virtualization, and batch processing',
+        'Create data processing engines with streaming, compression, and progressive loading capabilities',
+        'Handle massive datasets efficiently with chunking, indexing, and memory-efficient algorithms',
+        'Build animation optimization with performance-aware transitions and frame management'
+      ],
+      hints: [
+        'Use performance.now() for high-resolution timing measurements and profiling',
+        'Implement object pooling and memory management strategies for efficient resource utilization',
+        'Create render scheduling with requestAnimationFrame and priority queues for smooth performance',
+        'Use web workers for data processing to avoid blocking the main thread',
+        'Monitor memory usage and implement automatic garbage collection optimization'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/data-visualization/10-chart-performance-optimization/exercise.tsx',
+      solutionPath: './src/exercises/data-visualization/10-chart-performance-optimization/solution.tsx',
+      testsPath: './src/exercises/data-visualization/10-chart-performance-optimization/test.ts',
+      instructionsPath: './src/exercises/data-visualization/10-chart-performance-optimization/instructions.md',
+    },
+    {
+      id: '11-visualization-testing-strategies',
+      title: 'Visualization Testing Strategies',
+      description: 'Build comprehensive testing strategies for data visualizations with visual regression testing, interaction simulation, and accessibility validation',
+      category: 'data-visualization',
+      difficulty: 4,
+      prerequisites: ['01-d3-react-integration', '07-responsive-chart-systems', '10-chart-performance-optimization'],
+      learningObjectives: [
+        'Master visual regression testing with screenshot comparison and baseline management',
+        'Implement comprehensive interaction testing with event simulation and behavior validation',
+        'Design data validation systems with accuracy testing and edge case handling',
+        'Create accessibility testing with WCAG compliance and assistive technology simulation',
+        'Build cross-browser testing with automated screenshot comparison and compatibility validation',
+        'Handle performance testing with rendering benchmarks and optimization verification'
+      ],
+      hints: [
+        'Use headless browsers like Playwright or Puppeteer for visual regression testing',
+        'Implement event simulation for comprehensive user interaction testing',
+        'Create custom Jest matchers for visualization-specific assertions and validations',
+        'Use axe-core for automated accessibility testing and WCAG compliance validation',
+        'Build test data generators for comprehensive edge case and boundary testing'
+      ],
+      estimatedTime: 75,
+      filePath: './exercise-files/data-visualization/11-visualization-testing-strategies/exercise.tsx',
+      solutionPath: './src/exercises/data-visualization/11-visualization-testing-strategies/solution.tsx',
+      testsPath: './src/exercises/data-visualization/11-visualization-testing-strategies/test.ts',
+      instructionsPath: './src/exercises/data-visualization/11-visualization-testing-strategies/instructions.md',
+    },
+    {
+      id: '12-cross-platform-visualization',
+      title: 'Cross-Platform Visualization',
+      description: 'Build visualizations that work seamlessly across web browsers, mobile devices, server environments, and embedded contexts with universal compatibility',
+      category: 'data-visualization',
+      difficulty: 5,
+      prerequisites: ['01-d3-react-integration', '07-responsive-chart-systems', '10-chart-performance-optimization', '11-visualization-testing-strategies'],
+      learningObjectives: [
+        'Master universal chart components that work consistently across all platforms and environments',
+        'Implement platform-specific adapters for optimal performance on each target environment',
+        'Design comprehensive export systems supporting multiple formats and deployment scenarios',
+        'Create secure embed widgets with iframe integration and cross-domain communication',
+        'Handle server-side rendering compatibility with Next.js and static site generation',
+        'Build mobile optimization with touch interactions, responsive design, and platform-specific features'
+      ],
+      hints: [
+        'Use feature detection to adapt chart behavior based on platform capabilities',
+        'Implement platform-specific optimizations while maintaining consistent APIs',
+        'Create export engines that work across server and client environments',
+        'Use secure iframe patterns for embeddable widgets with proper sandboxing',
+        'Build SSR-compatible components that hydrate properly on the client side'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/data-visualization/12-cross-platform-visualization/exercise.tsx',
+      solutionPath: './src/exercises/data-visualization/12-cross-platform-visualization/solution.tsx',
+      testsPath: './src/exercises/data-visualization/12-cross-platform-visualization/test.ts',
+      instructionsPath: './src/exercises/data-visualization/12-cross-platform-visualization/instructions.md',
     }
   ],
 };
