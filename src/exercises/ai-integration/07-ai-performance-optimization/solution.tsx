@@ -203,6 +203,7 @@ interface BudgetStatus {
   remaining: number;
   burnRate: number;
   daysRemaining: number;
+  budgetStart: number;
   alerts: BudgetAlert[];
 }
 
@@ -574,7 +575,20 @@ const useResponseCache = () => {
       maxTokens: parameters.maxTokens
     };
     
-    return 'cache_' + Buffer.from(JSON.stringify(normalized)).toString('base64').slice(0, 32);
+    // Simple browser-compatible hash function
+    const hashString = (str: string): string => {
+      let hash = 0;
+      if (str.length === 0) return hash.toString();
+      for (let i = 0; i < str.length; i++) {
+        const char = str.charCodeAt(i);
+        hash = ((hash << 5) - hash) + char;
+        hash = hash & hash; // Convert to 32bit integer
+      }
+      return Math.abs(hash).toString(36);
+    };
+    
+    const hash = hashString(JSON.stringify(normalized));
+    return 'cache_' + hash;
   };
 
   const get = useCallback((prompt: string, parameters: RequestParameters): CachedResponse | null => {
@@ -947,6 +961,7 @@ const useCostTracker = () => {
       remaining: 1000,
       burnRate: 0,
       daysRemaining: 0,
+      budgetStart: Date.now(),
       alerts: []
     }
   });
@@ -981,12 +996,22 @@ const useCostTracker = () => {
         percentage: (b.cost / newTotal) * 100
       }));
 
+      // Calculate daysElapsed since budget tracking started
+      const budgetStart = prev.budget.budgetStart || Date.now();
+      const daysElapsed = Math.max(1, (Date.now() - budgetStart) / (1000 * 60 * 60 * 24));
+      const burnRate = daysElapsed > 0 ? newTotal / daysElapsed : 0; // Cost per day
+      const daysRemaining =
+        burnRate > 0
+          ? Math.max(0, (prev.budget.limit - newTotal) / burnRate)
+          : 0;
+
       const newBudget = {
         ...prev.budget,
         spent: newTotal,
         remaining: prev.budget.limit - newTotal,
-        burnRate: newTotal / (Date.now() / (1000 * 60 * 60 * 24)), // Cost per day
-        daysRemaining: Math.max(0, (prev.budget.limit - newTotal) / (newTotal / (Date.now() / (1000 * 60 * 60 * 24))))
+        burnRate,
+        daysRemaining,
+        budgetStart
       };
 
       // Check for budget alerts
@@ -1041,15 +1066,26 @@ const useCostTracker = () => {
   };
 
   const updateBudgetLimit = (newLimit: number) => {
-    setCostData(prev => ({
-      ...prev,
-      budget: {
-        ...prev.budget,
-        limit: newLimit,
-        remaining: newLimit - prev.budget.spent,
-        daysRemaining: Math.max(0, (newLimit - prev.budget.spent) / prev.budget.burnRate)
-      }
-    }));
+    setCostData(prev => {
+      // Calculate daysElapsed based on budget start time
+      const now = Date.now();
+      const budgetStart = prev.budget.budgetStart || now;
+      const daysElapsed = Math.max(1, (now - budgetStart) / (1000 * 60 * 60 * 24));
+      const newBurnRate = daysElapsed > 0 ? prev.budget.spent / daysElapsed : 0;
+      
+      return {
+        ...prev,
+        budget: {
+          ...prev.budget,
+          limit: newLimit,
+          remaining: newLimit - prev.budget.spent,
+          burnRate: newBurnRate,
+          daysRemaining: newBurnRate > 0
+            ? Math.max(0, (newLimit - prev.budget.spent) / newBurnRate)
+            : 0
+        }
+      };
+    });
   };
 
   const generateCostReport = () => {
@@ -1500,8 +1536,7 @@ export const AIPerformanceOptimizationExercise: React.FC = () => {
           <p>Advanced performance optimization and cost management patterns for AI applications</p>
         </div>
 
-        <Tabs value={selectedDemo} onChange={setSelectedDemo || ''}>
-          {/* @ts-ignore */}
+        <Tabs value={selectedDemo} onChange={setSelectedDemo}>
           <Tabs.List>
             <Tabs.Tab value="batcher">Request Batcher</Tabs.Tab>
             <Tabs.Tab value="cache">Response Cache</Tabs.Tab>
@@ -1509,7 +1544,6 @@ export const AIPerformanceOptimizationExercise: React.FC = () => {
             <Tabs.Tab value="monitor">Performance Monitor</Tabs.Tab>
           </Tabs.List>
 
-          {/* @ts-ignore */}
           <Tabs.Panel value="batcher" pt="md">
             <Stack>
               <Card>
@@ -1593,7 +1627,6 @@ export const AIPerformanceOptimizationExercise: React.FC = () => {
             </Stack>
           </Tabs.Panel>
 
-          {/* @ts-ignore */}
           <Tabs.Panel value="cache" pt="md">
             <Stack>
               <Card>
@@ -1673,7 +1706,6 @@ export const AIPerformanceOptimizationExercise: React.FC = () => {
             </Stack>
           </Tabs.Panel>
 
-          {/* @ts-ignore */}
           <Tabs.Panel value="optimizer" pt="md">
             <Stack>
               <Card>
@@ -1743,7 +1775,6 @@ export const AIPerformanceOptimizationExercise: React.FC = () => {
             </Stack>
           </Tabs.Panel>
 
-          {/* @ts-ignore */}
           <Tabs.Panel value="monitor" pt="md">
             <PerformanceMonitor
               batcher={batcher}
