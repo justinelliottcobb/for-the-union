@@ -11,6 +11,7 @@ import { fullStackIntegrationCategory } from '@exercises/full-stack-integration/
 import { testingStrategiesCategory } from '@exercises/testing-strategies/config';
 import { aiIntegrationCategory } from '@exercises/ai-integration/config';
 import { dataVisualizationCategory } from '@exercises/data-visualization/config';
+import { web3CryptoFintechCategory } from '@exercises/web3-crypto-fintech/config';
 
 // Import all exercise categories
 const EXERCISE_CATEGORIES: ExerciseCategory[] = [
@@ -25,6 +26,7 @@ const EXERCISE_CATEGORIES: ExerciseCategory[] = [
   testingStrategiesCategory,
   aiIntegrationCategory,
   dataVisualizationCategory,
+  web3CryptoFintechCategory,
 ].sort((a, b) => a.order - b.order);
 
 export function useExercises() {
