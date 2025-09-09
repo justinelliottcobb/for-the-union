@@ -1,0 +1,29 @@
+<svg width="32" height="32" viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">
+  <!-- Flag pole -->
+  <rect x="4" y="2" width="1.5" height="28" fill="#333"/>
+  
+  <!-- Flag -->
+  <path d="M5.5 2 L5.5 18 L18 15 L18 5 Z" fill="#e74c3c" stroke="none"/>
+  
+  <!-- Person silhouette -->
+  <g fill="#333">
+    <!-- Head -->
+    <circle cx="10" cy="24" r="2"/>
+    
+    <!-- Body -->
+    <rect x="9" y="26" width="2" height="4"/>
+    
+    <!-- Arm holding flag (extended) -->
+    <rect x="7" y="27" width="3" height="1" transform="rotate(-15 8.5 27.5)"/>
+    
+    <!-- Other arm -->
+    <rect x="11" y="27" width="2" height="1" transform="rotate(20 12 27.5)"/>
+    
+    <!-- Legs -->
+    <rect x="8.5" y="30" width="1" height="2"/>
+    <rect x="10.5" y="30" width="1" height="2"/>
+  </g>
+  
+  <!-- Flag wave effect -->
+  <path d="M18 5 Q20 7 18 9 Q20 11 18 13 Q20 15 18 15" fill="none" stroke="#c0392b" stroke-width="1.5" opacity="0.6"/>
+</svg>

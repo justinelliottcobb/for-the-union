@@ -168,6 +168,168 @@ export const web3CryptoFintechCategory: ExerciseCategory = {
       solutionPath: './src/exercises/web3-crypto-fintech/06-nft-marketplace-development/solution.tsx',
       testsPath: './src/exercises/web3-crypto-fintech/06-nft-marketplace-development/test.ts',
       instructionsPath: './src/exercises/web3-crypto-fintech/06-nft-marketplace-development/instructions.md',
+    },
+    {
+      id: '07-web3-security-patterns',
+      title: 'Web3 Security Patterns',
+      description: 'Implement enterprise-grade security patterns with transaction validation, phishing protection, and audit logging',
+      category: 'web3-crypto-fintech',
+      difficulty: 5,
+      prerequisites: ['01-web3-wallet-integration', '03-smart-contract-interaction'],
+      learningObjectives: [
+        'Implement comprehensive security providers for Web3 applications with multi-layered protection',
+        'Build transaction validators with simulation, analysis, and approval workflows',
+        'Create phishing detection systems to protect users from malicious sites and contracts',
+        'Develop audit logging systems for compliance and security monitoring',
+        'Integrate hardware wallet support with secure transaction signing flows'
+      ],
+      hints: [
+        'Use transaction simulation APIs like Tenderly for pre-execution analysis',
+        'Implement multiple IPFS gateways for metadata resolution reliability',
+        'Create immutable audit trails using cryptographic hash chains',
+        'Add hardware wallet support for Ledger and Trezor devices',
+        'Implement multi-signature wallet workflows for institutional security'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/web3-crypto-fintech/07-web3-security-patterns/exercise.tsx',
+      solutionPath: './src/exercises/web3-crypto-fintech/07-web3-security-patterns/solution.tsx',
+      testsPath: './src/exercises/web3-crypto-fintech/07-web3-security-patterns/test.ts',
+      instructionsPath: './src/exercises/web3-crypto-fintech/07-web3-security-patterns/instructions.md',
+    },
+    {
+      id: '08-regulatory-compliance-systems',
+      title: 'Regulatory Compliance Systems',
+      description: 'Build comprehensive compliance features with KYC/AML integration, tax reporting, and GDPR compliance',
+      category: 'web3-crypto-fintech',
+      difficulty: 5,
+      prerequisites: ['07-web3-security-patterns'],
+      learningObjectives: [
+        'Build KYC/AML integration systems with identity verification and document processing',
+        'Implement automated compliance monitoring with real-time transaction screening',
+        'Create comprehensive tax reporting with multi-jurisdiction support and automated calculations',
+        'Develop compliance dashboards with audit trails and regulatory reporting',
+        'Integrate GDPR and data privacy controls with user consent management and data portability'
+      ],
+      hints: [
+        'Integrate with KYC providers like Jumio, Onfido, or Veriff for identity verification',
+        'Implement watchlist screening against OFAC, UN, and EU sanctions lists',
+        'Calculate taxes using FIFO, LIFO, or specific identification methods',
+        'Create configurable compliance policies with automated enforcement',
+        'Implement GDPR data rights with automated request processing'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/web3-crypto-fintech/08-regulatory-compliance-systems/exercise.tsx',
+      solutionPath: './src/exercises/web3-crypto-fintech/08-regulatory-compliance-systems/solution.tsx',
+      testsPath: './src/exercises/web3-crypto-fintech/08-regulatory-compliance-systems/test.ts',
+      instructionsPath: './src/exercises/web3-crypto-fintech/08-regulatory-compliance-systems/instructions.md',
+    },
+    {
+      id: '09-risk-management-interfaces',
+      title: 'Risk Management Interfaces',
+      description: 'Develop sophisticated risk assessment tools with VaR calculations, portfolio analysis, and automated controls',
+      category: 'web3-crypto-fintech',
+      difficulty: 5,
+      prerequisites: ['05-trading-interface-patterns', '07-web3-security-patterns'],
+      learningObjectives: [
+        'Build comprehensive risk assessment systems with portfolio analysis and risk metrics calculation',
+        'Implement advanced portfolio analyzers with correlation analysis and diversification metrics',
+        'Create intelligent alert systems with real-time monitoring and automated notifications',
+        'Develop position limit managers with dynamic risk controls and automated enforcement',
+        'Design VaR calculators with Monte Carlo simulation and stress testing capabilities'
+      ],
+      hints: [
+        'Implement multiple VaR methodologies: historical simulation, parametric, and Monte Carlo',
+        'Calculate portfolio risk metrics including Sharpe ratio, maximum drawdown, and beta',
+        'Create configurable alert rules with cooldown periods and severity levels',
+        'Implement position limits with percentage, absolute, and VaR-based constraints',
+        'Add stress testing with scenario analysis and correlation breakdown'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/web3-crypto-fintech/09-risk-management-interfaces/exercise.tsx',
+      solutionPath: './src/exercises/web3-crypto-fintech/09-risk-management-interfaces/solution.tsx',
+      testsPath: './src/exercises/web3-crypto-fintech/09-risk-management-interfaces/test.ts',
+      instructionsPath: './src/exercises/web3-crypto-fintech/09-risk-management-interfaces/instructions.md',
+    },
+    {
+      id: '10-layer2-multichain-integration',
+      title: 'Layer 2 & Multi-chain Integration',
+      description: 'Master multi-chain and Layer 2 scaling solutions with chain switching, bridge protocols, and cross-chain coordination',
+      category: 'web3-crypto-fintech',
+      difficulty: 5,
+      prerequisites: ['04-defi-protocol-integration', '07-web3-security-patterns'],
+      learningObjectives: [
+        'Build chain switching systems that handle multiple Ethereum L1 and L2 networks seamlessly',
+        'Implement bridge interfaces supporting major protocols (Hop, Across, Arbitrum Bridge)',
+        'Create L2 monitoring systems with sequencer health tracking and performance metrics',
+        'Develop cross-chain managers for arbitrage execution and multi-chain governance coordination',
+        'Optimize gas strategies across different networks with dynamic fee estimation and routing'
+      ],
+      hints: [
+        'Create a unified interface for different bridge protocols with standardized APIs',
+        'Implement chain detection and automatic network switching based on user needs',
+        'Monitor L2 sequencer health and provide fallback mechanisms for downtime',
+        'Use cross-chain messaging protocols for complex multi-chain operations',
+        'Optimize gas costs by choosing the right network for each operation type'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/web3-crypto-fintech/10-layer2-multichain-integration/exercise.tsx',
+      solutionPath: './src/exercises/web3-crypto-fintech/10-layer2-multichain-integration/solution.tsx',
+      testsPath: './src/exercises/web3-crypto-fintech/10-layer2-multichain-integration/test.ts',
+      instructionsPath: './src/exercises/web3-crypto-fintech/10-layer2-multichain-integration/instructions.md',
+    },
+    {
+      id: '11-web3-state-management',
+      title: 'Web3 State Management',
+      description: 'Implement advanced state management patterns for complex Web3 applications with blockchain synchronization',
+      category: 'web3-crypto-fintech',
+      difficulty: 5,
+      prerequisites: ['03-smart-contract-interaction', '08-regulatory-compliance-systems'],
+      learningObjectives: [
+        'Build centralized Web3 state managers with subscription patterns and middleware support',
+        'Create transaction queues with priority handling, retry logic, and gas optimization',
+        'Implement multi-level caching systems with intelligent invalidation and background refresh',
+        'Develop blockchain sync engines with conflict resolution and state merging capabilities',
+        'Design optimistic update managers for responsive user interfaces with rollback support'
+      ],
+      hints: [
+        'Use Redux-like patterns but optimized for Web3 with blockchain-specific middleware',
+        'Implement optimistic updates for immediate UI feedback with automatic rollbacks',
+        'Create intelligent caching that understands blockchain finality and reorg handling',
+        'Build sync engines that can handle multiple data sources and conflicting state',
+        'Add time-travel debugging capabilities for easier Web3 development workflows'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/web3-crypto-fintech/11-web3-state-management/exercise.tsx',
+      solutionPath: './src/exercises/web3-crypto-fintech/11-web3-state-management/solution.tsx',
+      testsPath: './src/exercises/web3-crypto-fintech/11-web3-state-management/test.ts',
+      instructionsPath: './src/exercises/web3-crypto-fintech/11-web3-state-management/instructions.md',
+    },
+    {
+      id: '12-web3-performance-monitoring',
+      title: 'Web3 Performance Monitoring',
+      description: 'Build comprehensive performance monitoring systems with transaction analytics and gas optimization',
+      category: 'web3-crypto-fintech',
+      difficulty: 5,
+      prerequisites: ['11-web3-state-management', '09-risk-management-interfaces'],
+      learningObjectives: [
+        'Create performance analyzers that track transaction speeds, gas efficiency, and user experience metrics',
+        'Build transaction trackers with end-to-end monitoring, gas price optimization, and network health detection',
+        'Implement metrics collectors with real-time aggregation, custom definitions, and multi-source data integration',
+        'Develop alert systems with configurable rules, multi-channel notifications, and performance baseline management',
+        'Design performance dashboards with real-time charts, optimization insights, and actionable recommendations'
+      ],
+      hints: [
+        'Use performance APIs to measure Web3 operation timing with sub-millisecond precision',
+        'Implement gas price prediction models using historical data and network congestion analysis',
+        'Create metrics dashboards with time series databases for historical performance tracking',
+        'Build alerting systems that can detect performance regressions and unusual patterns',
+        'Add performance profiling with flame graphs and bottleneck identification'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/web3-crypto-fintech/12-web3-performance-monitoring/exercise.tsx',
+      solutionPath: './src/exercises/web3-crypto-fintech/12-web3-performance-monitoring/solution.tsx',
+      testsPath: './src/exercises/web3-crypto-fintech/12-web3-performance-monitoring/test.ts',
+      instructionsPath: './src/exercises/web3-crypto-fintech/12-web3-performance-monitoring/instructions.md',
     }
   ]
 };
