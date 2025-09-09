@@ -87,6 +87,87 @@ export const web3CryptoFintechCategory: ExerciseCategory = {
       solutionPath: './src/exercises/web3-crypto-fintech/03-smart-contract-interaction/solution.tsx',
       testsPath: './src/exercises/web3-crypto-fintech/03-smart-contract-interaction/test.ts',
       instructionsPath: './src/exercises/web3-crypto-fintech/03-smart-contract-interaction/instructions.md',
+    },
+    {
+      id: '04-defi-protocol-integration',
+      title: 'DeFi Protocol Integration',
+      description: 'Build advanced DeFi protocol integration with multi-DEX routing, liquidity provisioning, and yield farming strategies',
+      category: 'web3-crypto-fintech',
+      difficulty: 5,
+      prerequisites: ['03-smart-contract-interaction'],
+      learningObjectives: [
+        'Integrate multiple DeFi protocols (Uniswap V2/V3, SushiSwap, 1inch) for optimal routing',
+        'Implement liquidity provisioning with impermanent loss calculations',
+        'Build yield farming strategies with APY tracking and automatic compounding',
+        'Handle MEV protection and slippage calculations for production trading',
+        'Create advanced price impact analysis and arbitrage detection systems'
+      ],
+      hints: [
+        'Create a protocol router that can compare rates across multiple DEXs',
+        'Implement proper slippage protection for all swaps',
+        'Add MEV protection using private mempools or flashbots',
+        'Calculate impermanent loss accurately for LP positions',
+        'Use multicall for efficient batch operations'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/web3-crypto-fintech/04-defi-protocol-integration/exercise.tsx',
+      solutionPath: './src/exercises/web3-crypto-fintech/04-defi-protocol-integration/solution.tsx',
+      testsPath: './src/exercises/web3-crypto-fintech/04-defi-protocol-integration/test.ts',
+      instructionsPath: './src/exercises/web3-crypto-fintech/04-defi-protocol-integration/instructions.md',
+    },
+    {
+      id: '05-trading-interface-patterns',
+      title: 'Trading Interface Patterns',
+      description: 'Develop professional trading interfaces with real-time data feeds, advanced charting, and sophisticated order management',
+      category: 'web3-crypto-fintech',
+      difficulty: 5,
+      prerequisites: ['04-defi-protocol-integration'],
+      learningObjectives: [
+        'Build professional trading interfaces with real-time price feeds and advanced charting',
+        'Implement order management systems with multiple order types and execution strategies',
+        'Create portfolio tracking with P&L calculations and risk metrics',
+        'Handle WebSocket connections for real-time market data and order updates',
+        'Design risk management tools with position sizing and stop-loss automation'
+      ],
+      hints: [
+        'Use WebSockets for real-time market data updates',
+        'Implement efficient chart rendering with canvas or SVG',
+        'Add proper order validation and risk checks',
+        'Create a modular order management system',
+        'Use technical indicators libraries for chart analysis'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/web3-crypto-fintech/05-trading-interface-patterns/exercise.tsx',
+      solutionPath: './src/exercises/web3-crypto-fintech/05-trading-interface-patterns/solution.tsx',
+      testsPath: './src/exercises/web3-crypto-fintech/05-trading-interface-patterns/test.ts',
+      instructionsPath: './src/exercises/web3-crypto-fintech/05-trading-interface-patterns/instructions.md',
+    },
+    {
+      id: '06-nft-marketplace-development',
+      title: 'NFT Marketplace Development',
+      description: 'Create comprehensive NFT marketplace features with IPFS integration, auction systems, and metadata resolution',
+      category: 'web3-crypto-fintech',
+      difficulty: 4,
+      prerequisites: ['03-smart-contract-interaction'],
+      learningObjectives: [
+        'Build comprehensive NFT marketplace interfaces with gallery views and detailed NFT displays',
+        'Implement NFT minting workflows with IPFS integration and metadata management',
+        'Create auction and marketplace systems with bidding, offers, and secondary sales',
+        'Handle ERC-721 and ERC-1155 standards for both single and batch NFT operations',
+        'Integrate IPFS for decentralized storage with image optimization and metadata resolution'
+      ],
+      hints: [
+        'Use IPFS for decentralized metadata and image storage',
+        'Implement proper NFT standard detection (ERC-721 vs ERC-1155)',
+        'Add image optimization and lazy loading for large collections',
+        'Create efficient metadata caching strategies',
+        'Handle auction timing and bid validation carefully'
+      ],
+      estimatedTime: 75,
+      filePath: './exercise-files/web3-crypto-fintech/06-nft-marketplace-development/exercise.tsx',
+      solutionPath: './src/exercises/web3-crypto-fintech/06-nft-marketplace-development/solution.tsx',
+      testsPath: './src/exercises/web3-crypto-fintech/06-nft-marketplace-development/test.ts',
+      instructionsPath: './src/exercises/web3-crypto-fintech/06-nft-marketplace-development/instructions.md',
     }
   ]
 };
