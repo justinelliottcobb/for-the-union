@@ -167,6 +167,84 @@ export const ssrEdgeComputingCategory: ExerciseCategory = {
       solutionPath: './src/exercises/ssr-edge-computing/06-edge-middleware-patterns/solution.tsx',
       testsPath: './src/exercises/ssr-edge-computing/06-edge-middleware-patterns/test.ts',
       instructionsPath: './src/exercises/ssr-edge-computing/06-edge-middleware-patterns/instructions.md',
+    },
+
+    {
+      id: '07-streaming-ssr-implementation',
+      title: 'Streaming SSR Implementation',
+      description: 'Implement streaming SSR with React 18 features including selective hydration and progressive loading.',
+      category: 'ssr-edge-computing',
+      difficulty: 5,
+      prerequisites: ['06-edge-middleware-patterns'],
+      learningObjectives: [
+        'Master React 18 streaming SSR capabilities',
+        'Implement selective hydration with Suspense boundaries',
+        'Build progressive loading systems with out-of-order streaming',
+        'Create error recovery mechanisms for streaming contexts'
+      ],
+      hints: [
+        'Use renderToPipeableStream for optimal streaming',
+        'Place Suspense boundaries strategically',
+        'Implement interaction-based hydration triggers',
+        'Handle backpressure and flow control properly'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/ssr-edge-computing/07-streaming-ssr-implementation/exercise.tsx',
+      solutionPath: './src/exercises/ssr-edge-computing/07-streaming-ssr-implementation/solution.tsx',
+      testsPath: './src/exercises/ssr-edge-computing/07-streaming-ssr-implementation/test.ts',
+      instructionsPath: './src/exercises/ssr-edge-computing/07-streaming-ssr-implementation/instructions.md',
+    },
+
+    {
+      id: '08-partial-hydration-strategies',
+      title: 'Partial Hydration Strategies',
+      description: 'Build partial and selective hydration systems for optimal performance with islands architecture.',
+      category: 'ssr-edge-computing',
+      difficulty: 5,
+      prerequisites: ['07-streaming-ssr-implementation'],
+      learningObjectives: [
+        'Implement islands architecture patterns',
+        'Build lazy hydration with interaction triggers',
+        'Create hydration scheduling systems',
+        'Optimize memory usage during hydration'
+      ],
+      hints: [
+        'Use IntersectionObserver for viewport-based hydration',
+        'Implement priority queues for hydration scheduling',
+        'Handle hydration mismatches gracefully',
+        'Monitor hydration performance metrics'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/ssr-edge-computing/08-partial-hydration-strategies/exercise.tsx',
+      solutionPath: './src/exercises/ssr-edge-computing/08-partial-hydration-strategies/solution.tsx',
+      testsPath: './src/exercises/ssr-edge-computing/08-partial-hydration-strategies/test.ts',
+      instructionsPath: './src/exercises/ssr-edge-computing/08-partial-hydration-strategies/instructions.md',
+    },
+
+    {
+      id: '09-seo-optimization-systems',
+      title: 'SEO Optimization Systems',
+      description: 'Build advanced SEO optimization systems for SSR applications with dynamic metadata and structured data.',
+      category: 'ssr-edge-computing',
+      difficulty: 4,
+      prerequisites: ['08-partial-hydration-strategies'],
+      learningObjectives: [
+        'Implement dynamic metadata generation',
+        'Create structured data with JSON-LD',
+        'Build sitemap generation systems',
+        'Optimize for social media sharing'
+      ],
+      hints: [
+        'Use Next.js metadata API effectively',
+        'Implement schema.org structured data',
+        'Generate dynamic sitemaps with proper caching',
+        'Test with social media debuggers'
+      ],
+      estimatedTime: 75,
+      filePath: './exercise-files/ssr-edge-computing/09-seo-optimization-systems/exercise.tsx',
+      solutionPath: './src/exercises/ssr-edge-computing/09-seo-optimization-systems/solution.tsx',
+      testsPath: './src/exercises/ssr-edge-computing/09-seo-optimization-systems/test.ts',
+      instructionsPath: './src/exercises/ssr-edge-computing/09-seo-optimization-systems/instructions.md',
     }
   ]
 };
