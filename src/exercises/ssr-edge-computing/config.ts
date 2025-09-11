@@ -245,6 +245,84 @@ export const ssrEdgeComputingCategory: ExerciseCategory = {
       solutionPath: './src/exercises/ssr-edge-computing/09-seo-optimization-systems/solution.tsx',
       testsPath: './src/exercises/ssr-edge-computing/09-seo-optimization-systems/test.ts',
       instructionsPath: './src/exercises/ssr-edge-computing/09-seo-optimization-systems/instructions.md',
+    },
+
+    {
+      id: '10-ssr-caching-strategies',
+      title: 'SSR Caching Strategies',
+      description: 'Build advanced multi-layer caching systems with smart invalidation and geographic distribution for enterprise SSR applications.',
+      category: 'ssr-edge-computing',
+      difficulty: 5,
+      prerequisites: ['09-seo-optimization-systems'],
+      learningObjectives: [
+        'Master multi-layer caching architectures',
+        'Implement smart cache invalidation strategies',
+        'Build geographic cache distribution',
+        'Create cache warming and promotion strategies'
+      ],
+      hints: [
+        'Implement cache-aside pattern with promotion',
+        'Use tag-based invalidation for efficiency',
+        'Design stale-while-revalidate patterns',
+        'Monitor cache hit ratios and performance'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/ssr-edge-computing/10-ssr-caching-strategies/exercise.tsx',
+      solutionPath: './src/exercises/ssr-edge-computing/10-ssr-caching-strategies/solution.tsx',
+      testsPath: './src/exercises/ssr-edge-computing/10-ssr-caching-strategies/test.ts',
+      instructionsPath: './src/exercises/ssr-edge-computing/10-ssr-caching-strategies/instructions.md',
+    },
+
+    {
+      id: '11-ssr-monitoring-observability',
+      title: 'SSR Monitoring & Observability',
+      description: 'Build comprehensive monitoring and observability systems for SSR applications with real-time performance tracking.',
+      category: 'ssr-edge-computing',
+      difficulty: 5,
+      prerequisites: ['10-ssr-caching-strategies'],
+      learningObjectives: [
+        'Implement Core Web Vitals monitoring',
+        'Build real-time performance tracking systems',
+        'Create comprehensive error monitoring',
+        'Design intelligent alerting systems'
+      ],
+      hints: [
+        'Use Performance Observer API for Web Vitals',
+        'Implement error boundaries with reporting',
+        'Create performance budgets with alerts',
+        'Monitor hydration performance metrics'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/ssr-edge-computing/11-ssr-monitoring-observability/exercise.tsx',
+      solutionPath: './src/exercises/ssr-edge-computing/11-ssr-monitoring-observability/solution.tsx',
+      testsPath: './src/exercises/ssr-edge-computing/11-ssr-monitoring-observability/test.ts',
+      instructionsPath: './src/exercises/ssr-edge-computing/11-ssr-monitoring-observability/instructions.md',
+    },
+
+    {
+      id: '12-ssr-deployment-scaling',
+      title: 'SSR Deployment & Scaling',
+      description: 'Build enterprise deployment and scaling strategies for SSR applications with zero-downtime deployments and auto-scaling.',
+      category: 'ssr-edge-computing',
+      difficulty: 5,
+      prerequisites: ['11-ssr-monitoring-observability'],
+      learningObjectives: [
+        'Master deployment strategies (blue-green, rolling, canary)',
+        'Implement intelligent auto-scaling systems',
+        'Build comprehensive health monitoring',
+        'Create load balancing solutions'
+      ],
+      hints: [
+        'Implement blue-green deployments with health validation',
+        'Use metrics-based auto-scaling decisions',
+        'Design comprehensive health check systems',
+        'Handle graceful degradation and rollbacks'
+      ],
+      estimatedTime: 90,
+      filePath: './exercise-files/ssr-edge-computing/12-ssr-deployment-scaling/exercise.tsx',
+      solutionPath: './src/exercises/ssr-edge-computing/12-ssr-deployment-scaling/solution.tsx',
+      testsPath: './src/exercises/ssr-edge-computing/12-ssr-deployment-scaling/test.ts',
+      instructionsPath: './src/exercises/ssr-edge-computing/12-ssr-deployment-scaling/instructions.md',
     }
   ]
 };
