@@ -94,7 +94,10 @@ export async function initializeTestRegistry(): Promise<void> {
     'component-architecture-design-patterns',
     'full-stack-integration',
     'testing-strategies',
-    'ai-integration'
+    'ai-integration',
+    'ssr-edge-computing',
+    'data-visualization',
+    'web3-crypto-fintech'
   ];
   
   for (const category of categories) {
