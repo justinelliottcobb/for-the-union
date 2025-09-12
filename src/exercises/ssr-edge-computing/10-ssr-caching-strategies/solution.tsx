@@ -584,7 +584,7 @@ const DemoCachingStrategies: React.FC = () => {
               <Title order={3} mb="md">Database Cache Layer</Title>
               <Text mb="sm">Persistent storage with SQL-based invalidation</Text>
               <Code block>
-                SELECT * FROM cache_entries WHERE cache_key = ? AND expires_at > NOW()
+                {`SELECT * FROM cache_entries WHERE cache_key = ? AND expires_at > NOW()`}
               </Code>
               <Text mt="sm" size="sm" c="dimmed">
                 Connection: Redis Cluster | Backup: MySQL | Sharding: Consistent Hash
