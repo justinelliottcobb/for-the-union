@@ -13,6 +13,7 @@ import { aiIntegrationCategory } from '@exercises/ai-integration/config';
 import { dataVisualizationCategory } from '@exercises/data-visualization/config';
 import { web3CryptoFintechCategory } from '@exercises/web3-crypto-fintech/config';
 import { ssrEdgeComputingCategory } from '@exercises/ssr-edge-computing/config';
+import { multiFrameworkMasteryCategory } from '@exercises/multi-framework-mastery/config';
 
 // Import all exercise categories
 const EXERCISE_CATEGORIES: ExerciseCategory[] = [
@@ -29,6 +30,7 @@ const EXERCISE_CATEGORIES: ExerciseCategory[] = [
   dataVisualizationCategory,
   web3CryptoFintechCategory,
   ssrEdgeComputingCategory,
+  multiFrameworkMasteryCategory,
 ].sort((a, b) => a.order - b.order);
 
 export function useExercises() {
