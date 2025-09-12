@@ -86,6 +86,93 @@ export const multiFrameworkMasteryExercises: Exercise[] = [
     solutionPath: './src/exercises/multi-framework-mastery/03-vue-ecosystem-integration/solution.tsx',
     testsPath: './src/exercises/multi-framework-mastery/03-vue-ecosystem-integration/test.ts',
     instructionsPath: './src/exercises/multi-framework-mastery/03-vue-ecosystem-integration/instructions.md',
+  },
+
+  {
+    id: '04-solidjs-reactivity-mastery',
+    title: 'SolidJS Reactivity Mastery',
+    description: 'Master SolidJS fine-grained reactivity patterns with signals, effects, resources, and stores for maximum performance applications.',
+    category: 'multi-framework-mastery',
+    difficulty: 4,
+    estimatedTime: 75,
+    prerequisites: ['03-vue-ecosystem-integration'],
+    learningObjectives: [
+      'Master SolidJS signals and fine-grained reactivity',
+      'Implement signal composition and derived state patterns',
+      'Build comprehensive effect systems with proper cleanup',
+      'Create resource handling for async operations',
+      'Design store patterns for complex state management',
+      'Analyze and optimize reactive performance'
+    ],
+    hints: [
+      'Use TypeScript generics for type-safe signals',
+      'Implement proper effect cleanup to prevent memory leaks',
+      'Design signals for maximum granularity and performance',
+      'Monitor reactive performance with custom metrics',
+      'Test reactivity patterns thoroughly in isolation'
+    ],
+    filePath: './exercise-files/multi-framework-mastery/04-solidjs-reactivity-mastery/exercise.tsx',
+    solutionPath: './src/exercises/multi-framework-mastery/04-solidjs-reactivity-mastery/solution.tsx',
+    testsPath: './src/exercises/multi-framework-mastery/04-solidjs-reactivity-mastery/test.ts',
+    instructionsPath: './src/exercises/multi-framework-mastery/04-solidjs-reactivity-mastery/instructions.md',
+  },
+
+  {
+    id: '05-solid-start-ssr-patterns',
+    title: 'SolidStart SSR Patterns',
+    description: 'Build SolidStart server-side rendering applications with server functions, islands architecture, and progressive enhancement.',
+    category: 'multi-framework-mastery',
+    difficulty: 4,
+    estimatedTime: 75,
+    prerequisites: ['04-solidjs-reactivity-mastery'],
+    learningObjectives: [
+      'Master SolidStart SSR architecture and routing patterns',
+      'Implement server functions with proper data fetching',
+      'Build islands architecture for selective hydration',
+      'Create progressive enhancement strategies',
+      'Design streaming SSR with SolidJS patterns',
+      'Optimize deployment and performance for SolidStart applications'
+    ],
+    hints: [
+      'Use SolidStart server functions for optimal data fetching',
+      'Implement islands architecture for selective hydration',
+      'Handle server/client boundaries carefully',
+      'Optimize streaming SSR for better performance',
+      'Test SSR applications thoroughly across environments'
+    ],
+    filePath: './exercise-files/multi-framework-mastery/05-solid-start-ssr-patterns/exercise.tsx',
+    solutionPath: './src/exercises/multi-framework-mastery/05-solid-start-ssr-patterns/solution.tsx',
+    testsPath: './src/exercises/multi-framework-mastery/05-solid-start-ssr-patterns/test.ts',
+    instructionsPath: './src/exercises/multi-framework-mastery/05-solid-start-ssr-patterns/instructions.md',
+  },
+
+  {
+    id: '06-solid-performance-optimization',
+    title: 'Solid Performance Optimization',
+    description: 'Master advanced SolidJS performance optimization with bundle analysis, memoization strategies, lazy loading, and compilation optimizations.',
+    category: 'multi-framework-mastery',
+    difficulty: 5,
+    estimatedTime: 90,
+    prerequisites: ['05-solid-start-ssr-patterns'],
+    learningObjectives: [
+      'Master SolidJS compilation and build optimizations',
+      'Implement intelligent bundle splitting and lazy loading',
+      'Build comprehensive memoization and caching strategies',
+      'Create performance profiling and monitoring systems',
+      'Design memory management and garbage collection optimization',
+      'Analyze and optimize runtime performance metrics'
+    ],
+    hints: [
+      'Use Vite and Rollup for optimal bundle optimization',
+      'Implement intelligent lazy loading with intersection observers',
+      'Design custom memoization strategies for specific use cases',
+      'Profile performance regularly with browser dev tools',
+      'Optimize compilation settings for production builds'
+    ],
+    filePath: './exercise-files/multi-framework-mastery/06-solid-performance-optimization/exercise.tsx',
+    solutionPath: './src/exercises/multi-framework-mastery/06-solid-performance-optimization/solution.tsx',
+    testsPath: './src/exercises/multi-framework-mastery/06-solid-performance-optimization/test.ts',
+    instructionsPath: './src/exercises/multi-framework-mastery/06-solid-performance-optimization/instructions.md',
   }
 ];
 
