@@ -173,6 +173,93 @@ export const multiFrameworkMasteryExercises: Exercise[] = [
     solutionPath: './src/exercises/multi-framework-mastery/06-solid-performance-optimization/solution.tsx',
     testsPath: './src/exercises/multi-framework-mastery/06-solid-performance-optimization/test.ts',
     instructionsPath: './src/exercises/multi-framework-mastery/06-solid-performance-optimization/instructions.md',
+  },
+
+  {
+    id: '07-lit-web-components-fundamentals',
+    title: 'Lit Web Components Fundamentals',
+    description: 'Master Lit and Web Components development patterns for building framework-agnostic, reusable components with modern web standards.',
+    category: 'multi-framework-mastery',
+    difficulty: 3,
+    estimatedTime: 60,
+    prerequisites: ['06-solid-performance-optimization'],
+    learningObjectives: [
+      'Master Lit custom element development with TypeScript decorators',
+      'Implement shadow DOM encapsulation and styling strategies',
+      'Build template management systems with reactive properties',
+      'Create lifecycle management for Web Components',
+      'Design property binding and event handling patterns',
+      'Understand Web Components standards and browser compatibility'
+    ],
+    hints: [
+      'Use TypeScript decorators for clean property definitions',
+      'Implement proper shadow DOM encapsulation for style isolation',
+      'Design components with framework-agnostic APIs',
+      'Handle lifecycle methods carefully to prevent memory leaks',
+      'Test components across different browsers and frameworks'
+    ],
+    filePath: './exercise-files/multi-framework-mastery/07-lit-web-components-fundamentals/exercise.tsx',
+    solutionPath: './src/exercises/multi-framework-mastery/07-lit-web-components-fundamentals/solution.tsx',
+    testsPath: './src/exercises/multi-framework-mastery/07-lit-web-components-fundamentals/test.ts',
+    instructionsPath: './src/exercises/multi-framework-mastery/07-lit-web-components-fundamentals/instructions.md',
+  },
+
+  {
+    id: '08-design-system-with-lit',
+    title: 'Design System with Lit',
+    description: 'Build scalable design systems using Lit with comprehensive theming, design tokens, component libraries, and documentation systems.',
+    category: 'multi-framework-mastery',
+    difficulty: 4,
+    estimatedTime: 75,
+    prerequisites: ['07-lit-web-components-fundamentals'],
+    learningObjectives: [
+      'Build scalable design systems with Lit and design tokens',
+      'Implement comprehensive theming and token management',
+      'Create component libraries with consistent design patterns',
+      'Design documentation systems for component libraries',
+      'Master component composition and variant patterns',
+      'Integrate with modern design tooling and workflows'
+    ],
+    hints: [
+      'Use design tokens for consistent theming across components',
+      'Implement CSS custom properties for flexible styling',
+      'Create comprehensive component variants and compositions',
+      'Generate automated documentation with interactive examples',
+      'Integrate with Storybook for component development workflow'
+    ],
+    filePath: './exercise-files/multi-framework-mastery/08-design-system-with-lit/exercise.tsx',
+    solutionPath: './src/exercises/multi-framework-mastery/08-design-system-with-lit/solution.tsx',
+    testsPath: './src/exercises/multi-framework-mastery/08-design-system-with-lit/test.ts',
+    instructionsPath: './src/exercises/multi-framework-mastery/08-design-system-with-lit/instructions.md',
+  },
+
+  {
+    id: '09-lit-framework-integration',
+    title: 'Lit Framework Integration',
+    description: 'Master integrating Lit components across different frameworks with comprehensive event communication, state synchronization, and performance optimization.',
+    category: 'multi-framework-mastery',
+    difficulty: 5,
+    estimatedTime: 90,
+    prerequisites: ['08-design-system-with-lit'],
+    learningObjectives: [
+      'Build framework-agnostic components that work seamlessly across React, Vue, Angular',
+      'Implement cross-framework event communication and state synchronization',
+      'Create adapter patterns for framework-specific integration',
+      'Design hydration strategies for SSR environments',
+      'Master performance optimization for multi-framework scenarios',
+      'Build comprehensive integration testing and deployment strategies'
+    ],
+    hints: [
+      'Create framework adapters for seamless integration',
+      'Implement event bridges for cross-framework communication',
+      'Design state synchronization strategies for different frameworks',
+      'Handle SSR hydration carefully across different environments',
+      'Test integration thoroughly with automated cross-framework testing'
+    ],
+    filePath: './exercise-files/multi-framework-mastery/09-lit-framework-integration/exercise.tsx',
+    solutionPath: './src/exercises/multi-framework-mastery/09-lit-framework-integration/solution.tsx',
+    testsPath: './src/exercises/multi-framework-mastery/09-lit-framework-integration/test.ts',
+    instructionsPath: './src/exercises/multi-framework-mastery/09-lit-framework-integration/instructions.md',
   }
 ];
 
