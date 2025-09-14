@@ -260,6 +260,93 @@ export const multiFrameworkMasteryExercises: Exercise[] = [
     solutionPath: './src/exercises/multi-framework-mastery/09-lit-framework-integration/solution.tsx',
     testsPath: './src/exercises/multi-framework-mastery/09-lit-framework-integration/test.ts',
     instructionsPath: './src/exercises/multi-framework-mastery/09-lit-framework-integration/instructions.md',
+  },
+
+  {
+    id: '10-framework-migration-strategies',
+    title: 'Framework Migration Strategies',
+    description: 'Master strategies for migrating between frontend frameworks with comprehensive planning, transformation, and testing approaches.',
+    category: 'multi-framework-mastery',
+    difficulty: 5,
+    estimatedTime: 90,
+    prerequisites: ['09-lit-framework-integration'],
+    learningObjectives: [
+      'Design comprehensive migration planning and risk assessment strategies',
+      'Implement automated code transformation with AST parsing and codemods',
+      'Build state management migration utilities for different frameworks',
+      'Create test suite migration and coverage preservation systems',
+      'Master incremental migration patterns with compatibility layers',
+      'Develop rollback strategies and emergency procedures'
+    ],
+    hints: [
+      'Use AST transformations and codemods for automated migration',
+      'Implement incremental migration with component boundaries',
+      'Design compatibility layers for gradual transitions',
+      'Preserve test coverage during framework transitions',
+      'Plan comprehensive rollback and emergency procedures'
+    ],
+    filePath: './exercise-files/multi-framework-mastery/10-framework-migration-strategies/exercise.tsx',
+    solutionPath: './src/exercises/multi-framework-mastery/10-framework-migration-strategies/solution.tsx',
+    testsPath: './src/exercises/multi-framework-mastery/10-framework-migration-strategies/test.ts',
+    instructionsPath: './src/exercises/multi-framework-mastery/10-framework-migration-strategies/instructions.md',
+  },
+
+  {
+    id: '11-framework-performance-comparison',
+    title: 'Framework Performance Comparison',
+    description: 'Build comprehensive performance analysis tools to compare frontend frameworks across multiple metrics and real-world scenarios.',
+    category: 'multi-framework-mastery',
+    difficulty: 5,
+    estimatedTime: 90,
+    prerequisites: ['10-framework-migration-strategies'],
+    learningObjectives: [
+      'Build comprehensive benchmarking suites for framework comparison',
+      'Implement detailed performance profiling and bottleneck detection',
+      'Create metrics collection systems with Web Vitals and custom markers',
+      'Design automated reporting and comparative analysis tools',
+      'Master decision frameworks for framework selection',
+      'Develop performance monitoring for production environments'
+    ],
+    hints: [
+      'Use Web Vitals and Performance API for accurate measurements',
+      'Implement comprehensive benchmarking across real-world scenarios',
+      'Design automated analysis and recommendation systems',
+      'Profile memory usage and bundle sizes effectively',
+      'Create decision matrices for framework selection criteria'
+    ],
+    filePath: './exercise-files/multi-framework-mastery/11-framework-performance-comparison/exercise.tsx',
+    solutionPath: './src/exercises/multi-framework-mastery/11-framework-performance-comparison/solution.tsx',
+    testsPath: './src/exercises/multi-framework-mastery/11-framework-performance-comparison/test.ts',
+    instructionsPath: './src/exercises/multi-framework-mastery/11-framework-performance-comparison/instructions.md',
+  },
+
+  {
+    id: '12-micro-frontend-architecture',
+    title: 'Micro-Frontend Architecture',
+    description: 'Master micro-frontend architecture patterns for building scalable applications with multiple frameworks and shared resources.',
+    category: 'multi-framework-mastery',
+    difficulty: 5,
+    estimatedTime: 90,
+    prerequisites: ['11-framework-performance-comparison'],
+    learningObjectives: [
+      'Build micro-frontend host systems with module federation',
+      'Implement cross-framework routing and navigation orchestration',
+      'Create shared state coordination and event communication systems',
+      'Design deployment pipelines for multi-framework applications',
+      'Master framework isolation and error boundary strategies',
+      'Develop performance optimization for micro-frontend architectures'
+    ],
+    hints: [
+      'Use Webpack Module Federation for dynamic loading',
+      'Implement event bus systems for cross-framework communication',
+      'Design framework-agnostic routing orchestration',
+      'Create shared dependency management strategies',
+      'Build comprehensive error boundaries and recovery mechanisms'
+    ],
+    filePath: './exercise-files/multi-framework-mastery/12-micro-frontend-architecture/exercise.tsx',
+    solutionPath: './src/exercises/multi-framework-mastery/12-micro-frontend-architecture/solution.tsx',
+    testsPath: './src/exercises/multi-framework-mastery/12-micro-frontend-architecture/test.ts',
+    instructionsPath: './src/exercises/multi-framework-mastery/12-micro-frontend-architecture/instructions.md',
   }
 ];
 
