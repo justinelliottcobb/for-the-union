@@ -184,10 +184,9 @@ export default defineConfig({
       },
       // Optimize for production
       ssr: true,
-      solid: {
-        generate: 'dom', // or 'ssr'
-        hydratable: true
-      }
+      // Compilation options
+      generate: 'dom', // or 'ssr'
+      hydratable: true
     })
   ],
   build: {
