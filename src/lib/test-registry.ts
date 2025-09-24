@@ -97,7 +97,8 @@ export async function initializeTestRegistry(): Promise<void> {
     'ai-integration',
     'ssr-edge-computing',
     'data-visualization',
-    'web3-crypto-fintech'
+    'web3-crypto-fintech',
+    'multi-framework-mastery'
   ];
   
   for (const category of categories) {
